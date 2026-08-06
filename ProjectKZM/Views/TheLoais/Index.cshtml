@@ -1,0 +1,53 @@
+@model IEnumerable<ProjectKZM.Models.TheLoai>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.TenTheLoai)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MoTa)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Hinh)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Sachs)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(model => item.TenTheLoai)
+            </td>
+            <td>
+                @Html.DisplayFor(model => item.MoTa)
+            </td>
+            <td>
+                @Html.DisplayFor(model => item.Hinh)
+            </td>
+            <td>
+                @Html.DisplayFor(model => item.Sachs)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.MaTheLoai">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.MaTheLoai">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.MaTheLoai">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

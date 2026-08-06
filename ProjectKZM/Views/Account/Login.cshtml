@@ -1,0 +1,14 @@
+﻿<form asp-action="Login" method="post">
+    <label>Email:</label>
+
+    <input name="email" />
+    <br />
+    <label>Password: </label>
+    <input name="password" type="password" />
+    <br />
+    <button type="submit">Login</button>
+</form>
+@if (ViewBag.Error != null)
+{
+    <div style="color:red">@ViewBag.Error</div>
+}
