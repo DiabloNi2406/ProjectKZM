@@ -1,106 +1,245 @@
 @model ProjectKZM.Models.Sach
 
 @{
-    ViewData["Title"] = "Delete";
+    ViewData["Title"] = "Xóa sách";
 }
 
-<h1>Delete</h1>
+<style>
+    .delete-page {
+        max-width: 900px;
+        margin: 40px auto;
+        padding: 0 20px;
+    }
 
-<h3>Are you sure you want to delete this?</h3>
-<div>
-    <h4>ProjectKZM.Models.Sach</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.TenSach)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.TenSach)
-        </dd>
-    </dl>
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.TacGia)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.TacGia)
-        </dd>
-    </dl>
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.NhaXuatBan)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.NhaXuatBan)
-        </dd>
-    </dl>
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Gia)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Gia)
-        </dd>
-    </dl>
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.SoLuong)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.SoLuong)
-        </dd>
-    </dl>
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Hinh)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Hinh)
-        </dd>
-    </dl>
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.MoTa)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.MoTa)
-        </dd>
-    </dl>
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.MaTheLoai)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.MaTheLoai)
-        </dd>
-    </dl>
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.TheLoai)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.TheLoai)
-        </dd>
-    </dl>
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ChiTietGioHangs)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ChiTietGioHangs)
-        </dd>
-    </dl>
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ChiTietDonHangs)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ChiTietDonHangs)
-        </dd>
-    </dl>
-    <form asp-action="Delete">
-        <input type="hidden" asp-for="MaSach" />
-        <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a asp-action="Index">Back to List</a>
-    </form>
+    .delete-title {
+        font-size: 40px;
+        margin-bottom: 8px;
+    }
+
+    .delete-subtitle {
+        color: #777;
+        margin-bottom: 30px;
+    }
+
+    .delete-card {
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 30px;
+        background: white;
+    }
+
+    .book-image {
+        width: 200px;
+        max-height: 280px;
+        object-fit: cover;
+        border-radius: 8px;
+        border: 1px solid #ddd;
+    }
+
+    .info-label {
+        font-weight: 600;
+        width: 180px;
+        display: inline-block;
+    }
+
+    .genre-badge {
+        margin-right: 5px;
+        margin-bottom: 5px;
+    }
+
+    .button-area {
+        margin-top: 30px;
+        display: flex;
+        gap: 10px;
+    }
+
+    .warning-box {
+        background-color: #fff3cd;
+        border: 1px solid #ffe69c;
+        border-radius: 6px;
+        padding: 15px;
+        margin-bottom: 25px;
+    }
+</style>
+
+<div class="delete-page">
+
+    <h1 class="delete-title">
+        Xóa sách
+    </h1>
+
+    <p class="delete-subtitle">
+        Kiểm tra thông tin trước khi xóa
+    </p>
+
+    <div class="delete-card">
+
+        <div class="warning-box">
+
+            <strong>
+                Cảnh báo:
+            </strong>
+
+            Bạn có chắc chắn muốn xóa sách này không?
+
+        </div>
+
+        <div class="row">
+
+            <!-- HÌNH -->
+            <div class="col-md-4 text-center">
+
+                @if (!string.IsNullOrEmpty(Model.Hinh))
+                {
+                    <img src="@Model.Hinh"
+                         class="book-image"
+                         alt="@Model.TenSach" />
+                }
+                else
+                {
+                    <span class="text-muted">
+                        Chưa có hình
+                    </span>
+                }
+
+            </div>
+
+            <!-- THÔNG TIN -->
+            <div class="col-md-8">
+
+                <div class="mb-3">
+
+                    <span class="info-label">
+                        Tên sách:
+                    </span>
+
+                    @Model.TenSach
+
+                </div>
+
+                <div class="mb-3">
+
+                    <span class="info-label">
+                        Chương:
+                    </span>
+
+                    @(Model.Chuong ?? "Chưa cập nhật")
+
+                </div>
+
+                <div class="mb-3">
+
+                    <span class="info-label">
+                        Tác giả:
+                    </span>
+
+                    @(Model.TacGia ?? "Chưa cập nhật")
+
+                </div>
+
+                <div class="mb-3">
+
+                    <span class="info-label">
+                        Nhà xuất bản:
+                    </span>
+
+                    @(Model.NhaXuatBan ?? "Chưa cập nhật")
+
+                </div>
+
+                <div class="mb-3">
+
+                    <span class="info-label">
+                        Giá:
+                    </span>
+
+                    @Model.Gia.ToString("N0") VNĐ
+
+                </div>
+
+                <div class="mb-3">
+
+                    <span class="info-label">
+                        Số lượng:
+                    </span>
+
+                    @Model.SoLuong
+
+                </div>
+
+                <!-- THỂ LOẠI -->
+                <div class="mb-3">
+
+                    <span class="info-label">
+                        Thể loại:
+                    </span>
+
+                    @if (Model.SachTheLoais.Any())
+                    {
+                        <div class="mt-2">
+
+                            @foreach (var item in Model.SachTheLoais)
+                            {
+                                <span class="badge bg-primary genre-badge">
+                                    @item.TheLoai?.TenTheLoai
+                                </span>
+                            }
+
+                        </div>
+                    }
+                    else
+                    {
+                        <span class="text-muted">
+                            Chưa có thể loại
+                        </span>
+                    }
+
+                </div>
+
+                <!-- MÔ TẢ -->
+                <div class="mb-3">
+
+                    <span class="info-label">
+                        Mô tả:
+                    </span>
+
+                    <div class="mt-2">
+                        @(Model.MoTa ?? "Chưa có mô tả")
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- FORM XÓA -->
+
+        <form asp-action="Delete"
+              method="post">
+
+            @Html.AntiForgeryToken()
+
+            <input type="hidden"
+                   name="id"
+                   value="@Model.MaSach" />
+
+            <div class="button-area">
+
+                <button type="submit"
+                        class="btn btn-danger">
+                    Xác nhận xóa
+                </button>
+
+                <a asp-action="Index"
+                   class="btn btn-secondary">
+                    Quay lại
+                </a>
+
+            </div>
+
+        </form>
+
+    </div>
+
 </div>

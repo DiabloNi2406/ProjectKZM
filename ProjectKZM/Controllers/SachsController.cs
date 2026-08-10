@@ -1,150 +1,601 @@
-
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using ProjectKZM.Models;
 using ProjectKZM.Data;
+using ProjectKZM.Models;
 
-public class SachsController : Controller
+namespace ProjectKZM.Controllers
 {
-    private readonly MyDbContext _context;
-
-    public SachsController(MyDbContext context)
+    [Authorize(Roles = "Admin")]
+    public class SachsController : Controller
     {
-        _context = context;
-    }
+        private readonly MyDbContext _context;
+        private readonly IWebHostEnvironment _environment;
 
-    // GET: SACHS
-    public async Task<IActionResult> Index()    
-    {
-        return View(await _context.Sachs.ToListAsync());
-    }
-
-    // GET: SACHS/Details/5
-    public async Task<IActionResult> Details(int? masach)
-    {
-        if (masach == null)
+        public SachsController(
+            MyDbContext context,
+            IWebHostEnvironment environment)
         {
-            return NotFound();
+            _context = context;
+            _environment = environment;
         }
 
-        var sach = await _context.Sachs
-            .FirstOrDefaultAsync(m => m.MaSach == masach);
-        if (sach == null)
+        // =========================================================
+        // INDEX
+        // =========================================================
+
+        public async Task<IActionResult> Index()
         {
-            return NotFound();
+            var sachs = await _context.Sachs
+                .Include(s => s.LoaiSach)
+                .Include(s => s.SachTheLoais)
+                    .ThenInclude(st => st.TheLoai)
+                .ToListAsync();
+
+            return View(sachs);
         }
 
-        return View(sach);
-    }
+        // =========================================================
+        // DETAILS
+        // =========================================================
 
-    // GET: SACHS/Create
-    public IActionResult Create()
-    {
-        return View();
-    }
-
-    // POST: SACHS/Create
-    // To protect from overposting attacks, enable the specific properties you want to bind to.
-    // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-    [HttpPost]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create([Bind("MaSach,TenSach,TacGia,NhaXuatBan,Gia,SoLuong,Hinh,MoTa,MaTheLoai,TheLoai,ChiTietGioHangs,ChiTietDonHangs")] Sach sach)
-    {
-        if (ModelState.IsValid)
+        public async Task<IActionResult> Details(int? id)
         {
-            _context.Add(sach);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
-        return View(sach);
-    }
-
-    // GET: SACHS/Edit/5
-    public async Task<IActionResult> Edit(int? masach)
-    {
-        if (masach == null)
-        {
-            return NotFound();
-        }
-
-        var sach = await _context.Sachs.FindAsync(masach);
-        if (sach == null)
-        {
-            return NotFound();
-        }
-        return View(sach);
-    }
-
-    // POST: SACHS/Edit/5
-    // To protect from overposting attacks, enable the specific properties you want to bind to.
-    // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-    [HttpPost]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit(int? masach, [Bind("MaSach,TenSach,TacGia,NhaXuatBan,Gia,SoLuong,Hinh,MoTa,MaTheLoai,TheLoai,ChiTietGioHangs,ChiTietDonHangs")] Sach sach)
-    {
-        if (masach != sach.MaSach)
-        {
-            return NotFound();
-        }
-
-        if (ModelState.IsValid)
-        {
-            try
+            if (id == null)
             {
-                _context.Update(sach);
-                await _context.SaveChangesAsync();
+                return NotFound();
             }
-            catch (DbUpdateConcurrencyException)
+
+            var sach = await _context.Sachs
+                .Include(s => s.LoaiSach)
+                .Include(s => s.SachTheLoais)
+                    .ThenInclude(st => st.TheLoai)
+                .FirstOrDefaultAsync(s => s.MaSach == id);
+
+            if (sach == null)
             {
-                if (!SachExists(sach.MaSach))
+                return NotFound();
+            }
+
+            return View(sach);
+        }
+
+        // =========================================================
+        // CREATE - GET
+        // =========================================================
+
+        public async Task<IActionResult> Create()
+        {
+            await LoadFormData();
+
+            return View();
+        }
+
+        // =========================================================
+        // CREATE - POST
+        // =========================================================
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(
+            Sach sach,
+            int[] selectedTheLoaiIds,
+            IFormFile? HinhFile)
+        {
+            // -----------------------------------------------------
+            // Kiểm tra Loại sách
+            // -----------------------------------------------------
+
+            if (sach.MaLoaiSach <= 0)
+            {
+                ModelState.AddModelError(
+                    "MaLoaiSach",
+                    "Vui lòng chọn loại sách."
+                );
+            }
+
+            // -----------------------------------------------------
+            // Kiểm tra Thể loại
+            // -----------------------------------------------------
+
+            if (selectedTheLoaiIds == null ||
+                selectedTheLoaiIds.Length == 0)
+            {
+                ModelState.AddModelError(
+                    "SachTheLoais",
+                    "Vui lòng chọn ít nhất một thể loại."
+                );
+            }
+
+            // -----------------------------------------------------
+            // Kiểm tra hình ảnh
+            // -----------------------------------------------------
+
+            if (HinhFile != null && HinhFile.Length > 0)
+            {
+                var extension =
+                    Path.GetExtension(HinhFile.FileName)
+                    .ToLowerInvariant();
+
+                var allowedExtensions = new[]
+                {
+                    ".jpg",
+                    ".jpeg",
+                    ".png",
+                    ".webp"
+                };
+
+                if (!allowedExtensions.Contains(extension))
+                {
+                    ModelState.AddModelError(
+                        "Hinh",
+                        "Chỉ chấp nhận JPG, JPEG, PNG hoặc WEBP."
+                    );
+                }
+
+                if (HinhFile.Length > 5 * 1024 * 1024)
+                {
+                    ModelState.AddModelError(
+                        "Hinh",
+                        "Kích thước hình ảnh không được vượt quá 5MB."
+                    );
+                }
+            }
+
+            // -----------------------------------------------------
+            // Nếu hợp lệ
+            // -----------------------------------------------------
+
+            if (ModelState.IsValid)
+            {
+                // =================================================
+                // UPLOAD HÌNH
+                // =================================================
+
+                if (HinhFile != null && HinhFile.Length > 0)
+                {
+                    sach.Hinh = await SaveImage(HinhFile);
+                }
+
+                // =================================================
+                // THÊM SÁCH
+                // =================================================
+
+                _context.Sachs.Add(sach);
+
+                await _context.SaveChangesAsync();
+
+                // =================================================
+                // THÊM NHIỀU THỂ LOẠI
+                // =================================================
+
+                var distinctTheLoaiIds =
+                    (selectedTheLoaiIds ?? Array.Empty<int>())
+                    .Distinct()
+                    .ToList();
+
+                foreach (var maTheLoai in distinctTheLoaiIds)
+                {
+                    _context.SachTheLoais.Add(
+                        new SachTheLoai
+                        {
+                            MaSach = sach.MaSach,
+                            MaTheLoai = maTheLoai
+                        }
+                    );
+                }
+
+                await _context.SaveChangesAsync();
+
+                return RedirectToAction(nameof(Index));
+            }
+
+            // -----------------------------------------------------
+            // ModelState lỗi → load lại dữ liệu
+            // -----------------------------------------------------
+
+            await LoadFormData(
+                sach.MaLoaiSach,
+                selectedTheLoaiIds
+            );
+
+            return View(sach);
+        }
+
+        // =========================================================
+        // EDIT - GET
+        // =========================================================
+
+        public async Task<IActionResult> Edit(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var sach = await _context.Sachs
+                .Include(s => s.SachTheLoais)
+                .FirstOrDefaultAsync(s => s.MaSach == id);
+
+            if (sach == null)
+            {
+                return NotFound();
+            }
+
+            // Lấy danh sách Loại sách
+            ViewBag.MaLoaiSach = new SelectList(
+                await _context.LoaiSachs
+                    .OrderBy(x => x.TenLoaiSach)
+                    .ToListAsync(),
+                "MaLoaiSach",
+                "TenLoaiSach",
+                sach.MaLoaiSach
+            );
+
+            // Lấy danh sách Thể loại
+            ViewBag.TheLoais = await _context.TheLoais
+                .OrderBy(x => x.TenTheLoai)
+                .ToListAsync();
+
+            // Các thể loại sách hiện tại
+            ViewBag.SelectedTheLoaiIds =
+                sach.SachTheLoais
+                    .Select(x => x.MaTheLoai)
+                    .ToList();
+
+            return View(sach);
+        }
+
+        // =========================================================
+        // EDIT - POST
+        // =========================================================
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(
+            int id,
+            Sach sach,
+            int[] selectedTheLoaiIds,
+            IFormFile? HinhFile)
+        {
+            // -----------------------------------------------------
+            // Kiểm tra ID
+            // -----------------------------------------------------
+
+            if (id != sach.MaSach)
+            {
+                return NotFound();
+            }
+
+            // -----------------------------------------------------
+            // Kiểm tra Loại sách
+            // -----------------------------------------------------
+
+            if (sach.MaLoaiSach <= 0)
+            {
+                ModelState.AddModelError(
+                    "MaLoaiSach",
+                    "Vui lòng chọn loại sách."
+                );
+            }
+
+            // -----------------------------------------------------
+            // Kiểm tra Thể loại
+            // -----------------------------------------------------
+
+            if (selectedTheLoaiIds == null ||
+                selectedTheLoaiIds.Length == 0)
+            {
+                ModelState.AddModelError(
+                    "SachTheLoais",
+                    "Vui lòng chọn ít nhất một thể loại."
+                );
+            }
+
+            // -----------------------------------------------------
+            // Kiểm tra hình mới
+            // -----------------------------------------------------
+
+            if (HinhFile != null && HinhFile.Length > 0)
+            {
+                var extension =
+                    Path.GetExtension(HinhFile.FileName)
+                    .ToLowerInvariant();
+
+                var allowedExtensions = new[]
+                {
+                    ".jpg",
+                    ".jpeg",
+                    ".png",
+                    ".webp"
+                };
+
+                if (!allowedExtensions.Contains(extension))
+                {
+                    ModelState.AddModelError(
+                        "Hinh",
+                        "Chỉ chấp nhận JPG, JPEG, PNG hoặc WEBP."
+                    );
+                }
+
+                if (HinhFile.Length > 5 * 1024 * 1024)
+                {
+                    ModelState.AddModelError(
+                        "Hinh",
+                        "Kích thước hình ảnh không được vượt quá 5MB."
+                    );
+                }
+            }
+
+            // -----------------------------------------------------
+            // Nếu ModelState hợp lệ
+            // -----------------------------------------------------
+
+            if (ModelState.IsValid)
+            {
+                var sachDb = await _context.Sachs
+                    .Include(s => s.SachTheLoais)
+                    .FirstOrDefaultAsync(s => s.MaSach == id);
+
+                if (sachDb == null)
                 {
                     return NotFound();
                 }
-                else
+
+                // =================================================
+                // CẬP NHẬT THÔNG TIN SÁCH
+                // =================================================
+
+                sachDb.TenSach = sach.TenSach;
+                sachDb.Chuong = sach.Chuong;
+                sachDb.TacGia = sach.TacGia;
+                sachDb.NhaXuatBan = sach.NhaXuatBan;
+                sachDb.Gia = sach.Gia;
+                sachDb.SoLuong = sach.SoLuong;
+                sachDb.MoTa = sach.MoTa;
+                sachDb.MaLoaiSach = sach.MaLoaiSach;
+
+                // =================================================
+                // CẬP NHẬT HÌNH
+                // =================================================
+
+                if (HinhFile != null && HinhFile.Length > 0)
                 {
-                    throw;
+                    // Xóa hình cũ
+                    DeleteImage(sachDb.Hinh);
+
+                    // Lưu hình mới
+                    sachDb.Hinh = await SaveImage(HinhFile);
                 }
+
+                // =================================================
+                // XÓA TOÀN BỘ THỂ LOẠI CŨ
+                // =================================================
+
+                _context.SachTheLoais.RemoveRange(
+                    sachDb.SachTheLoais
+                );
+
+                // =================================================
+                // THÊM LẠI THỂ LOẠI MỚI
+                // =================================================
+
+                var distinctTheLoaiIds =
+                    (selectedTheLoaiIds ?? Array.Empty<int>())
+                    .Distinct()
+                    .ToList();
+
+                foreach (var maTheLoai in distinctTheLoaiIds)
+                {
+                    _context.SachTheLoais.Add(
+                        new SachTheLoai
+                        {
+                            MaSach = sachDb.MaSach,
+                            MaTheLoai = maTheLoai
+                        }
+                    );
+                }
+
+                // =================================================
+                // LƯU
+                // =================================================
+
+                await _context.SaveChangesAsync();
+
+                return RedirectToAction(nameof(Index));
             }
+
+            // -----------------------------------------------------
+            // ModelState lỗi → load lại dữ liệu
+            // -----------------------------------------------------
+
+            await LoadFormData(
+                sach.MaLoaiSach,
+                selectedTheLoaiIds
+            );
+
+            return View(sach);
+        }
+
+        // =========================================================
+        // DELETE - GET
+        // =========================================================
+
+        public async Task<IActionResult> Delete(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var sach = await _context.Sachs
+                .Include(s => s.LoaiSach)
+                .Include(s => s.SachTheLoais)
+                    .ThenInclude(st => st.TheLoai)
+                .FirstOrDefaultAsync(s => s.MaSach == id);
+
+            if (sach == null)
+            {
+                return NotFound();
+            }
+
+            return View(sach);
+        }
+
+        // =========================================================
+        // DELETE - POST
+        // =========================================================
+
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            var sach = await _context.Sachs
+                .Include(s => s.SachTheLoais)
+                .FirstOrDefaultAsync(s => s.MaSach == id);
+
+            if (sach != null)
+            {
+                // Xóa các quan hệ Thể loại
+                _context.SachTheLoais.RemoveRange(
+                    sach.SachTheLoais
+                );
+
+                // Xóa hình
+                DeleteImage(sach.Hinh);
+
+                // Xóa sách
+                _context.Sachs.Remove(sach);
+
+                await _context.SaveChangesAsync();
+            }
+
             return RedirectToAction(nameof(Index));
         }
-        return View(sach);
-    }
 
-    // GET: SACHS/Delete/5
-    public async Task<IActionResult> Delete(int? masach)
-    {
-        if (masach == null)
+        // =========================================================
+        // LOAD FORM DATA
+        // =========================================================
+
+        private async Task LoadFormData(
+            int? selectedLoaiSachId = null,
+            int[]? selectedTheLoaiIds = null)
         {
-            return NotFound();
+            // -----------------------------------------------------
+            // Loại sách
+            // -----------------------------------------------------
+
+            ViewBag.MaLoaiSach = new SelectList(
+                await _context.LoaiSachs
+                    .OrderBy(x => x.TenLoaiSach)
+                    .ToListAsync(),
+                "MaLoaiSach",
+                "TenLoaiSach",
+                selectedLoaiSachId
+            );
+
+            // -----------------------------------------------------
+            // Thể loại A-Z
+            // -----------------------------------------------------
+
+            ViewBag.TheLoais = await _context.TheLoais
+                .OrderBy(x => x.TenTheLoai)
+                .ToListAsync();
+
+            // Danh sách ID đã chọn
+            ViewBag.SelectedTheLoaiIds =
+                selectedTheLoaiIds?
+                    .Distinct()
+                    .ToList()
+                ?? new List<int>();
         }
 
-        var sach = await _context.Sachs
-            .FirstOrDefaultAsync(m => m.MaSach == masach);
-        if (sach == null)
+        // =========================================================
+        // SAVE IMAGE
+        // =========================================================
+
+        private async Task<string> SaveImage(IFormFile file)
         {
-            return NotFound();
+            string uploadsFolder =
+                Path.Combine(
+                    _environment.WebRootPath,
+                    "images",
+                    "sach"
+                );
+
+            if (!Directory.Exists(uploadsFolder))
+            {
+                Directory.CreateDirectory(uploadsFolder);
+            }
+
+            string extension =
+                Path.GetExtension(file.FileName);
+
+            string fileName =
+                Guid.NewGuid().ToString()
+                + extension;
+
+            string filePath =
+                Path.Combine(
+                    uploadsFolder,
+                    fileName
+                );
+
+            using (var stream =
+                   new FileStream(
+                       filePath,
+                       FileMode.Create))
+            {
+                await file.CopyToAsync(stream);
+            }
+
+            return "/images/sach/" + fileName;
         }
 
-        return View(sach);
-    }
+        // =========================================================
+        // DELETE IMAGE
+        // =========================================================
 
-    // POST: SACHS/Delete/5
-    [HttpPost, ActionName("Delete")]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> DeleteConfirmed(int? masach)
-    {
-        var sach = await _context.Sachs.FindAsync(masach);
-        if (sach != null)
+        private void DeleteImage(string? imagePath)
         {
-            _context.Sachs.Remove(sach);
+            if (string.IsNullOrEmpty(imagePath))
+            {
+                return;
+            }
+
+            try
+            {
+                string fileName =
+                    Path.GetFileName(imagePath);
+
+                string filePath =
+                    Path.Combine(
+                        _environment.WebRootPath,
+                        "images",
+                        "sach",
+                        fileName
+                    );
+
+                if (System.IO.File.Exists(filePath))
+                {
+                    System.IO.File.Delete(filePath);
+                }
+            }
+            catch
+            {
+                // Không làm crash chương trình nếu xóa hình thất bại
+            }
         }
 
-        await _context.SaveChangesAsync();
-        return RedirectToAction(nameof(Index));
-    }
+        // =========================================================
+        // CHECK EXISTS
+        // =========================================================
 
-    private bool SachExists(int? masach)
-    {
-        return _context.Sachs.Any(e => e.MaSach == masach);
+        private bool SachExists(int id)
+        {
+            return _context.Sachs
+                .Any(e => e.MaSach == id);
+        }
     }
 }

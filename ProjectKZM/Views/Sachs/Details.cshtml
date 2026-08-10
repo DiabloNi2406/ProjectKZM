@@ -1,94 +1,202 @@
 @model ProjectKZM.Models.Sach
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Xem sách";
 }
 
-<h1>Details</h1>
+<style>
+    .details-page {
+        max-width: 900px;
+        margin: 40px auto;
+        padding: 0 20px;
+    }
 
-<div>
-    <h4>Sach</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.TenSach)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.TenSach)
-        </dd>
-    </dl>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.TacGia)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.TacGia)
-        </dd>
-    </dl>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.NhaXuatBan)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.NhaXuatBan)
-        </dd>
-    </dl>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Gia)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Gia)
-        </dd>
-    </dl>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.SoLuong)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.SoLuong)
-        </dd>
-    </dl>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Hinh)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Hinh)
-        </dd>
-    </dl>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.MoTa)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.MoTa)
-        </dd>
-    </dl>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.MaTheLoai)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.MaTheLoai)
-        </dd>
-    </dl>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.TheLoai)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.TheLoai)
-        </dd>
-    </dl>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ChiTietGioHangs)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ChiTietGioHangs)
-        </dd>
-    </dl>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ChiTietDonHangs)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ChiTietDonHangs)
-        </dd>
-    </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.MaSach">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    .details-card {
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 30px;
+        background: white;
+    }
+
+    .details-title {
+        font-size: 40px;
+        margin-bottom: 8px;
+    }
+
+    .details-subtitle {
+        color: #777;
+        margin-bottom: 30px;
+    }
+
+    .book-image {
+        width: 220px;
+        max-height: 300px;
+        object-fit: cover;
+        border-radius: 8px;
+        border: 1px solid #ddd;
+    }
+
+    .info-label {
+        font-weight: 600;
+        width: 180px;
+    }
+
+    .genre-badge {
+        margin-right: 5px;
+        margin-bottom: 5px;
+    }
+
+    .button-area {
+        margin-top: 30px;
+        display: flex;
+        gap: 10px;
+    }
+</style>
+
+<div class="details-page">
+
+    <h1 class="details-title">
+        Xem sách
+    </h1>
+
+    <p class="details-subtitle">
+        Thông tin chi tiết của sách
+    </p>
+
+    <div class="details-card">
+
+        <div class="row">
+
+            <!-- HÌNH -->
+            <div class="col-md-4 text-center">
+
+                @if (!string.IsNullOrEmpty(Model.Hinh))
+                {
+                    <img src="@Model.Hinh"
+                         class="book-image"
+                         alt="@Model.TenSach" />
+                }
+                else
+                {
+                    <div class="text-muted">
+                        Chưa có hình ảnh
+                    </div>
+                }
+
+            </div>
+
+            <!-- THÔNG TIN -->
+            <div class="col-md-8">
+
+                <div class="mb-3">
+                    <strong class="info-label">
+                        Tên sách:
+                    </strong>
+                    @Model.TenSach
+                </div>
+
+                <div class="mb-3">
+                    <strong class="info-label">
+                        Chương:
+                    </strong>
+                    @(Model.Chuong ?? "Chưa cập nhật")
+                </div>
+
+                <div class="mb-3">
+                    <strong class="info-label">
+                        Tác giả:
+                    </strong>
+                    @(Model.TacGia ?? "Chưa cập nhật")
+                </div>
+
+                <div class="mb-3">
+                    <strong class="info-label">
+                        Nhà xuất bản:
+                    </strong>
+                    @(Model.NhaXuatBan ?? "Chưa cập nhật")
+                </div>
+
+                <div class="mb-3">
+                    <strong class="info-label">
+                        Giá:
+                    </strong>
+                    @Model.Gia.ToString("N0") VNĐ
+                </div>
+
+                <div class="mb-3">
+                    <strong class="info-label">
+                        Số lượng:
+                    </strong>
+                    @Model.SoLuong
+                </div>
+
+                <!-- THỂ LOẠI -->
+                <div class="mb-3">
+
+                    <strong class="info-label">
+                        Thể loại:
+                    </strong>
+
+                    @if (Model.SachTheLoais.Any())
+                    {
+                        <div class="mt-2">
+
+                            @foreach (var item in Model.SachTheLoais)
+                            {
+                                <span class="badge bg-primary genre-badge">
+                                    @item.TheLoai?.TenTheLoai
+                                </span>
+                            }
+
+                        </div>
+                    }
+                    else
+                    {
+                        <span class="text-muted">
+                            Chưa có thể loại
+                        </span>
+                    }
+
+                </div>
+
+                <!-- MÔ TẢ -->
+                <div class="mb-3">
+
+                    <strong class="info-label">
+                        Mô tả:
+                    </strong>
+
+                    <p class="mt-2">
+                        @(Model.MoTa ?? "Chưa có mô tả")
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="button-area">
+
+            <a asp-action="Edit"
+               asp-route-id="@Model.MaSach"
+               class="btn btn-warning">
+                Sửa
+            </a>
+
+            <a asp-action="Delete"
+               asp-route-id="@Model.MaSach"
+               class="btn btn-danger">
+                Xóa
+            </a>
+
+            <a asp-action="Index"
+               class="btn btn-secondary">
+                Quay lại
+            </a>
+
+        </div>
+
+    </div>
+
 </div>

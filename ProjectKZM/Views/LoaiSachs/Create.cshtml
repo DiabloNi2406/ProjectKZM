@@ -1,0 +1,93 @@
+﻿@model ProjectKZM.Models.LoaiSach
+
+@{
+    ViewData["Title"] = "Thêm loại sách";
+}
+
+<style>
+    .type-form-page {
+        max-width: 700px;
+        margin: 50px auto;
+        padding: 0 20px;
+    }
+
+    .type-form-card {
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        background: white;
+        padding: 35px;
+        box-shadow: 0 3px 12px rgba(0,0,0,0.06);
+    }
+
+    .type-form-title {
+        font-size: 36px;
+        font-weight: 400;
+        margin-bottom: 8px;
+    }
+
+    .type-form-subtitle {
+        color: #777;
+        margin-bottom: 30px;
+    }
+</style>
+
+<div class="type-form-page">
+
+    <div class="type-form-card">
+
+        <h1 class="type-form-title">
+            Thêm loại sách
+        </h1>
+
+        <p class="type-form-subtitle">
+            Thêm một loại sách mới vào hệ thống
+        </p>
+
+        <form asp-action="Create" method="post">
+
+            <div asp-validation-summary="ModelOnly"
+                 class="text-danger mb-3">
+            </div>
+
+            <div class="mb-3">
+
+                <label asp-for="TenLoaiSach"
+                       class="form-label">
+                    Tên loại sách
+                </label>
+
+                <input asp-for="TenLoaiSach"
+                       class="form-control"
+                       placeholder="Ví dụ: Manga, Novel, Light Novel..." />
+
+                <span asp-validation-for="TenLoaiSach"
+                      class="text-danger">
+                </span>
+
+            </div>
+
+            <div class="d-flex gap-2">
+
+                <button type="submit"
+                        class="btn btn-success">
+                    + Thêm loại sách
+                </button>
+
+                <a asp-action="Index"
+                   class="btn btn-secondary">
+                    Hủy
+                </a>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

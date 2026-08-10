@@ -9,9 +9,11 @@ namespace ProjectKZM.Models
 
         [Required(ErrorMessage = "Tên vai trò không được để trống")]
         [StringLength(50)]
+        [Display(Name = "Tên vai trò")]
         public string TenVaiTro { get; set; } = string.Empty;
 
         // Navigation Property
-        public ICollection<NguoiDung> NguoiDungs { get; set; } = new List<NguoiDung>();
+        public virtual ICollection<NguoiDung> NguoiDungs { get; set; }
+            = new List<NguoiDung>();
     }
 }

@@ -1,0 +1,690 @@
+﻿@model ProjectKZM.Models.NguoiDung
+
+@{
+    ViewData["Title"] = "Đăng ký";
+}
+
+<style>
+
+    /* =========================================================
+           REGISTER PAGE
+           ========================================================= */
+
+    .register-page {
+        min-height: calc(100vh - 100px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 40px 20px;
+    }
+
+
+    /* =========================================================
+           REGISTER CARD
+           ========================================================= */
+
+    .register-card {
+        width: 100%;
+        max-width: 520px;
+        background: #ffffff;
+        border: 1px solid #e5e5e5;
+        border-radius: 16px;
+        padding: 35px;
+        box-shadow: 0 10px 35px rgba(0, 0, 0, 0.08);
+    }
+
+
+    /* =========================================================
+           HEADER
+           ========================================================= */
+
+    .register-header {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+
+    .register-icon {
+        width: 65px;
+        height: 65px;
+        margin: 0 auto 15px;
+        border-radius: 50%;
+        background: #212529;
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 28px;
+    }
+
+    .register-header h2 {
+        margin: 0;
+        font-size: 30px;
+        font-weight: 600;
+        color: #222;
+    }
+
+    .register-header p {
+        margin: 8px 0 0;
+        color: #888;
+        font-size: 14px;
+    }
+
+
+    /* =========================================================
+           ERROR
+           ========================================================= */
+
+    .register-error {
+        border: none;
+        border-radius: 8px;
+        font-size: 14px;
+        margin-bottom: 20px;
+    }
+
+
+    /* =========================================================
+           FORM
+           ========================================================= */
+
+    .register-form-group {
+        margin-bottom: 20px;
+    }
+
+        .register-form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+
+    /* =========================================================
+           INPUT
+           ========================================================= */
+
+    .register-input {
+        width: 100%;
+        height: 46px;
+        padding: 0 14px;
+        border: 1px solid #dcdcdc;
+        border-radius: 8px;
+        outline: none;
+        font-size: 14px;
+        transition: all 0.2s ease;
+        box-sizing: border-box;
+    }
+
+        .register-input:focus {
+            border-color: #212529;
+            box-shadow: 0 0 0 3px rgba(33, 37, 41, 0.08);
+        }
+
+        .register-input::placeholder {
+            color: #aaa;
+        }
+
+
+    /* =========================================================
+           PASSWORD
+           ========================================================= */
+
+    .password-wrapper {
+        position: relative;
+    }
+
+        .password-wrapper .register-input {
+            padding-right: 50px;
+        }
+
+    .password-check {
+        position: absolute;
+        top: 50%;
+        right: 14px;
+        transform: translateY(-50%);
+        width: 22px;
+        height: 22px;
+        margin: 0;
+        cursor: pointer;
+        accent-color: #212529;
+    }
+
+
+    /* =========================================================
+           PASSWORD CONFIRM
+           ========================================================= */
+
+    .password-match {
+        display: none;
+        margin-top: 7px;
+        font-size: 13px;
+    }
+
+        .password-match.success {
+            display: block;
+            color: #198754;
+        }
+
+        .password-match.error {
+            display: block;
+            color: #dc3545;
+        }
+
+
+    /* =========================================================
+           VALIDATION
+           ========================================================= */
+
+    .field-validation-error {
+        display: block;
+        margin-top: 5px;
+        font-size: 13px;
+    }
+
+
+    /* =========================================================
+           BUTTON
+           ========================================================= */
+
+    .register-button {
+        width: 100%;
+        height: 46px;
+        border: none;
+        border-radius: 8px;
+        background: #212529;
+        color: white;
+        font-size: 15px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+        .register-button:hover {
+            background: #000;
+            transform: translateY(-1px);
+            box-shadow: 0 5px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .register-button:active {
+            transform: translateY(0);
+        }
+
+
+    /* =========================================================
+           LOGIN
+           ========================================================= */
+
+    .login-area {
+        text-align: center;
+        margin-top: 25px;
+        padding-top: 20px;
+        border-top: 1px solid #eeeeee;
+        font-size: 14px;
+        color: #777;
+    }
+
+        .login-area a {
+            margin-left: 5px;
+            color: #212529;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+            .login-area a:hover {
+                text-decoration: underline;
+            }
+
+
+    /* =========================================================
+           RESPONSIVE
+           ========================================================= */
+
+    @@media (max-width: 600px) {
+
+        .register-page {
+            padding: 25px 15px;
+        }
+
+        .register-card {
+            padding: 28px 22px;
+            border-radius: 12px;
+        }
+
+        .register-header h2 {
+            font-size: 26px;
+        }
+    }
+
+</style>
+
+
+<div class="register-page">
+
+    <div class="register-card">
+
+        <!-- =====================================================
+             HEADER
+             ===================================================== -->
+
+        <div class="register-header">
+
+            <div class="register-icon">
+                📝
+            </div>
+
+            <h2>
+                Đăng ký
+            </h2>
+
+            <p>
+                Tạo tài khoản để mua sách tại Yuuji Store
+            </p>
+
+        </div>
+
+
+        <!-- =====================================================
+             ERROR
+             ===================================================== -->
+        @if (ViewBag.Error != null)
+        {
+            <div class="alert alert-danger register-error">
+                @ViewBag.Error
+            </div>
+        }
+
+
+        <!-- =====================================================
+             FORM
+             ===================================================== -->
+
+        <form asp-action="Register"
+              method="post"
+              id="registerForm">
+
+            <div asp-validation-summary="All"
+                 class="text-danger register-error">
+            </div>
+
+
+            <!-- =================================================
+                 HỌ VÀ TÊN
+                 ================================================= -->
+
+            <div class="register-form-group">
+
+                <label asp-for="HoTen">
+                    Họ và tên
+                </label>
+
+                <input asp-for="HoTen"
+                       class="register-input"
+                       placeholder="Nhập họ và tên"
+                       autocomplete="name" />
+
+                <span asp-validation-for="HoTen"
+                      class="text-danger">
+                </span>
+
+            </div>
+
+
+            <!-- =================================================
+                 EMAIL
+                 ================================================= -->
+
+            <div class="register-form-group">
+
+                <label asp-for="Email">
+                    Email
+                </label>
+
+                <input asp-for="Email"
+                       type="email"
+                       class="register-input"
+                       placeholder="Nhập email của bạn"
+                       autocomplete="email" />
+
+                <span asp-validation-for="Email"
+                      class="text-danger">
+                </span>
+
+            </div>
+
+
+            <!-- =================================================
+                 MẬT KHẨU
+                 ================================================= -->
+
+            <div class="register-form-group">
+
+                <label asp-for="MatKhau">
+                    Mật khẩu
+                </label>
+
+                <div class="password-wrapper">
+
+                    <input asp-for="MatKhau"
+                           type="password"
+                           id="password"
+                           class="register-input"
+                           placeholder="Nhập mật khẩu"
+                           autocomplete="new-password" />
+
+                    <input type="checkbox"
+                           id="showPassword"
+                           class="password-check"
+                           title="Hiện mật khẩu" />
+
+                </div>
+
+                <span asp-validation-for="MatKhau"
+                      class="text-danger">
+                </span>
+
+            </div>
+
+
+            <!-- =================================================
+                 XÁC NHẬN MẬT KHẨU
+                 ================================================= -->
+
+            <div class="register-form-group">
+
+                <label for="confirmPassword">
+                    Xác nhận mật khẩu
+                </label>
+
+                <div class="password-wrapper">
+
+                    <input type="password"
+                           id="confirmPassword"
+                           name="confirmPassword"
+                           class="register-input"
+                           placeholder="Nhập lại mật khẩu"
+                           autocomplete="new-password"
+                           required />
+
+                    <input type="checkbox"
+                           id="showConfirmPassword"
+                           class="password-check"
+                           title="Hiện mật khẩu" />
+
+                </div>
+
+                <div id="passwordMatch"
+                     class="password-match">
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 SỐ ĐIỆN THOẠI
+                 ================================================= -->
+
+            <div class="register-form-group">
+
+                <label asp-for="SoDienThoai">
+                    Số điện thoại
+                </label>
+
+                <input asp-for="SoDienThoai"
+                       type="tel"
+                       class="register-input"
+                       placeholder="Nhập số điện thoại"
+                       autocomplete="tel" />
+
+                <span asp-validation-for="SoDienThoai"
+                      class="text-danger">
+                </span>
+
+            </div>
+
+
+            <!-- =================================================
+                 ĐỊA CHỈ
+                 ================================================= -->
+
+            <div class="register-form-group">
+
+                <label asp-for="DiaChi">
+                    Địa chỉ
+                </label>
+
+                <input asp-for="DiaChi"
+                       class="register-input"
+                       placeholder="Nhập địa chỉ"
+                       autocomplete="street-address" />
+
+                <span asp-validation-for="DiaChi"
+                      class="text-danger">
+                </span>
+
+            </div>
+
+
+            <!-- =================================================
+                 ẢNH ĐẠI DIỆN
+                 ================================================= -->
+
+            <div class="register-form-group">
+
+                <label asp-for="AnhDaiDien">
+                    Ảnh đại diện (URL)
+                </label>
+
+                <input asp-for="AnhDaiDien"
+                       class="register-input"
+                       placeholder="Nhập URL ảnh đại diện" />
+
+                <span asp-validation-for="AnhDaiDien"
+                      class="text-danger">
+                </span>
+
+            </div>
+
+
+            <!-- =================================================
+                 BUTTON
+                 ================================================= -->
+
+            <div>
+
+                <button type="submit"
+                        class="register-button">
+
+                    Đăng ký
+
+                </button>
+
+            </div>
+
+        </form>
+
+
+        <!-- =====================================================
+             LOGIN
+             ===================================================== -->
+
+        <div class="login-area">
+
+            <span>
+                Đã có tài khoản?
+            </span>
+
+            <a asp-action="Login">
+                Đăng nhập ngay
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+@section Scripts {
+
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+
+    <script>
+
+        /* =====================================================
+           HIỆN / ẨN MẬT KHẨU
+           ===================================================== */
+
+        const password =
+            document.getElementById("password");
+
+        const confirmPassword =
+            document.getElementById("confirmPassword");
+
+        const showPassword =
+            document.getElementById("showPassword");
+
+        const showConfirmPassword =
+            document.getElementById("showConfirmPassword");
+
+
+        if (showPassword) {
+
+            showPassword.addEventListener(
+                "change",
+                function() {
+
+                    password.type =
+                        this.checked
+                            ? "text"
+                            : "password";
+
+                }
+            );
+
+        }
+
+
+        if (showConfirmPassword) {
+
+            showConfirmPassword.addEventListener(
+                "change",
+                function() {
+
+                    confirmPassword.type =
+                        this.checked
+                            ? "text"
+                            : "password";
+
+                }
+            );
+
+        }
+
+
+        /* =====================================================
+           KIỂM TRA MẬT KHẨU TRÙNG NHAU
+           ===================================================== */
+
+        const passwordMatch =
+            document.getElementById("passwordMatch");
+
+        function checkPasswordMatch() {
+
+            if (!password.value &&
+                !confirmPassword.value) {
+
+                passwordMatch.style.display =
+                    "none";
+
+                passwordMatch.innerHTML =
+                    "";
+
+                passwordMatch.className =
+                    "password-match";
+
+                return true;
+            }
+
+
+            if (!confirmPassword.value) {
+
+                passwordMatch.style.display =
+                    "none";
+
+                passwordMatch.innerHTML =
+                    "";
+
+                passwordMatch.className =
+                    "password-match";
+
+                return true;
+            }
+
+
+            if (password.value === confirmPassword.value) {
+
+                passwordMatch.innerHTML =
+                    "✓ Mật khẩu trùng khớp";
+
+                passwordMatch.className =
+                    "password-match success";
+
+                return true;
+
+            }
+            else {
+
+                passwordMatch.innerHTML =
+                    "✗ Mật khẩu không trùng khớp";
+
+                passwordMatch.className =
+                    "password-match error";
+
+                return false;
+
+            }
+
+        }
+
+
+        password.addEventListener(
+            "input",
+            checkPasswordMatch
+        );
+
+
+        confirmPassword.addEventListener(
+            "input",
+            checkPasswordMatch
+        );
+
+
+        /* =====================================================
+           KHÔNG CHO ĐĂNG KÝ NẾU MẬT KHẨU KHÔNG GIỐNG
+           ===================================================== */
+
+        const registerForm =
+            document.getElementById("registerForm");
+
+
+        registerForm.addEventListener(
+            "submit",
+            function(event) {
+
+                if (!checkPasswordMatch()) {
+
+                    event.preventDefault();
+
+                    confirmPassword.focus();
+
+                }
+
+            }
+        );
+
+    </script>
+
+}

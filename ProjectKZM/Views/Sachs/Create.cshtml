@@ -1,90 +1,698 @@
 @model ProjectKZM.Models.Sach
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Thêm sách";
 }
 
-<h1>Create</h1>
+<style>
 
-<h4>Sach</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    .create-page {
+        max-width: 850px;
+        margin: 40px auto;
+        padding: 0 20px;
+    }
 
-            <div class="form-group">
-                <label asp-for="TenSach" class="control-label"></label>
-                <input asp-for="TenSach" class="form-control" />
-                <span asp-validation-for="TenSach" class="text-danger"></span>
+    .create-title {
+        font-size: 40px;
+        font-weight: 400;
+        color: #222;
+        margin-bottom: 8px;
+    }
+
+    .create-subtitle {
+        color: #777;
+        margin-bottom: 30px;
+    }
+
+    .create-card {
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 30px;
+        background-color: white;
+    }
+
+    .form-label {
+        font-weight: 500;
+    }
+
+    .image-preview {
+        width: 150px;
+        height: 200px;
+        object-fit: cover;
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        margin-top: 10px;
+        display: none;
+    }
+
+    .button-area {
+        margin-top: 25px;
+        display: flex;
+        gap: 10px;
+    }
+
+
+    /* ========================================================= */
+    /* THỂ LOẠI DROPDOWN */
+    /* ========================================================= */
+
+    .genre-dropdown {
+        position: relative;
+    }
+
+    .genre-button {
+        width: 100%;
+        text-align: left;
+        background: white;
+        border: 1px solid #ced4da;
+        border-radius: 6px;
+        padding: 10px 12px;
+        cursor: pointer;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+        .genre-button:hover {
+            background-color: #f8f9fa;
+        }
+
+    .genre-list {
+        display: none;
+        position: absolute;
+        z-index: 1000;
+        width: 100%;
+        max-height: 280px;
+        overflow-y: auto;
+        background: white;
+        border: 1px solid #ced4da;
+        border-radius: 6px;
+        margin-top: 4px;
+        padding: 8px 0;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+
+        .genre-list.show {
+            display: block;
+        }
+
+    .genre-item {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 9px 14px;
+        cursor: pointer;
+    }
+
+        .genre-item:hover {
+            background-color: #f1f3f5;
+        }
+
+        .genre-item input {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+
+        .genre-item label {
+            cursor: pointer;
+            width: 100%;
+            margin: 0;
+        }
+
+    .selected-count {
+        color: #6c757d;
+        font-size: 14px;
+    }
+
+</style>
+
+
+<div class="create-page">
+
+    <!-- ========================================================= -->
+    <!-- HEADER -->
+    <!-- ========================================================= -->
+
+    <h1 class="create-title">
+        Thêm sách
+    </h1>
+
+    <p class="create-subtitle">
+        Nhập thông tin sách và chọn hình ảnh
+    </p>
+
+
+    <!-- ========================================================= -->
+    <!-- CARD -->
+    <!-- ========================================================= -->
+
+    <div class="create-card">
+
+        <form asp-action="Create"
+              method="post"
+              enctype="multipart/form-data">
+
+            @Html.AntiForgeryToken()
+
+
+            <!-- VALIDATION -->
+
+            <div asp-validation-summary="ModelOnly"
+                 class="text-danger mb-3">
             </div>
 
-            <div class="form-group">
-                <label asp-for="TacGia" class="control-label"></label>
-                <input asp-for="TacGia" class="form-control" />
-                <span asp-validation-for="TacGia" class="text-danger"></span>
+
+            <!-- ================================================= -->
+            <!-- TÊN SÁCH -->
+            <!-- ================================================= -->
+
+            <div class="mb-3">
+
+                <label asp-for="TenSach"
+                       class="form-label">
+                    Tên sách
+                </label>
+
+                <input asp-for="TenSach"
+                       class="form-control"
+                       placeholder="Nhập tên sách..." />
+
+                <span asp-validation-for="TenSach"
+                      class="text-danger">
+                </span>
+
             </div>
 
-            <div class="form-group">
-                <label asp-for="NhaXuatBan" class="control-label"></label>
-                <input asp-for="NhaXuatBan" class="form-control" />
-                <span asp-validation-for="NhaXuatBan" class="text-danger"></span>
+
+            <!-- ================================================= -->
+            <!-- CHƯƠNG -->
+            <!-- ================================================= -->
+
+            <div class="mb-3">
+
+                <label asp-for="Chuong"
+                       class="form-label">
+                    Chương
+                </label>
+
+                <input asp-for="Chuong"
+                       type="text"
+                       class="form-control"
+                       placeholder="Ví dụ: Chương 1 - 10" />
+
+                <span asp-validation-for="Chuong"
+                      class="text-danger">
+                </span>
+
             </div>
 
-            <div class="form-group">
-                <label asp-for="Gia" class="control-label"></label>
-                <input asp-for="Gia" class="form-control" />
-                <span asp-validation-for="Gia" class="text-danger"></span>
+
+            <!-- ================================================= -->
+            <!-- TÁC GIẢ -->
+            <!-- ================================================= -->
+
+            <div class="mb-3">
+
+                <label asp-for="TacGia"
+                       class="form-label">
+                    Tác giả
+                </label>
+
+                <input asp-for="TacGia"
+                       class="form-control"
+                       placeholder="Nhập tên tác giả..." />
+
+                <span asp-validation-for="TacGia"
+                      class="text-danger">
+                </span>
+
             </div>
 
-            <div class="form-group">
-                <label asp-for="SoLuong" class="control-label"></label>
-                <input asp-for="SoLuong" class="form-control" />
-                <span asp-validation-for="SoLuong" class="text-danger"></span>
+
+            <!-- ================================================= -->
+            <!-- NHÀ XUẤT BẢN -->
+            <!-- ================================================= -->
+
+            <div class="mb-3">
+
+                <label asp-for="NhaXuatBan"
+                       class="form-label">
+                    Nhà xuất bản
+                </label>
+
+                <input asp-for="NhaXuatBan"
+                       class="form-control"
+                       placeholder="Nhập nhà xuất bản..." />
+
+                <span asp-validation-for="NhaXuatBan"
+                      class="text-danger">
+                </span>
+
             </div>
 
-            <div class="form-group">
-                <label asp-for="Hinh" class="control-label"></label>
-                <input asp-for="Hinh" class="form-control" />
-                <span asp-validation-for="Hinh" class="text-danger"></span>
+
+            <!-- ================================================= -->
+            <!-- LOẠI SÁCH -->
+            <!-- ================================================= -->
+
+            <div class="mb-3">
+
+                <label asp-for="MaLoaiSach"
+                       class="form-label">
+                    Loại sách
+                </label>
+
+                <select asp-for="MaLoaiSach"
+                        class="form-select"
+                        asp-items="ViewBag.MaLoaiSach">
+
+                    <option value="">
+                        -- Chọn loại sách --
+                    </option>
+
+                </select>
+
+                <span asp-validation-for="MaLoaiSach"
+                      class="text-danger">
+                </span>
+
+                <small class="text-muted">
+                    Chọn một loại: Manga, Light Novel, Novel,...
+                </small>
+
             </div>
 
-            <div class="form-group">
-                <label asp-for="MoTa" class="control-label"></label>
-                <input asp-for="MoTa" class="form-control" />
-                <span asp-validation-for="MoTa" class="text-danger"></span>
+
+            <!-- ================================================= -->
+            <!-- GIÁ -->
+            <!-- ================================================= -->
+
+            <div class="mb-3">
+
+                <label asp-for="Gia"
+                       class="form-label">
+                    Giá (VNĐ)
+                </label>
+
+                <div class="input-group">
+
+                    <input asp-for="Gia"
+                           type="number"
+                           step="1000"
+                           min="0"
+                           class="form-control"
+                           placeholder="Ví dụ: 50000" />
+
+                    <span class="input-group-text">
+                        VNĐ
+                    </span>
+
+                </div>
+
+                <span asp-validation-for="Gia"
+                      class="text-danger">
+                </span>
+
+                <small class="text-muted">
+                    Nhập giá bằng đồng Việt Nam. Ví dụ: 50.000 VNĐ nhập 50000.
+                </small>
+
             </div>
 
-            <div class="form-group">
-                <label asp-for="MaTheLoai" class="control-label"></label>
-                <input asp-for="MaTheLoai" class="form-control" />
-                <span asp-validation-for="MaTheLoai" class="text-danger"></span>
+
+            <!-- ================================================= -->
+            <!-- SỐ LƯỢNG -->
+            <!-- ================================================= -->
+
+            <div class="mb-3">
+
+                <label asp-for="SoLuong"
+                       class="form-label">
+                    Số lượng
+                </label>
+
+                <input asp-for="SoLuong"
+                       type="number"
+                       min="0"
+                       class="form-control"
+                       placeholder="Nhập số lượng..." />
+
+                <span asp-validation-for="SoLuong"
+                      class="text-danger">
+                </span>
+
             </div>
 
-            <div class="form-group">
-                <label asp-for="TheLoai" class="control-label"></label>
-                <input asp-for="TheLoai" class="form-control" />
-                <span asp-validation-for="TheLoai" class="text-danger"></span>
+
+            <!-- ================================================= -->
+            <!-- THỂ LOẠI -->
+            <!-- ================================================= -->
+
+            <div class="mb-3">
+
+                <label class="form-label">
+                    Thể loại
+                </label>
+
+
+                <div class="genre-dropdown">
+
+                    <!-- NÚT MỞ DANH SÁCH -->
+
+                    <button type="button"
+                            class="genre-button"
+                            id="genreButton">
+
+                        <span id="genreButtonText">
+                            -- Chọn thể loại --
+                        </span>
+
+                        <span>
+                            ▼
+                        </span>
+
+                    </button>
+
+
+                    <!-- DANH SÁCH CHECKBOX -->
+
+                    <div class="genre-list"
+                         id="genreList">
+
+                        @if (ViewBag.TheLoais != null)
+                        {
+                            foreach (var theLoai in ViewBag.TheLoais)
+                            {
+                                <div class="genre-item">
+
+                                    <input type="checkbox"
+                                           class="genre-checkbox"
+                                           name="selectedTheLoaiIds"
+                                           value="@theLoai.MaTheLoai"
+                                           id="genre_@theLoai.MaTheLoai" />
+
+                                    <label for="genre_@theLoai.MaTheLoai">
+
+                                        @theLoai.TenTheLoai
+
+                                    </label>
+
+                                </div>
+                            }
+                        }
+
+                    </div>
+
+                </div>
+
+
+                <div class="mt-2">
+
+                    <span class="selected-count"
+                          id="selectedGenreCount">
+                        Chưa chọn thể loại
+                    </span>
+
+                </div>
+
+
+                <span asp-validation-for="SachTheLoais"
+                      class="text-danger">
+                </span>
+
             </div>
 
-            <div class="form-group">
-                <label asp-for="ChiTietGioHangs" class="control-label"></label>
-                <input asp-for="ChiTietGioHangs" class="form-control" />
-                <span asp-validation-for="ChiTietGioHangs" class="text-danger"></span>
+
+            <!-- ================================================= -->
+            <!-- HÌNH ẢNH -->
+            <!-- ================================================= -->
+
+            <div class="mb-3">
+
+                <label class="form-label">
+                    Hình ảnh
+                </label>
+
+                <input type="file"
+                       name="HinhFile"
+                       id="HinhFile"
+                       class="form-control"
+                       accept=".jpg,.jpeg,.png,.webp" />
+
+                <small class="text-muted">
+                    Chỉ chấp nhận JPG, JPEG, PNG hoặc WEBP. Tối đa 5MB.
+                </small>
+
+                <span asp-validation-for="Hinh"
+                      class="text-danger">
+                </span>
+
+                <br />
+
+                <img id="imagePreview"
+                     class="image-preview"
+                     alt="Xem trước hình ảnh" />
+
             </div>
 
-            <div class="form-group">
-                <label asp-for="ChiTietDonHangs" class="control-label"></label>
-                <input asp-for="ChiTietDonHangs" class="form-control" />
-                <span asp-validation-for="ChiTietDonHangs" class="text-danger"></span>
+
+            <!-- ================================================= -->
+            <!-- MÔ TẢ -->
+            <!-- ================================================= -->
+
+            <div class="mb-3">
+
+                <label asp-for="MoTa"
+                       class="form-label">
+                    Mô tả
+                </label>
+
+                <textarea asp-for="MoTa"
+                          class="form-control"
+                          rows="5"
+                          placeholder="Nhập mô tả sách..."></textarea>
+
+                <span asp-validation-for="MoTa"
+                      class="text-danger">
+                </span>
+
             </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+
+
+            <!-- ================================================= -->
+            <!-- BUTTON -->
+            <!-- ================================================= -->
+
+            <div class="button-area">
+
+                <button type="submit"
+                        class="btn btn-success">
+
+                    Thêm sách
+
+                </button>
+
+
+                <a asp-action="Index"
+                   class="btn btn-secondary">
+
+                    Quay lại
+
+                </a>
+
             </div>
+
         </form>
+
     </div>
+
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+
+@section Scripts {
+
+    @{
+        await Html.RenderPartialAsync(
+            "_ValidationScriptsPartial");
+    }
+
+
+    <script>
+
+        // =========================================================
+        // DROPDOWN THỂ LOẠI
+        // =========================================================
+
+        const genreButton =
+            document.getElementById("genreButton");
+
+        const genreList =
+            document.getElementById("genreList");
+
+        const genreButtonText =
+            document.getElementById("genreButtonText");
+
+        const selectedGenreCount =
+            document.getElementById("selectedGenreCount");
+
+        const genreCheckboxes =
+            document.querySelectorAll(".genre-checkbox");
+
+
+        // Mở / đóng danh sách
+
+        genreButton.addEventListener("click", function() {
+
+            genreList.classList.toggle("show");
+
+        });
+
+
+        // Cập nhật số lượng thể loại
+
+        function updateGenreText() {
+
+            const selected =
+                document.querySelectorAll(
+                    ".genre-checkbox:checked"
+                );
+
+
+            if (selected.length === 0) {
+
+                genreButtonText.textContent =
+                    "-- Chọn thể loại --";
+
+                selectedGenreCount.textContent =
+                    "Chưa chọn thể loại";
+
+                return;
+            }
+
+
+            const names = [];
+
+
+            selected.forEach(function(checkbox) {
+
+                const label =
+                    document.querySelector(
+                        'label[for="' +
+                        checkbox.id +
+                        '"]'
+                    );
+
+                if (label) {
+
+                    names.push(
+                        label.textContent.trim()
+                    );
+
+                }
+
+            });
+
+
+            genreButtonText.textContent =
+                names.join(", ");
+
+
+            selectedGenreCount.textContent =
+                "Đã chọn " +
+                selected.length +
+                " thể loại";
+        }
+
+
+        // Khi tick checkbox
+
+        genreCheckboxes.forEach(function(checkbox) {
+
+            checkbox.addEventListener(
+                "change",
+                updateGenreText
+            );
+
+        });
+
+
+        // Click bên ngoài dropdown thì đóng
+
+        document.addEventListener(
+            "click",
+            function(event) {
+
+                const dropdown =
+                    document.querySelector(
+                        ".genre-dropdown"
+                    );
+
+
+                if (!dropdown.contains(event.target)) {
+
+                    genreList.classList.remove(
+                        "show"
+                    );
+
+                }
+
+            }
+        );
+
+
+        // =========================================================
+        // PREVIEW HÌNH
+        // =========================================================
+
+        document
+            .getElementById("HinhFile")
+            .addEventListener(
+                "change",
+                function(event) {
+
+                    const file =
+                        event.target.files[0];
+
+
+                    const preview =
+                        document.getElementById(
+                            "imagePreview"
+                        );
+
+
+                    if (file) {
+
+                        const reader =
+                            new FileReader();
+
+
+                        reader.onload =
+                            function(e) {
+
+                                preview.src =
+                                    e.target.result;
+
+                                preview.style.display =
+                                    "block";
+
+                            };
+
+
+                        reader.readAsDataURL(file);
+
+                    }
+                    else {
+
+                        preview.src = "";
+
+                        preview.style.display =
+                            "none";
+
+                    }
+
+                }
+            );
+
+    </script>
+}

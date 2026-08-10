@@ -4950,7 +4950,7 @@ textarea.form-control-lg {
   --bs-alert-link-color: var(--bs-dark-text-emphasis);
 }
 
-@keyframes progress-bar-stripes {
+@@keyframes progress-bar-stripes {
   0% {
     background-position-x: 1rem;
   }
@@ -6236,7 +6236,7 @@ textarea.form-control-lg {
   animation: var(--bs-spinner-animation-speed) linear infinite var(--bs-spinner-animation-name);
 }
 
-@keyframes spinner-border {
+@@keyframes spinner-border {
   to {
     transform: rotate(360deg) /* rtl:ignore */;
   }
@@ -6258,7 +6258,7 @@ textarea.form-control-lg {
   --bs-spinner-border-width: 0.2em;
 }
 
-@keyframes spinner-grow {
+@@keyframes spinner-grow {
   0% {
     transform: scale(0);
   }
@@ -6816,7 +6816,7 @@ textarea.form-control-lg {
   animation: placeholder-glow 2s ease-in-out infinite;
 }
 
-@keyframes placeholder-glow {
+@@keyframes placeholder-glow {
   50% {
     opacity: 0.2;
   }
@@ -6829,7 +6829,7 @@ textarea.form-control-lg {
   animation: placeholder-wave 2s linear infinite;
 }
 
-@keyframes placeholder-wave {
+@@keyframes placeholder-wave {
   100% {
     -webkit-mask-position: -200% 0%;
     mask-position: -200% 0%;

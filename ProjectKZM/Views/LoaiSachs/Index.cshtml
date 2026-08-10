@@ -1,0 +1,227 @@
+﻿@model IEnumerable<ProjectKZM.Models.LoaiSach>
+
+@{
+    ViewData["Title"] = "Quản lý loại sách";
+}
+
+<style>
+    .type-page {
+        max-width: 1200px;
+        margin: 40px auto;
+        padding: 0 20px;
+    }
+
+    .type-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 30px;
+    }
+
+    .type-title {
+        font-size: 40px;
+        font-weight: 400;
+        margin-bottom: 8px;
+        color: #222;
+    }
+
+    .type-subtitle {
+        color: #777;
+        margin: 0;
+    }
+
+    .button-area {
+        display: flex;
+        gap: 10px;
+    }
+
+    .type-card {
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        overflow: hidden;
+        background: white;
+    }
+
+    .type-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+        .type-table th {
+            background: #212529;
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: 500;
+        }
+
+        .type-table td {
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+            vertical-align: middle;
+        }
+
+        .type-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .type-table tr:hover {
+            background-color: #f8f9fa;
+        }
+
+    .type-name {
+        font-weight: 500;
+        font-size: 16px;
+    }
+
+    .action-buttons {
+        display: flex;
+        gap: 6px;
+    }
+</style>
+
+
+<div class="type-page">
+
+    <!-- ============================= -->
+    <!-- HEADER -->
+    <!-- ============================= -->
+
+    <div class="type-header">
+
+        <div>
+
+            <h1 class="type-title">
+                Quản lý loại sách
+            </h1>
+
+            <p class="type-subtitle">
+                Thêm, chỉnh sửa, xem và xóa loại sách
+            </p>
+
+        </div>
+
+
+        <div class="button-area">
+
+            <a asp-action="Create"
+               class="btn btn-success">
+                + Thêm loại sách
+            </a>
+
+            <a asp-controller="Admin"
+               asp-action="Index"
+               class="btn btn-secondary">
+                ← Quản lý
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- ============================= -->
+    <!-- TABLE -->
+    <!-- ============================= -->
+
+    <div class="type-card">
+
+        @if (Model != null && Model.Any())
+        {
+            <table class="type-table">
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            Mã
+                        </th>
+
+                        <th>
+                            Tên loại sách
+                        </th>
+
+                        <th>
+                            Số sách
+                        </th>
+
+                        <th>
+                            Thao tác
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+
+                            <td>
+                                @item.MaLoaiSach
+                            </td>
+
+
+                            <td>
+
+                                <strong class="type-name">
+                                    @item.TenLoaiSach
+                                </strong>
+
+                            </td>
+
+
+                            <td>
+                                @(item.Sachs?.Count ?? 0)
+                            </td>
+
+
+                            <td>
+
+                                <div class="action-buttons">
+
+                                    <a asp-action="Details"
+                                       asp-route-id="@item.MaLoaiSach"
+                                       class="btn btn-info btn-sm">
+                                        Xem
+                                    </a>
+
+                                    <a asp-action="Edit"
+                                       asp-route-id="@item.MaLoaiSach"
+                                       class="btn btn-warning btn-sm">
+                                        Sửa
+                                    </a>
+
+                                    <a asp-action="Delete"
+                                       asp-route-id="@item.MaLoaiSach"
+                                       class="btn btn-danger btn-sm">
+                                        Xóa
+                                    </a>
+
+                                </div>
+
+                            </td>
+
+                        </tr>
+                    }
+
+                </tbody>
+
+            </table>
+        }
+        else
+        {
+            <div class="p-5 text-center text-muted">
+
+                Chưa có loại sách nào trong hệ thống.
+
+            </div>
+        }
+
+    </div>
+
+</div>

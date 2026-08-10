@@ -119,6 +119,24 @@ namespace ProjectKZM.Migrations
                     b.ToTable("GioHangs");
                 });
 
+            modelBuilder.Entity("ProjectKZM.Models.LoaiSach", b =>
+                {
+                    b.Property<int>("MaLoaiSach")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("MaLoaiSach"));
+
+                    b.Property<string>("TenLoaiSach")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.HasKey("MaLoaiSach");
+
+                    b.ToTable("LoaiSachs");
+                });
+
             modelBuilder.Entity("ProjectKZM.Models.NguoiDung", b =>
                 {
                     b.Property<int>("MaNguoiDung")
@@ -170,13 +188,16 @@ namespace ProjectKZM.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("MaSach"));
 
+                    b.Property<string>("Chuong")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<decimal>("Gia")
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("Hinh")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("MaTheLoai")
+                    b.Property<int?>("MaLoaiSach")
                         .HasColumnType("int");
 
                     b.Property<string>("MoTa")
@@ -200,9 +221,24 @@ namespace ProjectKZM.Migrations
 
                     b.HasKey("MaSach");
 
-                    b.HasIndex("MaTheLoai");
+                    b.HasIndex("MaLoaiSach");
 
                     b.ToTable("Sachs");
+                });
+
+            modelBuilder.Entity("ProjectKZM.Models.SachTheLoai", b =>
+                {
+                    b.Property<int>("MaSach")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MaTheLoai")
+                        .HasColumnType("int");
+
+                    b.HasKey("MaSach", "MaTheLoai");
+
+                    b.HasIndex("MaTheLoai");
+
+                    b.ToTable("SachTheLoais");
                 });
 
             modelBuilder.Entity("ProjectKZM.Models.TheLoai", b =>
@@ -217,13 +253,12 @@ namespace ProjectKZM.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("MoTa")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("TenTheLoai")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.HasKey("MaTheLoai");
 
@@ -246,6 +281,18 @@ namespace ProjectKZM.Migrations
                     b.HasKey("MaVaiTro");
 
                     b.ToTable("VaiTros");
+
+                    b.HasData(
+                        new
+                        {
+                            MaVaiTro = 1,
+                            TenVaiTro = "Admin"
+                        },
+                        new
+                        {
+                            MaVaiTro = 2,
+                            TenVaiTro = "User"
+                        });
                 });
 
             modelBuilder.Entity("ProjectKZM.Models.ChiTietDonHang", b =>
@@ -313,7 +360,7 @@ namespace ProjectKZM.Migrations
                     b.HasOne("ProjectKZM.Models.VaiTro", "VaiTro")
                         .WithMany("NguoiDungs")
                         .HasForeignKey("MaVaiTro")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("VaiTro");
@@ -321,11 +368,29 @@ namespace ProjectKZM.Migrations
 
             modelBuilder.Entity("ProjectKZM.Models.Sach", b =>
                 {
-                    b.HasOne("ProjectKZM.Models.TheLoai", "TheLoai")
+                    b.HasOne("ProjectKZM.Models.LoaiSach", "LoaiSach")
                         .WithMany("Sachs")
+                        .HasForeignKey("MaLoaiSach")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.Navigation("LoaiSach");
+                });
+
+            modelBuilder.Entity("ProjectKZM.Models.SachTheLoai", b =>
+                {
+                    b.HasOne("ProjectKZM.Models.Sach", "Sach")
+                        .WithMany("SachTheLoais")
+                        .HasForeignKey("MaSach")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ProjectKZM.Models.TheLoai", "TheLoai")
+                        .WithMany("SachTheLoais")
                         .HasForeignKey("MaTheLoai")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Sach");
 
                     b.Navigation("TheLoai");
                 });
@@ -340,6 +405,11 @@ namespace ProjectKZM.Migrations
                     b.Navigation("ChiTietGioHangs");
                 });
 
+            modelBuilder.Entity("ProjectKZM.Models.LoaiSach", b =>
+                {
+                    b.Navigation("Sachs");
+                });
+
             modelBuilder.Entity("ProjectKZM.Models.NguoiDung", b =>
                 {
                     b.Navigation("DonHangs");
@@ -352,11 +422,13 @@ namespace ProjectKZM.Migrations
                     b.Navigation("ChiTietDonHangs");
 
                     b.Navigation("ChiTietGioHangs");
+
+                    b.Navigation("SachTheLoais");
                 });
 
             modelBuilder.Entity("ProjectKZM.Models.TheLoai", b =>
                 {
-                    b.Navigation("Sachs");
+                    b.Navigation("SachTheLoais");
                 });
 
             modelBuilder.Entity("ProjectKZM.Models.VaiTro", b =>

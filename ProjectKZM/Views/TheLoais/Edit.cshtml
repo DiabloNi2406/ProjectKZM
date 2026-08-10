@@ -1,49 +1,153 @@
 @model ProjectKZM.Models.TheLoai
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Sửa thể loại";
 }
 
-<h1>Edit</h1>
+<div class="container mt-5">
 
-<h4>TheLoai</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="MaTheLoai" />
-            <div class="form-group">
-                <label asp-for="TenTheLoai" class="control-label"></label>
-                <input asp-for="TenTheLoai" class="form-control" />
-                <span asp-validation-for="TenTheLoai" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="MoTa" class="control-label"></label>
-                <input asp-for="MoTa" class="form-control" />
-                <span asp-validation-for="MoTa" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Hinh" class="control-label"></label>
-                <input asp-for="Hinh" class="form-control" />
-                <span asp-validation-for="Hinh" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Sachs" class="control-label"></label>
-                <input asp-for="Sachs" class="form-control" />
-                <span asp-validation-for="Sachs" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+            <h1>Sửa thể loại</h1>
+            <p class="text-muted">
+                Chỉnh sửa thông tin thể loại sách
+            </p>
+        </div>
+
+        <a asp-controller="TheLoais"
+           asp-action="Index"
+           class="btn btn-secondary">
+            ← Quản lý
+        </a>
+
     </div>
+
+
+    <div class="card shadow-sm">
+
+        <div class="card-body">
+
+            <form asp-action="Edit" method="post">
+
+                @Html.AntiForgeryToken()
+
+                <!-- MÃ THỂ LOẠI -->
+                <input type="hidden"
+                       asp-for="MaTheLoai" />
+
+
+                <!-- TÊN THỂ LOẠI -->
+                <div class="mb-3">
+
+                    <label asp-for="TenTheLoai"
+                           class="form-label fw-bold">
+                        Tên thể loại
+                    </label>
+
+                    <input asp-for="TenTheLoai"
+                           class="form-control"
+                           placeholder="Nhập tên thể loại..." />
+
+                    <span asp-validation-for="TenTheLoai"
+                          class="text-danger">
+                    </span>
+
+                </div>
+
+
+                <!-- MÔ TẢ -->
+                <div class="mb-3">
+
+                    <label asp-for="MoTa"
+                           class="form-label fw-bold">
+                        Mô tả
+                    </label>
+
+                    <textarea asp-for="MoTa"
+                              class="form-control"
+                              rows="5"
+                              placeholder="Nhập mô tả thể loại...">
+                    </textarea>
+
+                    <span asp-validation-for="MoTa"
+                          class="text-danger">
+                    </span>
+
+                </div>
+
+
+                <!-- HÌNH -->
+                <div class="mb-3">
+
+                    <label asp-for="Hinh"
+                           class="form-label fw-bold">
+                        Hình ảnh
+                    </label>
+
+                    <input asp-for="Hinh"
+                           class="form-control"
+                           placeholder="Nhập đường dẫn hình ảnh..." />
+
+                    <span asp-validation-for="Hinh"
+                          class="text-danger">
+                    </span>
+
+                </div>
+
+
+                <!-- XEM HÌNH HIỆN TẠI -->
+                @if (!string.IsNullOrEmpty(Model.Hinh))
+                {
+                    <div class="mb-4">
+
+                        <label class="form-label fw-bold">
+                            Hình ảnh hiện tại
+                        </label>
+
+                        <br />
+
+                        <img src="@Model.Hinh"
+                             alt="@Model.TenTheLoai"
+                             style="max-width: 300px;
+                        max-height: 300px;
+                        object-fit: contain;
+                        border: 1px solid #ddd;
+                        padding: 5px;
+                        border-radius: 6px;" />
+
+                    </div>
+                }
+
+
+                <!-- BUTTON -->
+                <div class="mt-4">
+
+                    <button type="submit"
+                            class="btn btn-warning">
+                        Lưu thay đổi
+                    </button>
+
+                    <a asp-action="Index"
+                       class="btn btn-secondary">
+                        Quay lại
+                    </a>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
 }

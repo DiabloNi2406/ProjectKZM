@@ -1,0 +1,135 @@
+﻿@model ProjectKZM.Models.LoaiSach
+
+@{
+    ViewData["Title"] = "Chi tiết loại sách";
+}
+
+<style>
+    .type-detail-page {
+        max-width: 700px;
+        margin: 50px auto;
+        padding: 0 20px;
+    }
+
+    .type-detail-card {
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        background: white;
+        overflow: hidden;
+        box-shadow: 0 3px 12px rgba(0,0,0,0.06);
+    }
+
+    .type-detail-header {
+        background: #212529;
+        color: white;
+        padding: 22px 30px;
+    }
+
+        .type-detail-header h1 {
+            margin: 0;
+            font-size: 28px;
+            font-weight: 400;
+        }
+
+    .type-detail-body {
+        padding: 30px;
+    }
+
+    .detail-row {
+        display: flex;
+        padding: 15px 0;
+        border-bottom: 1px solid #eee;
+    }
+
+        .detail-row:last-child {
+            border-bottom: none;
+        }
+
+    .detail-label {
+        width: 180px;
+        font-weight: 600;
+        color: #555;
+    }
+
+    .detail-value {
+        flex: 1;
+        color: #222;
+    }
+</style>
+
+<div class="type-detail-page">
+
+    <div class="type-detail-card">
+
+        <div class="type-detail-header">
+
+            <h1>
+                Chi tiết loại sách
+            </h1>
+
+        </div>
+
+
+        <div class="type-detail-body">
+
+            <div class="detail-row">
+
+                <div class="detail-label">
+                    Mã loại sách
+                </div>
+
+                <div class="detail-value">
+                    @Model.MaLoaiSach
+                </div>
+
+            </div>
+
+
+            <div class="detail-row">
+
+                <div class="detail-label">
+                    Tên loại sách
+                </div>
+
+                <div class="detail-value">
+                    <strong>
+                        @Model.TenLoaiSach
+                    </strong>
+                </div>
+
+            </div>
+
+
+            <div class="detail-row">
+
+                <div class="detail-label">
+                    Số sách
+                </div>
+
+                <div class="detail-value">
+                    @(Model.Sachs?.Count ?? 0)
+                </div>
+
+            </div>
+
+
+            <div class="mt-4">
+
+                <a asp-action="Edit"
+                   asp-route-id="@Model.MaLoaiSach"
+                   class="btn btn-warning">
+                    Sửa
+                </a>
+
+                <a asp-action="Index"
+                   class="btn btn-secondary">
+                    ← Quay lại
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

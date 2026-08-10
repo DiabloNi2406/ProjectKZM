@@ -1,0 +1,125 @@
+﻿@model ProjectKZM.Models.LoaiSach
+
+@{
+    ViewData["Title"] = "Xóa loại sách";
+}
+
+<style>
+    .type-delete-page {
+        max-width: 700px;
+        margin: 50px auto;
+        padding: 0 20px;
+    }
+
+    .type-delete-card {
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        background: white;
+        padding: 35px;
+        box-shadow: 0 3px 12px rgba(0,0,0,0.06);
+    }
+
+    .delete-title {
+        font-size: 36px;
+        font-weight: 400;
+        margin-bottom: 10px;
+    }
+
+    .delete-warning {
+        color: #dc3545;
+        margin-bottom: 30px;
+    }
+
+    .detail-row {
+        display: flex;
+        padding: 15px 0;
+        border-bottom: 1px solid #eee;
+    }
+
+    .detail-label {
+        width: 180px;
+        font-weight: 600;
+        color: #555;
+    }
+
+    .detail-value {
+        flex: 1;
+    }
+</style>
+
+<div class="type-delete-page">
+
+    <div class="type-delete-card">
+
+        <h1 class="delete-title">
+            Xóa loại sách
+        </h1>
+
+        <p class="delete-warning">
+            Bạn có chắc chắn muốn xóa loại sách này không?
+        </p>
+
+
+        <div class="detail-row">
+
+            <div class="detail-label">
+                Mã loại sách
+            </div>
+
+            <div class="detail-value">
+                @Model.MaLoaiSach
+            </div>
+
+        </div>
+
+
+        <div class="detail-row">
+
+            <div class="detail-label">
+                Tên loại sách
+            </div>
+
+            <div class="detail-value">
+                <strong>
+                    @Model.TenLoaiSach
+                </strong>
+            </div>
+
+        </div>
+
+
+        <div class="detail-row">
+
+            <div class="detail-label">
+                Số sách
+            </div>
+
+            <div class="detail-value">
+                @(Model.Sachs?.Count ?? 0)
+            </div>
+
+        </div>
+
+
+        <form asp-action="Delete"
+              method="post"
+              class="mt-4">
+
+            <input type="hidden"
+                   asp-for="MaLoaiSach" />
+
+            <button type="submit"
+                    class="btn btn-danger">
+                Xóa loại sách
+            </button>
+
+            <a asp-action="Index"
+               class="btn btn-secondary">
+                Hủy
+            </a>
+
+        </form>
+
+    </div>
+
+</div>

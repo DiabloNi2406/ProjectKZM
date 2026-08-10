@@ -1,150 +1,354 @@
-
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using ProjectKZM.Models;
 using ProjectKZM.Data;
+using ProjectKZM.Models;
+using System.Security.Claims;
 
-public class NguoiDungsController : Controller
+namespace ProjectKZM.Controllers
 {
-    private readonly MyDbContext _context;
-
-    public NguoiDungsController(MyDbContext context)
+    [Authorize(Roles = "Admin")]
+    public class NguoiDungsController : Controller
     {
-        _context = context;
-    }
+        private readonly MyDbContext _context;
 
-    // GET: NGUOIDUNGS
-    public async Task<IActionResult> Index()    
-    {
-        return View(await _context.NguoiDungs.ToListAsync());
-    }
-
-    // GET: NGUOIDUNGS/Details/5
-    public async Task<IActionResult> Details(int? manguoidung)
-    {
-        if (manguoidung == null)
+        public NguoiDungsController(MyDbContext context)
         {
-            return NotFound();
+            _context = context;
         }
 
-        var nguoidung = await _context.NguoiDungs
-            .FirstOrDefaultAsync(m => m.MaNguoiDung == manguoidung);
-        if (nguoidung == null)
+        // =====================================================
+        // INDEX
+        // =====================================================
+
+        public async Task<IActionResult> Index()
         {
-            return NotFound();
+            var nguoiDungs = await _context.NguoiDungs
+                .Include(x => x.VaiTro)
+                .ToListAsync();
+
+            return View(nguoiDungs);
         }
 
-        return View(nguoidung);
-    }
+        // =====================================================
+        // DETAILS
+        // =====================================================
 
-    // GET: NGUOIDUNGS/Create
-    public IActionResult Create()
-    {
-        return View();
-    }
-
-    // POST: NGUOIDUNGS/Create
-    // To protect from overposting attacks, enable the specific properties you want to bind to.
-    // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-    [HttpPost]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create([Bind("MaNguoiDung,HoTen,Email,MatKhau,SoDienThoai,DiaChi,AnhDaiDien,MaVaiTro,VaiTro,GioHangs,DonHangs")] NguoiDung nguoidung)
-    {
-        if (ModelState.IsValid)
+        public async Task<IActionResult> Details(int? manguoidung)
         {
-            _context.Add(nguoidung);
+            if (manguoidung == null)
+            {
+                return NotFound();
+            }
+
+            var nguoiDung = await _context.NguoiDungs
+                .Include(x => x.VaiTro)
+                .FirstOrDefaultAsync(x =>
+                    x.MaNguoiDung == manguoidung);
+
+            if (nguoiDung == null)
+            {
+                return NotFound();
+            }
+
+            return View(nguoiDung);
+        }
+
+        // =====================================================
+        // CREATE - GET
+        // =====================================================
+
+        [HttpGet]
+        public async Task<IActionResult> Create()
+        {
+            await LoadRolesAsync();
+
+            return View(new NguoiDung());
+        }
+
+        // =====================================================
+        // CREATE - POST
+        // =====================================================
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(
+            [Bind("HoTen,Email,MatKhau,SoDienThoai,DiaChi,AnhDaiDien,MaVaiTro")]
+            NguoiDung nguoiDung)
+        {
+            // ---------------------------------------------
+            // Kiểm tra Email
+            // ---------------------------------------------
+
+            if (!string.IsNullOrWhiteSpace(nguoiDung.Email))
+            {
+                bool emailExists = await _context.NguoiDungs
+                    .AnyAsync(x => x.Email == nguoiDung.Email);
+
+                if (emailExists)
+                {
+                    ModelState.AddModelError(
+                        "Email",
+                        "Email này đã tồn tại.");
+                }
+            }
+
+            // ---------------------------------------------
+            // Kiểm tra Role
+            // ---------------------------------------------
+
+            var roleExists = await _context.VaiTros
+                .AnyAsync(x => x.MaVaiTro == nguoiDung.MaVaiTro);
+
+            if (!roleExists)
+            {
+                ModelState.AddModelError(
+                    "MaVaiTro",
+                    "Vui lòng chọn vai trò.");
+            }
+
+            // ---------------------------------------------
+            // Nếu lỗi
+            // ---------------------------------------------
+
+            if (!ModelState.IsValid)
+            {
+                await LoadRolesAsync(nguoiDung.MaVaiTro);
+
+                return View(nguoiDung);
+            }
+
+            // ---------------------------------------------
+            // Thêm người dùng
+            // ---------------------------------------------
+
+            _context.NguoiDungs.Add(nguoiDung);
+
             await _context.SaveChangesAsync();
+
+            TempData["Success"] =
+                "Thêm người dùng thành công!";
+
             return RedirectToAction(nameof(Index));
         }
-        return View(nguoidung);
-    }
 
-    // GET: NGUOIDUNGS/Edit/5
-    public async Task<IActionResult> Edit(int? manguoidung)
-    {
-        if (manguoidung == null)
+        // =====================================================
+        // EDIT - GET
+        // =====================================================
+
+        [HttpGet]
+        public async Task<IActionResult> Edit(int? manguoidung)
         {
-            return NotFound();
+            if (manguoidung == null)
+            {
+                return NotFound();
+            }
+
+            var nguoiDung = await _context.NguoiDungs
+                .FindAsync(manguoidung);
+
+            if (nguoiDung == null)
+            {
+                return NotFound();
+            }
+
+            await LoadRolesAsync(nguoiDung.MaVaiTro);
+
+            return View(nguoiDung);
         }
 
-        var nguoidung = await _context.NguoiDungs.FindAsync(manguoidung);
-        if (nguoidung == null)
-        {
-            return NotFound();
-        }
-        return View(nguoidung);
-    }
+        // =====================================================
+        // EDIT - POST
+        // =====================================================
 
-    // POST: NGUOIDUNGS/Edit/5
-    // To protect from overposting attacks, enable the specific properties you want to bind to.
-    // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-    [HttpPost]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit(int? manguoidung, [Bind("MaNguoiDung,HoTen,Email,MatKhau,SoDienThoai,DiaChi,AnhDaiDien,MaVaiTro,VaiTro,GioHangs,DonHangs")] NguoiDung nguoidung)
-    {
-        if (manguoidung != nguoidung.MaNguoiDung)
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(
+            int manguoidung,
+            [Bind("MaNguoiDung,HoTen,Email,MatKhau,SoDienThoai,DiaChi,AnhDaiDien,MaVaiTro")]
+            NguoiDung nguoiDung)
         {
-            return NotFound();
-        }
+            if (manguoidung != nguoiDung.MaNguoiDung)
+            {
+                return NotFound();
+            }
 
-        if (ModelState.IsValid)
-        {
+            // ---------------------------------------------
+            // Kiểm tra Email trùng
+            // ---------------------------------------------
+
+            bool emailExists = await _context.NguoiDungs
+                .AnyAsync(x =>
+                    x.Email == nguoiDung.Email &&
+                    x.MaNguoiDung != nguoiDung.MaNguoiDung);
+
+            if (emailExists)
+            {
+                ModelState.AddModelError(
+                    "Email",
+                    "Email này đã được sử dụng.");
+            }
+
+            // ---------------------------------------------
+            // Kiểm tra Role
+            // ---------------------------------------------
+
+            bool roleExists = await _context.VaiTros
+                .AnyAsync(x =>
+                    x.MaVaiTro == nguoiDung.MaVaiTro);
+
+            if (!roleExists)
+            {
+                ModelState.AddModelError(
+                    "MaVaiTro",
+                    "Vai trò không tồn tại.");
+            }
+
+            // ---------------------------------------------
+            // Nếu lỗi
+            // ---------------------------------------------
+
+            if (!ModelState.IsValid)
+            {
+                await LoadRolesAsync(nguoiDung.MaVaiTro);
+
+                return View(nguoiDung);
+            }
+
+            // ---------------------------------------------
+            // Cập nhật
+            // ---------------------------------------------
+
             try
             {
-                _context.Update(nguoidung);
+                _context.Update(nguoiDung);
+
                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!NguoiDungExists(nguoidung.MaNguoiDung))
+                if (!NguoiDungExists(nguoiDung.MaNguoiDung))
                 {
                     return NotFound();
                 }
-                else
-                {
-                    throw;
-                }
+
+                throw;
             }
+
+            TempData["Success"] =
+                "Cập nhật người dùng thành công!";
+
             return RedirectToAction(nameof(Index));
         }
-        return View(nguoidung);
-    }
 
-    // GET: NGUOIDUNGS/Delete/5
-    public async Task<IActionResult> Delete(int? manguoidung)
-    {
-        if (manguoidung == null)
+        // =====================================================
+        // DELETE - GET
+        // =====================================================
+
+        [HttpGet]
+        public async Task<IActionResult> Delete(int? manguoidung)
         {
-            return NotFound();
+            if (manguoidung == null)
+            {
+                return NotFound();
+            }
+
+            var nguoiDung = await _context.NguoiDungs
+                .Include(x => x.VaiTro)
+                .FirstOrDefaultAsync(x =>
+                    x.MaNguoiDung == manguoidung);
+
+            if (nguoiDung == null)
+            {
+                return NotFound();
+            }
+
+            // Không cho Admin tự xóa mình
+
+            string? currentEmail =
+                User.FindFirstValue(ClaimTypes.Email);
+
+            if (!string.IsNullOrEmpty(currentEmail) &&
+                nguoiDung.Email == currentEmail)
+            {
+                ViewBag.Error =
+                    "Admin không thể tự xóa bản thân!";
+
+                return View(nguoiDung);
+            }
+
+            return View(nguoiDung);
         }
 
-        var nguoidung = await _context.NguoiDungs
-            .FirstOrDefaultAsync(m => m.MaNguoiDung == manguoidung);
-        if (nguoidung == null)
+        // =====================================================
+        // DELETE - POST
+        // =====================================================
+
+        [HttpPost]
+        [ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(
+            int manguoidung)
         {
-            return NotFound();
+            var nguoiDung = await _context.NguoiDungs
+                .FindAsync(manguoidung);
+
+            if (nguoiDung == null)
+            {
+                return NotFound();
+            }
+
+            // Không cho Admin tự xóa mình
+
+            string? currentEmail =
+                User.FindFirstValue(ClaimTypes.Email);
+
+            if (!string.IsNullOrEmpty(currentEmail) &&
+                nguoiDung.Email == currentEmail)
+            {
+                TempData["Error"] =
+                    "Admin không thể tự xóa bản thân!";
+
+                return RedirectToAction(nameof(Index));
+            }
+
+            _context.NguoiDungs.Remove(nguoiDung);
+
+            await _context.SaveChangesAsync();
+
+            TempData["Success"] =
+                "Xóa người dùng thành công!";
+
+            return RedirectToAction(nameof(Index));
         }
 
-        return View(nguoidung);
-    }
+        // =====================================================
+        // LOAD ROLE
+        // =====================================================
 
-    // POST: NGUOIDUNGS/Delete/5
-    [HttpPost, ActionName("Delete")]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> DeleteConfirmed(int? manguoidung)
-    {
-        var nguoidung = await _context.NguoiDungs.FindAsync(manguoidung);
-        if (nguoidung != null)
+        private async Task LoadRolesAsync(int? selectedRole = null)
         {
-            _context.NguoiDungs.Remove(nguoidung);
+            var roles = await _context.VaiTros
+                .OrderBy(x => x.TenVaiTro)
+                .ToListAsync();
+
+            ViewBag.Roles = new SelectList(
+                roles,
+                "MaVaiTro",
+                "TenVaiTro",
+                selectedRole
+            );
         }
 
-        await _context.SaveChangesAsync();
-        return RedirectToAction(nameof(Index));
-    }
+        // =====================================================
+        // EXISTS
+        // =====================================================
 
-    private bool NguoiDungExists(int? manguoidung)
-    {
-        return _context.NguoiDungs.Any(e => e.MaNguoiDung == manguoidung);
+        private bool NguoiDungExists(int id)
+        {
+            return _context.NguoiDungs
+                .Any(x => x.MaNguoiDung == id);
+        }
     }
 }

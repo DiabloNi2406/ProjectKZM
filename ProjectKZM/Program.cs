@@ -1,50 +1,88 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using ProjectKZM.Data;
-using Microsoft.AspNetCore.Authentication.Cookies;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+// ======================================================
+// MVC
+// ======================================================
+
 builder.Services.AddControllersWithViews();
 
-builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-.AddCookie(options =>
-{
-    options.LoginPath = "/Account/Login";
-    options.AccessDeniedPath = "/Account/AccessDenied";
-});
-
-builder.Services.AddAuthorization();
+// ======================================================
+// SQL Server
+// ======================================================
 
 builder.Services.AddDbContext<MyDbContext>(options =>
     options.UseSqlServer(
         builder.Configuration.GetConnectionString("DefaultConnection")));
 
+// ======================================================
+// Authentication
+// ======================================================
 
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        options.LoginPath = "/Account/Login";
+        options.AccessDeniedPath = "/Account/AccessDenied";
+
+        // Cookie tồn tại 7 ngày
+        options.ExpireTimeSpan = TimeSpan.FromDays(7);
+
+        // Gia hạn nếu còn hoạt động
+        options.SlidingExpiration = true;
+    });
+
+// ======================================================
+// Authorization
+// ======================================================
 
 builder.Services.AddAuthorization();
+
+// ======================================================
+// Session (Chuẩn bị cho Giỏ hàng)
+// ======================================================
+
+builder.Services.AddDistributedMemoryCache();
+
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(30);
+
+    options.Cookie.HttpOnly = true;
+
+    options.Cookie.IsEssential = true;
+});
+
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// ======================================================
+// Pipeline
+// ======================================================
+
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
 app.UseHttpsRedirection();
+
+app.UseStaticFiles();
+
 app.UseRouting();
 
-app.UseAuthentication();
-app.UseAuthorization();
+// Session phải đứng trước Authentication
+app.UseSession();
 
-app.MapStaticAssets();
+app.UseAuthentication();
+
+app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}")
-    .WithStaticAssets();
-
+    pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();

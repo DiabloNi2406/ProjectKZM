@@ -1,88 +1,1159 @@
 ﻿<!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
+
 <head>
+
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - ProjectKZM</title>
-    <script type="importmap"></script>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/ProjectKZM.styles.css" asp-append-version="true" />
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0" />
+
+    <title>
+        @ViewData["Title"] - Yuuji Store
+    </title>
+
+    <link rel="stylesheet"
+          href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+
+    <link rel="stylesheet"
+          href="~/css/site.css"
+          asp-append-version="true" />
+
+    <style>
+
+            /* =========================================================
+                       GLOBAL
+                       ========================================================= */
+
+            html,
+            body {
+                margin: 0;
+                padding: 0;
+                min-height: 100%;
+            }
+
+            body {
+                background-color: #f8f9fa;
+                color: #222;
+            }
+
+
+            /* =========================================================
+                       NAVBAR
+                       ========================================================= */
+
+            .main-navbar {
+                width: 100%;
+                background-color: #212529;
+                border-bottom: 1px solid #343a40;
+            }
+
+            .navbar-inner {
+                width: 100%;
+                min-height: 64px;
+                display: flex;
+                align-items: center;
+                gap: 14px;
+                padding: 10px 25px;
+                box-sizing: border-box;
+            }
+
+
+            /* =========================================================
+                       LOGO
+                       ========================================================= */
+
+            .store-logo {
+                flex-shrink: 0;
+                color: white;
+                text-decoration: none;
+                font-size: 24px;
+                font-weight: 600;
+                white-space: nowrap;
+                transition: 0.2s;
+            }
+
+                .store-logo:hover {
+                    color: #f8f9fa;
+                }
+
+
+            /* =========================================================
+                       SEARCH
+                       ========================================================= */
+
+            .navbar-search {
+                flex: 1;
+                min-width: 250px;
+                max-width: 680px;
+                margin-left: 10px;
+            }
+
+            .search-form {
+                width: 100%;
+                display: flex;
+                align-items: center;
+            }
+
+            .search-input {
+                width: 100%;
+                height: 40px;
+                padding: 0 14px;
+                border: none;
+                outline: none;
+                border-radius: 6px 0 0 6px;
+                font-size: 14px;
+                background-color: white;
+                color: #222;
+                box-sizing: border-box;
+            }
+
+                .search-input::placeholder {
+                    color: #888;
+                }
+
+            .search-button {
+                height: 40px;
+                padding: 0 16px;
+                border: none;
+                border-radius: 0 6px 6px 0;
+                background-color: #198754;
+                color: white;
+                font-size: 14px;
+                white-space: nowrap;
+                cursor: pointer;
+                transition: 0.2s;
+            }
+
+                .search-button:hover {
+                    background-color: #157347;
+                }
+
+
+            /* =========================================================
+                       NAVIGATION BUTTONS
+                       ========================================================= */
+
+            .navbar-links {
+                display: flex;
+                align-items: center;
+                gap: 6px;
+                flex-shrink: 0;
+            }
+
+            .navbar-link {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                height: 38px;
+                padding: 0 12px;
+                border-radius: 6px;
+                color: #dee2e6;
+                text-decoration: none;
+                font-size: 14px;
+                white-space: nowrap;
+                transition: 0.2s;
+            }
+
+                .navbar-link:hover {
+                    background-color: #343a40;
+                    color: white;
+                }
+
+
+            /* =========================================================
+                       FILTER BUTTON
+                       ========================================================= */
+
+            .filter-dropdown {
+                position: relative;
+            }
+
+            .filter-button {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                height: 38px;
+                padding: 0 12px;
+                border-radius: 6px;
+                background-color: #343a40;
+                border: 1px solid #495057;
+                color: white;
+                text-decoration: none;
+                font-size: 14px;
+                white-space: nowrap;
+                cursor: pointer;
+                transition: 0.2s;
+            }
+
+                .filter-button:hover {
+                    background-color: #495057;
+                    color: white;
+                }
+
+
+            /* =========================================================
+                       FILTER MENU
+                       ========================================================= */
+
+            .filter-menu {
+                display: none;
+                position: absolute;
+                top: calc(100% + 8px);
+                left: 0;
+                width: 300px;
+                max-height: 500px;
+                overflow-y: auto;
+                background-color: white;
+                border: 1px solid #ddd;
+                border-radius: 8px;
+                box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+                padding: 15px;
+                z-index: 9999;
+            }
+
+                .filter-menu.show {
+                    display: block;
+                }
+
+            .filter-title {
+                font-size: 15px;
+                font-weight: 600;
+                color: #222;
+                margin-bottom: 8px;
+                border-bottom: 1px solid #ddd;
+                padding-bottom: 7px;
+            }
+
+            .filter-section {
+                margin-bottom: 15px;
+            }
+
+            .filter-item {
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                padding: 5px 0;
+                font-size: 14px;
+                color: #333;
+                cursor: pointer;
+            }
+
+                .filter-item input {
+                    cursor: pointer;
+                }
+
+            .filter-actions {
+                display: flex;
+                gap: 8px;
+                margin-top: 10px;
+                padding-top: 10px;
+                border-top: 1px solid #ddd;
+            }
+
+            .filter-apply {
+                flex: 1;
+                height: 36px;
+                border: none;
+                border-radius: 5px;
+                background-color: #198754;
+                color: white;
+                cursor: pointer;
+                font-size: 14px;
+            }
+
+                .filter-apply:hover {
+                    background-color: #157347;
+                }
+
+            .filter-clear {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                height: 36px;
+                padding: 0 12px;
+                border-radius: 5px;
+                background-color: #6c757d;
+                color: white;
+                text-decoration: none;
+                font-size: 14px;
+            }
+
+                .filter-clear:hover {
+                    background-color: #5c636a;
+                    color: white;
+                }
+
+
+            /* =========================================================
+                       USER AREA
+                       ========================================================= */
+
+            .user-area {
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                margin-left: auto;
+                flex-shrink: 0;
+            }
+
+
+            /* =========================================================
+                       USER NAME
+                       ========================================================= */
+
+            .user-name {
+                color: #dee2e6;
+                font-size: 14px;
+                white-space: nowrap;
+            }
+
+
+            /* =========================================================
+                       CART BUTTON
+                       ========================================================= */
+
+            .cart-button {
+                height: 38px;
+                padding: 0 10px;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                border-radius: 6px;
+                border: 1px solid #495057;
+                background-color: #343a40;
+                color: white;
+                text-decoration: none;
+                font-size: 13px;
+                white-space: nowrap;
+                transition: 0.2s;
+            }
+
+                .cart-button:hover {
+                    background-color: #495057;
+                    color: white;
+                }
+
+
+            /* =========================================================
+                       LOGIN BUTTON
+                       ========================================================= */
+
+            .login-button {
+                height: 38px;
+                padding: 0 12px;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                border-radius: 6px;
+                background-color: #198754;
+                border: 1px solid #198754;
+                color: white;
+                text-decoration: none;
+                font-size: 14px;
+                white-space: nowrap;
+                transition: 0.2s;
+            }
+
+                .login-button:hover {
+                    background-color: #157347;
+                    border-color: #157347;
+                    color: white;
+                }
+
+
+            /* =========================================================
+                       LOGOUT BUTTON
+                       ========================================================= */
+
+            .logout-button {
+                height: 38px;
+                padding: 0 12px;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                border-radius: 6px;
+                background-color: #dc3545;
+                border: 1px solid #dc3545;
+                color: white;
+                font-size: 14px;
+                white-space: nowrap;
+                cursor: pointer;
+                transition: 0.2s;
+            }
+
+                .logout-button:hover {
+                    background-color: #bb2d3b;
+                    border-color: #b02a37;
+                    color: white;
+                }
+
+
+            /* =========================================================
+                       USER DROPDOWN
+                       ========================================================= */
+
+            .user-dropdown {
+                position: relative;
+            }
+
+            .user-button {
+                border: none;
+                background: transparent;
+                cursor: pointer;
+            }
+
+            .user-menu {
+                display: none;
+                position: absolute;
+                top: calc(100% + 8px);
+                right: 0;
+                width: 240px;
+                background-color: white;
+                border: 1px solid #ddd;
+                border-radius: 6px;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+                z-index: 9999;
+                overflow: hidden;
+            }
+
+                .user-menu.show {
+                    display: block;
+                }
+
+                .user-menu a {
+                    display: block;
+                    padding: 12px 15px;
+                    color: #222;
+                    background-color: white;
+                    text-decoration: none;
+                    font-size: 14px;
+                    transition: 0.2s;
+                }
+
+                    .user-menu a:hover {
+                        background-color: #f2f2f2;
+                        color: #000;
+                    }
+
+
+            /* =========================================================
+                       MAIN CONTENT
+                       ========================================================= */
+
+            .main-content {
+                min-height: calc(100vh - 120px);
+                padding-top: 20px;
+                padding-bottom: 40px;
+            }
+
+
+            /* =========================================================
+                       ALERT
+                       ========================================================= */
+
+            .site-alert {
+                max-width: 1200px;
+                margin: 20px auto;
+                padding: 0 20px;
+            }
+
+
+            /* =========================================================
+                       FOOTER
+                       ========================================================= */
+
+            .main-footer {
+                width: 100%;
+                padding: 20px;
+                margin-top: 30px;
+                background-color: #212529;
+                color: #adb5bd;
+                text-align: center;
+                font-size: 14px;
+            }
+
+
+            /* =========================================================
+                       RESPONSIVE
+                       ========================================================= */
+
+            @@media (max-width: 1200px) {
+
+                .navbar-inner {
+                    gap: 10px;
+                    padding-left: 15px;
+                    padding-right: 15px;
+                }
+
+                .navbar-search {
+                    max-width: 550px;
+                }
+
+                .navbar-link {
+                    padding: 0 9px;
+                }
+
+                .user-name {
+                    max-width: 220px;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                }
+            }
+
+
+            @@media (max-width: 992px) {
+
+                .navbar-inner {
+                    flex-wrap: wrap;
+                    padding-top: 12px;
+                    padding-bottom: 12px;
+                }
+
+                .navbar-search {
+                    order: 3;
+                    flex-basis: 100%;
+                    max-width: none;
+                    margin-left: 0;
+                    margin-top: 5px;
+                }
+
+                .navbar-links {
+                    margin-left: auto;
+                }
+
+                .user-area {
+                    margin-left: 0;
+                }
+            }
+
+
+            @@media (max-width: 768px) {
+
+                .store-logo {
+                    font-size: 21px;
+                }
+
+                .navbar-inner {
+                    gap: 8px;
+                }
+
+                .navbar-links {
+                    gap: 3px;
+                }
+
+                .navbar-link,
+                .filter-button,
+                .cart-button,
+                .login-button,
+                .logout-button {
+                    padding-left: 8px;
+                    padding-right: 8px;
+                    font-size: 13px;
+                }
+
+                .user-name {
+                    max-width: 160px;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                }
+
+                .filter-menu {
+                    width: 280px;
+                }
+            }
+
+
+            @@media (max-width: 576px) {
+
+                .navbar-inner {
+                    padding-left: 10px;
+                    padding-right: 10px;
+                }
+
+                .store-logo {
+                    font-size: 19px;
+                }
+
+                .navbar-links {
+                    width: 100%;
+                    justify-content: space-between;
+                    order: 2;
+                }
+
+                .user-area {
+                    order: 1;
+                }
+
+                .navbar-search {
+                    order: 3;
+                }
+
+                .user-name {
+                    display: none;
+                }
+
+                .filter-menu {
+                    position: fixed;
+                    top: 70px;
+                    left: 10px;
+                    right: 10px;
+                    width: auto;
+                    max-height: calc(100vh - 90px);
+                }
+            }
+
+    </style>
+
 </head>
+
+
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">ProjectKZM</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                    </ul>
-                    <ul class="navbar-nav">
 
-                        @if (User.Identity != null && User.Identity.IsAuthenticated)
-                        {
-                            <li class="nav-item">
-                                <span class="nav-link text-dark">
-                                    Xin chào, @User.Identity.Name
-                                </span>
-                            </li>
 
-                            <li class="nav-item">
-                                <a class="nav-link text-dark"
-                                   asp-controller="Account"
-                                   asp-action="Logout">
-                                    Đăng xuất
-                                </a>
-                            </li>
-                        }
-                        else
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link text-dark"
-                                   asp-controller="Account"
-                                   asp-action="Login">
-                                    Đăng nhập
-                                </a>
-                            </li>
+    <!-- =========================================================
+         NAVBAR
+         ========================================================= -->
 
-                            <li class="nav-item">
-                                <a class="nav-link text-dark"
-                                   asp-controller="Account"
-                                   asp-action="Register">
-                                    Đăng ký
-                                </a>
-                            </li>
-                        }
+    <header class="main-navbar">
 
-                    </ul>
-                </div>
+        <div class="navbar-inner">
+
+
+            <!-- =================================================
+                 LOGO
+                 ================================================= -->
+
+            <a asp-controller="Home"
+               asp-action="Index"
+               class="store-logo">
+
+                Yuuji Store
+
+            </a>
+
+
+            <!-- =================================================
+                 SEARCH
+                 ================================================= -->
+
+            <div class="navbar-search">
+
+                <form asp-controller="Home"
+                      asp-action="Index"
+                      method="get"
+                      class="search-form">
+
+                    <input type="text"
+                           name="search"
+                           value="@Context.Request.Query["search"].ToString()"
+                           class="search-input"
+                           placeholder="Tìm kiếm sách..." />
+
+                    <button type="submit"
+                            class="search-button">
+
+                        Tìm kiếm
+
+                    </button>
+
+                </form>
+
             </div>
-        </nav>
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2026 - ProjectKZM - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+
+            <!-- =================================================
+                 NAVIGATION
+                 ================================================= -->
+
+            <div class="navbar-links">
+
+
+                <!-- =================================================
+                     LỌC
+                     ================================================= -->
+
+                <div class="filter-dropdown">
+
+                    <button type="button"
+                            class="filter-button"
+                            onclick="toggleFilterMenu()">
+
+                        ☰ Lọc
+
+                    </button>
+
+
+                    <!-- =================================================
+                         FILTER MENU
+                         ================================================= -->
+
+                    <div id="filterMenu"
+                         class="filter-menu">
+
+                        <form asp-controller="Home"
+                              asp-action="Index"
+                              method="get">
+
+                            <!-- GIỮ LẠI TỪ KHÓA TÌM KIẾM -->
+
+                            <input type="hidden"
+                                   name="search"
+                                   value="@Context.Request.Query["search"].ToString()" />
+
+
+                            <!-- =================================================
+                                 THỂ LOẠI
+                                 ================================================= -->
+
+                            <div class="filter-section">
+
+                                <div class="filter-title">
+                                    Thể loại
+                                </div>
+
+                                @{
+                                    var filterTheLoais =
+                                        ViewBag.TheLoais as IEnumerable<ProjectKZM.Models.TheLoai>
+                                        ?? Enumerable.Empty<ProjectKZM.Models.TheLoai>();
+
+                                    var selectedTheLoaiIds =
+                                        ViewBag.SelectedTheLoaiIds as int[]
+                                        ?? Array.Empty<int>();
+                                }
+
+                                @foreach (var theLoai in filterTheLoais)
+                                {
+
+                                    <label class="filter-item">
+
+                                        <input type="checkbox"
+                                               name="theLoaiIds"
+                                               value="@theLoai.MaTheLoai"
+                                        @(selectedTheLoaiIds.Contains(theLoai.MaTheLoai)
+                                            ? "checked"
+                                            : null) />
+
+                                        <span>
+                                            @theLoai.TenTheLoai
+                                        </span>
+
+                                    </label>
+
+                                }
+
+                            </div>
+
+
+                            <!-- =================================================
+                                 LOẠI SÁCH
+                                 ================================================= -->
+
+                            <div class="filter-section">
+
+                                <div class="filter-title">
+                                    Loại sách
+                                </div>
+
+                                @{
+                                    var filterLoaiSachs =
+                                        ViewBag.LoaiSachs as IEnumerable<ProjectKZM.Models.LoaiSach>
+                                        ?? Enumerable.Empty<ProjectKZM.Models.LoaiSach>();
+
+                                    var selectedLoaiSachIds =
+                                        ViewBag.SelectedLoaiSachIds as int[]
+                                        ?? Array.Empty<int>();
+                                }
+
+                                @foreach (var loaiSach in filterLoaiSachs)
+                                {
+
+                                    <label class="filter-item">
+
+                                        <input type="checkbox"
+                                               name="loaiSachIds"
+                                               value="@loaiSach.MaLoaiSach"
+                                        @(selectedLoaiSachIds.Contains(loaiSach.MaLoaiSach)
+                                            ? "checked"
+                                            : null) />
+
+                                        <span>
+                                            @loaiSach.TenLoaiSach
+                                        </span>
+
+                                    </label>
+
+                                }
+
+                            </div>
+
+
+                            <!-- =================================================
+                                 BUTTON
+                                 ================================================= -->
+
+                            <div class="filter-actions">
+
+                                <button type="submit"
+                                        class="filter-apply">
+
+                                    Áp dụng
+
+                                </button>
+
+
+                                <a asp-controller="Home"
+                                   asp-action="Index"
+                                   class="filter-clear">
+
+                                    Xóa lọc
+
+                                </a>
+
+                            </div>
+
+                        </form>
+
+                    </div>
+
+                </div>
+
+
+                <!-- =================================================
+                     TRANG CHỦ
+                     ================================================= -->
+
+                <a asp-controller="Home"
+                   asp-action="Index"
+                   class="navbar-link">
+
+                    🏠 Trang chủ
+
+                </a>
+
+            </div>
+
+
+            <!-- =================================================
+                 USER AREA
+                 ================================================= -->
+
+            <div class="user-area">
+
+
+                <!-- =================================================
+                     GIỎ HÀNG
+                     LUÔN HIỆN
+                     ================================================= -->
+
+                <a asp-controller="GioHangs"
+                   asp-action="Index"
+                   class="cart-button">
+
+                    🛒 Giỏ hàng
+
+                </a>
+
+
+                <!-- =================================================
+                     ĐÃ ĐĂNG NHẬP
+                     ================================================= -->
+                @if (User.Identity?.IsAuthenticated == true)
+                {
+
+                    <!-- =================================================
+                         ADMIN
+                         ================================================= -->
+                    @if (User.IsInRole("Admin"))
+                    {
+
+                        <a asp-controller="Admin"
+                           asp-action="Index"
+                           class="navbar-link">
+
+                            Quản lý
+
+                        </a>
+
+                    }
+                    else
+                    {
+
+                        <!-- =================================================
+                             USER
+                             ================================================= -->
+
+                        <div class="user-dropdown">
+
+                            <button type="button"
+                                    class="navbar-link user-button"
+                                    onclick="toggleUserMenu()">
+
+                                Người dùng ▾
+
+                            </button>
+
+
+                            <div id="userMenu"
+                                 class="user-menu">
+
+                                <a asp-controller="Account"
+                                   asp-action="Profile">
+
+                                    Xem thông tin cá nhân
+
+                                </a>
+
+
+                                <a asp-controller="Account"
+                                   asp-action="EditProfile">
+
+                                    Chỉnh sửa thông tin cá nhân
+
+                                </a>
+
+                            </div>
+
+                        </div>
+
+                    }
+
+
+                    <!-- =================================================
+                         XIN CHÀO
+                         ================================================= -->
+
+                    <span class="user-name">
+
+                        Xin chào, @(User.Identity?.Name ?? "Người dùng")
+
+                    </span>
+
+
+                    <!-- =================================================
+                         ĐĂNG XUẤT
+                         ================================================= -->
+
+                    <form asp-controller="Account"
+                          asp-action="Logout"
+                          method="post"
+                          style="margin: 0;">
+
+                        @Html.AntiForgeryToken()
+
+                        <button type="submit"
+                                class="logout-button">
+
+                            Đăng xuất
+
+                        </button>
+
+                    </form>
+
+                }
+                else
+                {
+
+                    <!-- =================================================
+                         CHƯA ĐĂNG NHẬP
+                         ================================================= -->
+
+                    <a asp-controller="Account"
+                       asp-action="Login"
+                       class="login-button">
+
+                        Đăng nhập
+
+                    </a>
+
+                }
+
+            </div>
+
         </div>
+
+    </header>
+
+
+    <!-- =========================================================
+         SUCCESS ALERT
+         ========================================================= -->
+    @if (TempData["Success"] != null)
+    {
+
+        <div class="site-alert">
+
+            <div class="alert alert-success">
+
+                @TempData["Success"]
+
+            </div>
+
+        </div>
+
+    }
+
+
+    <!-- =========================================================
+         ERROR ALERT
+         ========================================================= -->
+    @if (TempData["Error"] != null)
+    {
+
+        <div class="site-alert">
+
+            <div class="alert alert-danger">
+
+                @TempData["Error"]
+
+            </div>
+
+        </div>
+
+    }
+
+
+    <!-- =========================================================
+         MAIN
+         ========================================================= -->
+
+    <main class="main-content">
+
+        @RenderBody()
+
+    </main>
+
+
+    <!-- =========================================================
+         FOOTER
+         ========================================================= -->
+
+    <footer class="main-footer">
+
+        © @DateTime.Now.Year - Yuuji Store
+
     </footer>
+
+
+    <!-- =========================================================
+         SCRIPTS
+         ========================================================= -->
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
+
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-    @await RenderSectionAsync("Scripts", required: false)
+
+    <script src="~/js/site.js"
+            asp-append-version="true">
+    </script>
+
+
+    <!-- =========================================================
+         FILTER MENU SCRIPT
+         ========================================================= -->
+
+    <script>
+
+            function toggleFilterMenu() {
+
+                const menu =
+                    document.getElementById("filterMenu");
+
+                if (menu) {
+
+                    menu.classList.toggle("show");
+
+                }
+
+            }
+
+
+            document.addEventListener("click", function(event) {
+
+                const menu =
+                    document.getElementById("filterMenu");
+
+                const button =
+                    document.querySelector(".filter-button");
+
+                if (!menu || !button) {
+
+                    return;
+
+                }
+
+                if (!menu.contains(event.target) &&
+                    !button.contains(event.target)) {
+
+                    menu.classList.remove("show");
+
+                }
+
+            });
+
+
+            document
+                .getElementById("filterMenu")
+                ?.addEventListener("click", function(event) {
+
+                    event.stopPropagation();
+
+                });
+
+    </script>
+
+
+    <!-- =========================================================
+         USER MENU SCRIPT
+         ========================================================= -->
+
+    <script>
+
+            function toggleUserMenu() {
+
+                const menu =
+                    document.getElementById("userMenu");
+
+                if (menu) {
+
+                    menu.classList.toggle("show");
+
+                }
+
+            }
+
+
+            document.addEventListener("click", function(event) {
+
+                const menu =
+                    document.getElementById("userMenu");
+
+                const button =
+                    document.querySelector(".user-button");
+
+                if (!menu || !button) {
+
+                    return;
+
+                }
+
+                if (!menu.contains(event.target) &&
+                    !button.contains(event.target)) {
+
+                    menu.classList.remove("show");
+
+                }
+
+            });
+
+    </script>
+
+
+    @await RenderSectionAsync(
+        "Scripts",
+        required: false
+    )
+
 </body>
+
 </html>

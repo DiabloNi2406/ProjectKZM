@@ -1,53 +1,228 @@
 @model IEnumerable<ProjectKZM.Models.TheLoai>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Quản lý thể loại";
 }
 
-<h1>Index</h1>
+<style>
+    .category-page {
+        max-width: 1200px;
+        margin: 40px auto;
+        padding: 0 20px;
+    }
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.TenTheLoai)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.MoTa)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Hinh)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Sachs)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(model => item.TenTheLoai)
-            </td>
-            <td>
-                @Html.DisplayFor(model => item.MoTa)
-            </td>
-            <td>
-                @Html.DisplayFor(model => item.Hinh)
-            </td>
-            <td>
-                @Html.DisplayFor(model => item.Sachs)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.MaTheLoai">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.MaTheLoai">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.MaTheLoai">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+    .category-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 30px;
+    }
+
+    .category-title {
+        font-size: 40px;
+        font-weight: 400;
+        margin-bottom: 8px;
+    }
+
+    .category-subtitle {
+        color: #777;
+        margin: 0;
+    }
+
+    .button-area {
+        display: flex;
+        gap: 10px;
+    }
+
+    .category-card {
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        overflow: hidden;
+        background: white;
+    }
+
+    .category-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+        .category-table th {
+            background: #212529;
+            color: white;
+            padding: 15px;
+            text-align: left;
+        }
+
+        .category-table td {
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+            vertical-align: middle;
+        }
+
+        .category-table tr:hover {
+            background-color: #f8f9fa;
+        }
+
+    .category-image {
+        width: 70px;
+        height: 90px;
+        object-fit: cover;
+        border-radius: 6px;
+        border: 1px solid #ddd;
+    }
+
+    .action-buttons {
+        display: flex;
+        gap: 6px;
+    }
+</style>
+
+<div class="category-page">
+
+    <div class="category-header">
+
+        <div>
+            <h1 class="category-title">
+                Quản lý thể loại
+            </h1>
+
+            <p class="category-subtitle">
+                Thêm, chỉnh sửa, xem và xóa thể loại sách
+            </p>
+        </div>
+
+        <div class="button-area">
+
+            <a asp-action="Create"
+               class="btn btn-success">
+                + Thêm thể loại
+            </a>
+
+            <a href="/Admin"
+               class="btn btn-secondary">
+                ← Quản lý
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <div class="category-card">
+
+        @if (Model != null && Model.Any())
+        {
+            <table class="category-table">
+
+                <thead>
+                    <tr>
+                        <th>
+                            Mã
+                        </th>
+
+                        <th>
+                            Hình ảnh
+                        </th>
+
+                        <th>
+                            Tên thể loại
+                        </th>
+
+                        <th>
+                            Mô tả
+                        </th>
+
+                        <th>
+                            Số sách
+                        </th>
+
+                        <th>
+                            Thao tác
+                        </th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+
+                            <td>
+                                @item.MaTheLoai
+                            </td>
+
+                            <td>
+
+                                @if (!string.IsNullOrEmpty(item.Hinh))
+                                {
+                                    <img src="@item.Hinh"
+                                         class="category-image"
+                                         alt="@item.TenTheLoai" />
+                                }
+                                else
+                                {
+                                    <span>
+                                        Không có hình
+                                    </span>
+                                }
+
+                            </td>
+
+                            <td>
+                                <strong>
+                                    @item.TenTheLoai
+                                </strong>
+                            </td>
+
+                            <td>
+                                @item.MoTa
+                            </td>
+
+                            <td>
+                                @(item.SachTheLoais?.Count ?? 0)
+                            </td>
+
+                            <td>
+
+                                <div class="action-buttons">
+
+                                    <a asp-action="Details"
+                                       asp-route-matheloai="@item.MaTheLoai"
+                                       class="btn btn-info btn-sm">
+                                        Xem
+                                    </a>
+
+                                    <a asp-action="Edit"
+                                       asp-route-matheloai="@item.MaTheLoai"
+                                       class="btn btn-warning btn-sm">
+                                        Sửa
+                                    </a>
+
+                                    <a asp-action="Delete"
+                                       asp-route-matheloai="@item.MaTheLoai"
+                                       class="btn btn-danger btn-sm">
+                                        Xóa
+                                    </a>
+
+                                </div>
+
+                            </td>
+
+                        </tr>
+                    }
+
+                </tbody>
+
+            </table>
+        }
+        else
+        {
+            <div class="p-5 text-center text-muted">
+                Chưa có thể loại nào trong hệ thống.
+            </div>
+        }
+
+    </div>
+
+</div>

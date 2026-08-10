@@ -1,84 +1,667 @@
 @model ProjectKZM.Models.Sach
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Sửa sách";
 }
 
-<h1>Edit</h1>
+<style>
+    .edit-page {
+        max-width: 850px;
+        margin: 40px auto;
+        padding: 0 20px;
+    }
 
-<h4>Sach</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="MaSach" />
-            <div class="form-group">
-                <label asp-for="TenSach" class="control-label"></label>
-                <input asp-for="TenSach" class="form-control" />
-                <span asp-validation-for="TenSach" class="text-danger"></span>
+    .edit-title {
+        font-size: 40px;
+        font-weight: 400;
+        color: #222;
+        margin-bottom: 8px;
+    }
+
+    .edit-subtitle {
+        color: #777;
+        margin-bottom: 30px;
+    }
+
+    .edit-card {
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        padding: 30px;
+        background-color: white;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    }
+
+    .form-label {
+        font-weight: 500;
+        margin-bottom: 8px;
+    }
+
+    .current-image {
+        width: 150px;
+        height: 200px;
+        object-fit: cover;
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        margin-top: 10px;
+    }
+
+    .image-preview {
+        width: 150px;
+        height: 200px;
+        object-fit: cover;
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        margin-top: 10px;
+        display: none;
+    }
+
+    .button-area {
+        margin-top: 30px;
+        display: flex;
+        gap: 10px;
+    }
+
+    /* =========================
+           LOẠI SÁCH
+           ========================= */
+
+    .loaisach-select {
+        width: 100%;
+    }
+
+    /* =========================
+           THỂ LOẠI
+           ========================= */
+
+    .theloai-container {
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        background-color: #fff;
+        overflow: hidden;
+    }
+
+    .theloai-header {
+        background-color: #212529;
+        color: white;
+        padding: 12px 15px;
+        font-weight: 500;
+    }
+
+    .theloai-list {
+        max-height: 280px;
+        overflow-y: auto;
+        padding: 10px 15px;
+    }
+
+    .theloai-item {
+        display: flex;
+        align-items: center;
+        padding: 9px 5px;
+        border-bottom: 1px solid #eee;
+        cursor: pointer;
+        transition: background-color 0.15s;
+    }
+
+        .theloai-item:last-child {
+            border-bottom: none;
+        }
+
+        .theloai-item:hover {
+            background-color: #f8f9fa;
+        }
+
+        .theloai-item input {
+            width: 18px;
+            height: 18px;
+            margin-right: 10px;
+            cursor: pointer;
+        }
+
+    .theloai-name {
+        cursor: pointer;
+        margin: 0;
+    }
+
+    .theloai-empty {
+        padding: 20px;
+        text-align: center;
+        color: #777;
+    }
+
+    .theloai-note {
+        margin-top: 8px;
+        color: #777;
+        font-size: 14px;
+    }
+
+    /* =========================
+           SEARCH THỂ LOẠI
+           ========================= */
+
+    .theloai-search {
+        padding: 10px 15px;
+        border-bottom: 1px solid #ddd;
+        background-color: #f8f9fa;
+    }
+
+        .theloai-search input {
+            width: 100%;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            padding: 8px 10px;
+        }
+</style>
+
+
+<div class="edit-page">
+
+    <!-- TIÊU ĐỀ -->
+
+    <h1 class="edit-title">
+        Sửa sách
+    </h1>
+
+    <p class="edit-subtitle">
+        Chỉnh sửa thông tin sách
+    </p>
+
+
+    <div class="edit-card">
+
+        <form asp-action="Edit"
+              method="post"
+              enctype="multipart/form-data">
+
+            @Html.AntiForgeryToken()
+
+            <!-- ID SÁCH -->
+
+            <input type="hidden"
+                   asp-for="MaSach" />
+
+
+            <!-- VALIDATION -->
+
+            <div asp-validation-summary="ModelOnly"
+                 class="text-danger mb-3">
             </div>
-            <div class="form-group">
-                <label asp-for="TacGia" class="control-label"></label>
-                <input asp-for="TacGia" class="form-control" />
-                <span asp-validation-for="TacGia" class="text-danger"></span>
+
+
+            <!-- =========================
+                 TÊN SÁCH
+                 ========================= -->
+
+            <div class="mb-3">
+
+                <label asp-for="TenSach"
+                       class="form-label">
+                    Tên sách
+                </label>
+
+                <input asp-for="TenSach"
+                       class="form-control"
+                       placeholder="Nhập tên sách" />
+
+                <span asp-validation-for="TenSach"
+                      class="text-danger">
+                </span>
+
             </div>
-            <div class="form-group">
-                <label asp-for="NhaXuatBan" class="control-label"></label>
-                <input asp-for="NhaXuatBan" class="form-control" />
-                <span asp-validation-for="NhaXuatBan" class="text-danger"></span>
+
+
+            <!-- =========================
+                 CHƯƠNG
+                 ========================= -->
+
+            <div class="mb-3">
+
+                <label asp-for="Chuong"
+                       class="form-label">
+                    Chương
+                </label>
+
+                <input asp-for="Chuong"
+                       class="form-control"
+                       placeholder="Nhập chương" />
+
+                <span asp-validation-for="Chuong"
+                      class="text-danger">
+                </span>
+
             </div>
-            <div class="form-group">
-                <label asp-for="Gia" class="control-label"></label>
-                <input asp-for="Gia" class="form-control" />
-                <span asp-validation-for="Gia" class="text-danger"></span>
+
+
+            <!-- =========================
+                 LOẠI SÁCH
+                 ========================= -->
+
+            <div class="mb-3">
+
+                <label class="form-label">
+                    Loại sách
+                </label>
+
+                <select asp-for="MaLoaiSach"
+                        asp-items="ViewBag.MaLoaiSach"
+                        class="form-select loaisach-select">
+
+                    <option value="">
+                        -- Chọn loại sách --
+                    </option>
+
+                </select>
+
+                <span asp-validation-for="MaLoaiSach"
+                      class="text-danger">
+                </span>
+
             </div>
-            <div class="form-group">
-                <label asp-for="SoLuong" class="control-label"></label>
-                <input asp-for="SoLuong" class="form-control" />
-                <span asp-validation-for="SoLuong" class="text-danger"></span>
+
+
+            <!-- =========================
+                 TÁC GIẢ
+                 ========================= -->
+
+            <div class="mb-3">
+
+                <label asp-for="TacGia"
+                       class="form-label">
+                    Tác giả
+                </label>
+
+                <input asp-for="TacGia"
+                       class="form-control"
+                       placeholder="Nhập tên tác giả" />
+
+                <span asp-validation-for="TacGia"
+                      class="text-danger">
+                </span>
+
             </div>
-            <div class="form-group">
-                <label asp-for="Hinh" class="control-label"></label>
-                <input asp-for="Hinh" class="form-control" />
-                <span asp-validation-for="Hinh" class="text-danger"></span>
+
+
+            <!-- =========================
+                 NHÀ XUẤT BẢN
+                 ========================= -->
+
+            <div class="mb-3">
+
+                <label asp-for="NhaXuatBan"
+                       class="form-label">
+                    Nhà xuất bản
+                </label>
+
+                <input asp-for="NhaXuatBan"
+                       class="form-control"
+                       placeholder="Nhập nhà xuất bản" />
+
+                <span asp-validation-for="NhaXuatBan"
+                      class="text-danger">
+                </span>
+
             </div>
-            <div class="form-group">
-                <label asp-for="MoTa" class="control-label"></label>
-                <input asp-for="MoTa" class="form-control" />
-                <span asp-validation-for="MoTa" class="text-danger"></span>
+
+
+            <!-- =========================
+                 GIÁ
+                 ========================= -->
+
+            <div class="mb-3">
+
+                <label asp-for="Gia"
+                       class="form-label">
+                    Giá
+                </label>
+
+                <div class="input-group">
+
+                    <input asp-for="Gia"
+                           type="number"
+                           step="1000"
+                           min="0"
+                           class="form-control"
+                           placeholder="Nhập giá sách" />
+
+                    <span class="input-group-text">
+                        VNĐ
+                    </span>
+
+                </div>
+
+                <span asp-validation-for="Gia"
+                      class="text-danger">
+                </span>
+
             </div>
-            <div class="form-group">
-                <label asp-for="MaTheLoai" class="control-label"></label>
-                <input asp-for="MaTheLoai" class="form-control" />
-                <span asp-validation-for="MaTheLoai" class="text-danger"></span>
+
+
+            <!-- =========================
+                 SỐ LƯỢNG
+                 ========================= -->
+
+            <div class="mb-3">
+
+                <label asp-for="SoLuong"
+                       class="form-label">
+                    Số lượng
+                </label>
+
+                <input asp-for="SoLuong"
+                       type="number"
+                       min="0"
+                       class="form-control"
+                       placeholder="Nhập số lượng" />
+
+                <span asp-validation-for="SoLuong"
+                      class="text-danger">
+                </span>
+
             </div>
-            <div class="form-group">
-                <label asp-for="TheLoai" class="control-label"></label>
-                <input asp-for="TheLoai" class="form-control" />
-                <span asp-validation-for="TheLoai" class="text-danger"></span>
+
+
+            <!-- =========================
+                 THỂ LOẠI
+                 ========================= -->
+
+            <div class="mb-3">
+
+                <label class="form-label">
+                    Thể loại
+                </label>
+
+
+                <div class="theloai-container">
+
+                    <div class="theloai-header">
+                        Chọn thể loại
+                    </div>
+
+
+                    <!-- SEARCH -->
+
+                    <div class="theloai-search">
+
+                        <input type="text"
+                               id="theloaiSearch"
+                               placeholder="Tìm thể loại..." />
+
+                    </div>
+
+
+                    <!-- DANH SÁCH -->
+
+                    <div class="theloai-list"
+                         id="theloaiList">
+
+                        @if (ViewBag.TheLoais != null)
+                        {
+                            foreach (var theLoai in ViewBag.TheLoais)
+                            {
+                                bool isSelected = false;
+
+                                if (Model.SachTheLoais != null)
+                                {
+                                    isSelected = Model.SachTheLoais
+                                        .Any(x => x.MaTheLoai == theLoai.MaTheLoai);
+                                }
+
+                                <div class="theloai-item">
+
+                                    <input type="checkbox"
+                                           name="selectedTheLoaiIds"
+                                           value="@theLoai.MaTheLoai"
+                                           id="theloai_@theLoai.MaTheLoai"
+                                    @(isSelected ? "checked" : "") />
+
+                                    <label class="theloai-name"
+                                           for="theloai_@theLoai.MaTheLoai">
+
+                                        @theLoai.TenTheLoai
+
+                                    </label>
+
+                                </div>
+                            }
+                        }
+                        else
+                        {
+                            <div class="theloai-empty">
+                                Chưa có thể loại nào.
+                            </div>
+                        }
+
+                    </div>
+
+                </div>
+
+
+                <div class="theloai-note">
+
+                    Có thể chọn nhiều thể loại cho một sách.
+
+                </div>
+
+
+                <span class="text-danger"
+                      id="theloaiError">
+                </span>
+
             </div>
-            <div class="form-group">
-                <label asp-for="ChiTietGioHangs" class="control-label"></label>
-                <input asp-for="ChiTietGioHangs" class="form-control" />
-                <span asp-validation-for="ChiTietGioHangs" class="text-danger"></span>
+
+
+            <!-- =========================
+                 HÌNH HIỆN TẠI
+                 ========================= -->
+            @if (!string.IsNullOrEmpty(Model.Hinh))
+            {
+                <div class="mb-3">
+
+                    <label class="form-label">
+                        Hình ảnh hiện tại
+                    </label>
+
+                    <br />
+
+                    <img src="@Model.Hinh"
+                         class="current-image"
+                         alt="@Model.TenSach" />
+
+                </div>
+            }
+
+
+            <!-- =========================
+                 HÌNH MỚI
+                 ========================= -->
+
+            <div class="mb-3">
+
+                <label class="form-label">
+                    Thay hình ảnh
+                </label>
+
+                <input type="file"
+                       name="HinhFile"
+                       id="HinhFile"
+                       class="form-control"
+                       accept=".jpg,.jpeg,.png,.webp" />
+
+
+                <img id="imagePreview"
+                     class="image-preview"
+                     alt="Xem trước hình ảnh" />
+
             </div>
-            <div class="form-group">
-                <label asp-for="ChiTietDonHangs" class="control-label"></label>
-                <input asp-for="ChiTietDonHangs" class="form-control" />
-                <span asp-validation-for="ChiTietDonHangs" class="text-danger"></span>
+
+
+            <!-- =========================
+                 MÔ TẢ
+                 ========================= -->
+
+            <div class="mb-3">
+
+                <label asp-for="MoTa"
+                       class="form-label">
+                    Mô tả
+                </label>
+
+                <textarea asp-for="MoTa"
+                          class="form-control"
+                          rows="5"
+                          placeholder="Nhập mô tả sách"></textarea>
+
+                <span asp-validation-for="MoTa"
+                      class="text-danger">
+                </span>
+
             </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+
+
+            <!-- =========================
+                 BUTTON
+                 ========================= -->
+
+            <div class="button-area">
+
+                <button type="submit"
+                        class="btn btn-success">
+
+                    Lưu thay đổi
+
+                </button>
+
+
+                <a asp-action="Index"
+                   class="btn btn-secondary">
+
+                    Quay lại
+
+                </a>
+
             </div>
+
         </form>
+
     </div>
+
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    @{
+        await Html.RenderPartialAsync(
+            "_ValidationScriptsPartial");
+    }
+
+
+    <script>
+
+        // ==========================================
+        // PREVIEW HÌNH
+        // ==========================================
+
+        const hinhFile =
+            document.getElementById("HinhFile");
+
+        const imagePreview =
+            document.getElementById("imagePreview");
+
+
+        if (hinhFile) {
+
+            hinhFile.addEventListener(
+                "change",
+                function(event) {
+
+                    const file =
+                        event.target.files[0];
+
+                    if (file) {
+
+                        const reader =
+                            new FileReader();
+
+                        reader.onload =
+                            function(e) {
+
+                                imagePreview.src =
+                                    e.target.result;
+
+                                imagePreview.style.display =
+                                    "block";
+                            };
+
+                        reader.readAsDataURL(file);
+
+                    }
+                    else {
+
+                        imagePreview.src = "";
+
+                        imagePreview.style.display =
+                            "none";
+                    }
+
+                }
+            );
+
+        }
+
+
+        // ==========================================
+        // TÌM KIẾM THỂ LOẠI
+        // ==========================================
+
+        const searchInput =
+            document.getElementById("theloaiSearch");
+
+        const theloaiItems =
+            document.querySelectorAll(".theloai-item");
+
+
+        if (searchInput) {
+
+            searchInput.addEventListener(
+                "input",
+                function() {
+
+                    const keyword =
+                        this.value
+                            .toLowerCase()
+                            .trim();
+
+
+                    theloaiItems.forEach(
+                        function(item) {
+
+                            const text =
+                                item
+                                    .querySelector(".theloai-name")
+                                    .textContent
+                                    .toLowerCase();
+
+
+                            if (text.includes(keyword)) {
+
+                                item.style.display =
+                                    "flex";
+
+                            }
+                            else {
+
+                                item.style.display =
+                                    "none";
+
+                            }
+
+                        }
+                    );
+
+                }
+            );
+
+        }
+
+    </script>
 }

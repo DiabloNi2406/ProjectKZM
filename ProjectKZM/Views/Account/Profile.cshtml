@@ -1,0 +1,356 @@
+﻿@model ProjectKZM.Models.NguoiDung
+
+@{
+    ViewData["Title"] = "Thông Tin Cá Nhân";
+}
+
+<style>
+
+    .profile-page {
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 40px 20px 60px;
+    }
+
+    .profile-title {
+        text-align: center;
+        margin-bottom: 35px;
+    }
+
+        .profile-title h1 {
+            font-size: 32px;
+            font-weight: 400;
+            color: #222;
+            margin-bottom: 8px;
+        }
+
+        .profile-title p {
+            color: #888;
+            margin: 0;
+            font-size: 15px;
+        }
+
+    .profile-card {
+        background: white;
+        border: 1px solid #ddd;
+        border-radius: 12px;
+        padding: 30px;
+        box-shadow: 0 3px 12px rgba(0, 0, 0, 0.05);
+    }
+
+    .profile-header {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        padding-bottom: 25px;
+        margin-bottom: 25px;
+        border-bottom: 1px solid #eee;
+    }
+
+    .profile-avatar {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        background-color: #212529;
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 32px;
+        font-weight: 600;
+        flex-shrink: 0;
+    }
+
+    .profile-header-info h2 {
+        margin: 0 0 5px;
+        font-size: 22px;
+        color: #222;
+    }
+
+    .profile-header-info span {
+        color: #888;
+        font-size: 14px;
+    }
+
+    .profile-row {
+        display: grid;
+        grid-template-columns: 200px 1fr;
+        min-height: 55px;
+        align-items: center;
+        border-bottom: 1px solid #eee;
+    }
+
+        .profile-row:last-child {
+            border-bottom: none;
+        }
+
+    .profile-label {
+        color: #777;
+        font-size: 14px;
+        font-weight: 600;
+    }
+
+    .profile-value {
+        color: #222;
+        font-size: 15px;
+    }
+
+    .profile-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 10px;
+        margin-top: 30px;
+        padding-top: 20px;
+        border-top: 1px solid #eee;
+    }
+
+    .profile-button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 40px;
+        padding: 0 18px;
+        border-radius: 6px;
+        text-decoration: none;
+        font-size: 14px;
+        transition: 0.2s;
+    }
+
+    .edit-button {
+        background-color: #198754;
+        color: white;
+        border: 1px solid #198754;
+    }
+
+        .edit-button:hover {
+            background-color: #157347;
+            border-color: #157347;
+            color: white;
+        }
+
+    .back-button {
+        background-color: #343a40;
+        color: white;
+        border: 1px solid #343a40;
+    }
+
+        .back-button:hover {
+            background-color: #212529;
+            color: white;
+        }
+
+    .empty-profile {
+        background: white;
+        border: 1px dashed #ccc;
+        border-radius: 10px;
+        padding: 60px 20px;
+        text-align: center;
+        color: #777;
+    }
+
+    @@media (max-width: 650px) {
+
+        .profile-page {
+            padding: 25px 15px 40px;
+        }
+
+        .profile-card {
+            padding: 20px;
+        }
+
+        .profile-header {
+            flex-direction: column;
+            text-align: center;
+        }
+
+        .profile-row {
+            grid-template-columns: 1fr;
+            gap: 5px;
+            padding: 12px 0;
+        }
+
+        .profile-actions {
+            flex-direction: column;
+        }
+
+        .profile-button {
+            width: 100%;
+        }
+    }
+
+</style>
+
+
+<div class="profile-page">
+
+    <div class="profile-title">
+
+        <h1>
+            Thông Tin Cá Nhân
+        </h1>
+
+        <p>
+            Xem thông tin tài khoản của bạn
+        </p>
+
+    </div>
+
+
+    @if (Model != null)
+    {
+
+        <div class="profile-card">
+
+            <!-- =====================================================
+                 HEADER
+                 ===================================================== -->
+
+            <div class="profile-header">
+
+                <div class="profile-avatar">
+
+                    @(string.IsNullOrWhiteSpace(Model.HoTen)
+                        ? "U"
+                        : Model.HoTen.Substring(0, 1).ToUpper())
+
+                </div>
+
+                <div class="profile-header-info">
+
+                    <h2>
+                        @(Model.HoTen ?? "Người dùng")
+                    </h2>
+
+                    <span>
+                        Tài khoản Yuuji Store
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <!-- =====================================================
+                 THÔNG TIN
+                 ===================================================== -->
+
+            <div class="profile-row">
+
+                <div class="profile-label">
+                    Họ và tên
+                </div>
+
+                <div class="profile-value">
+                    @(Model.HoTen ?? "Chưa cập nhật")
+                </div>
+
+            </div>
+
+
+            <div class="profile-row">
+
+                <div class="profile-label">
+                    Email
+                </div>
+
+                <div class="profile-value">
+                    @(Model.Email ?? "Chưa cập nhật")
+                </div>
+
+            </div>
+
+
+            <div class="profile-row">
+
+                <div class="profile-label">
+                    Số điện thoại
+                </div>
+
+                <div class="profile-value">
+                    @(Model.SoDienThoai ?? "Chưa cập nhật")
+                </div>
+
+            </div>
+
+
+            <div class="profile-row">
+
+                <div class="profile-label">
+                    Địa chỉ
+                </div>
+
+                <div class="profile-value">
+                    @(Model.DiaChi ?? "Chưa cập nhật")
+                </div>
+
+            </div>
+
+
+            <div class="profile-row">
+
+                <div class="profile-label">
+                    Vai trò
+                </div>
+
+                <div class="profile-value">
+
+                    @(Model.VaiTro?.TenVaiTro ?? "Khách hàng")
+
+                </div>
+
+            </div>
+
+
+            <!-- =====================================================
+                 BUTTON
+                 ===================================================== -->
+
+            <div class="profile-actions">
+
+                <a asp-controller="Home"
+                   asp-action="Index"
+                   class="profile-button back-button">
+
+                    ← Trang chủ
+
+                </a>
+
+                <a asp-controller="Account"
+                   asp-action="EditProfile"
+                   class="profile-button edit-button">
+
+                    ✎ Chỉnh sửa thông tin
+
+                </a>
+
+            </div>
+
+        </div>
+
+    }
+    else
+    {
+
+        <div class="empty-profile">
+
+            <h4>
+                Không tìm thấy thông tin tài khoản
+            </h4>
+
+            <p>
+                Vui lòng đăng nhập lại.
+            </p>
+
+            <a asp-controller="Account"
+               asp-action="Login"
+               class="btn btn-success">
+
+                Đăng nhập
+
+            </a>
+
+        </div>
+
+    }
+
+</div>

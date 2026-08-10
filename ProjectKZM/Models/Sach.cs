@@ -8,7 +8,7 @@ namespace ProjectKZM.Models
         [Key]
         public int MaSach { get; set; }
 
-        [Required(ErrorMessage = "Tên sách không được để trống")]
+        [Required]
         [StringLength(200)]
         public string TenSach { get; set; } = string.Empty;
 
@@ -23,19 +23,36 @@ namespace ProjectKZM.Models
 
         public int SoLuong { get; set; }
 
+        public string? Chuong { get; set; }
+
         public string? Hinh { get; set; }
 
         public string? MoTa { get; set; }
 
-        // Khóa ngoại
-        [ForeignKey("TheLoai")]
-        public int MaTheLoai { get; set; }
+        // ==============================
+        // LOẠI SÁCH
+        // ==============================
 
-        // Navigation Property
-        public TheLoai? TheLoai { get; set; }
+        public int? MaLoaiSach { get; set; }
 
-        public ICollection<ChiTietGioHang> ChiTietGioHangs { get; set; } = new List<ChiTietGioHang>();
+        [ForeignKey("MaLoaiSach")]
+        public LoaiSach? LoaiSach { get; set; }
 
-        public ICollection<ChiTietDonHang> ChiTietDonHangs { get; set; } = new List<ChiTietDonHang>();
+        // ==============================
+        // THỂ LOẠI
+        // ==============================
+
+        public ICollection<SachTheLoai> SachTheLoais { get; set; }
+            = new List<SachTheLoai>();
+
+        // ==============================
+        // GIỎ HÀNG / ĐƠN HÀNG
+        // ==============================
+
+        public ICollection<ChiTietGioHang> ChiTietGioHangs { get; set; }
+            = new List<ChiTietGioHang>();
+
+        public ICollection<ChiTietDonHang> ChiTietDonHangs { get; set; }
+            = new List<ChiTietDonHang>();
     }
 }

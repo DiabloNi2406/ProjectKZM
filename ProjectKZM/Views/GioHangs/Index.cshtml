@@ -1,0 +1,366 @@
+﻿@model ProjectKZM.Models.GioHang
+
+@{
+    ViewData["Title"] = "Giỏ hàng";
+}
+
+<div class="container py-4">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="mb-0">🛒 Giỏ hàng</h2>
+
+        <a asp-controller="Home"
+           asp-action="Index"
+           class="btn btn-secondary">
+            ← Tiếp tục mua hàng
+        </a>
+    </div>
+
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success">
+            @TempData["Success"]
+        </div>
+    }
+
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger">
+            @TempData["Error"]
+        </div>
+    }
+
+
+    @if (Model == null ||
+         Model.ChiTietGioHangs == null ||
+         !Model.ChiTietGioHangs.Any())
+    {
+        <div class="text-center py-5">
+
+            <div style="font-size:70px;">
+                🛒
+            </div>
+
+            <h4 class="mt-3">
+                Giỏ hàng đang trống
+            </h4>
+
+            <p class="text-muted">
+                Bạn chưa có sản phẩm nào trong giỏ hàng.
+            </p>
+
+            <a asp-controller="Home"
+               asp-action="Index"
+               class="btn btn-success mt-2">
+                Xem sản phẩm
+            </a>
+
+        </div>
+    }
+    else
+    {
+        <div class="row">
+
+            <!-- =====================================================
+                 DANH SÁCH SẢN PHẨM
+                 ===================================================== -->
+
+            <div class="col-lg-8">
+
+                @foreach (var item in Model.ChiTietGioHangs)
+                {
+                    <div class="card mb-3 shadow-sm">
+
+                        <div class="card-body">
+
+                            <div class="row align-items-center">
+
+                                <!-- HÌNH ẢNH -->
+
+                                <div class="col-md-2 text-center">
+
+                                    @if (item.Sach != null && !string.IsNullOrEmpty(item.Sach.Hinh))
+                                    {
+                                        <img src="@item.Sach.Hinh"
+                                             alt="@item.Sach.TenSach"
+                                             style="
+                                        width:90px;
+                                        height:120px;
+                                        object-fit:cover;
+                                        border-radius:6px;
+                                        " />
+                                    }
+                                    else
+                                    {
+                                        <div style="
+                                            width:90px;
+                                            height:120px;
+                                            background:#eee;
+                                            display:flex;
+                                            align-items:center;
+                                            justify-content:center;
+                                            border-radius:6px;
+                                            margin:auto;
+                                            ">
+                                            Không có ảnh
+                                        </div>
+                                    }
+
+                                </div>
+
+
+                                <!-- THÔNG TIN SÁCH -->
+
+                                <div class="col-md-4">
+
+                                    <h5 class="mb-2">
+                                        @(item.Sach?.TenSach ?? "Sản phẩm")
+                                    </h5>
+
+                                    @if (item.Sach != null)
+                                    {
+                                        <div class="text-muted small">
+
+                                            @if (!string.IsNullOrEmpty(item.Sach.TacGia))
+                                            {
+                                                <div>
+                                                    Tác giả:
+                                                    @item.Sach.TacGia
+                                                </div>
+                                            }
+
+                                            <div>
+                                                Giá:
+                                                <strong class="text-danger">
+                                                    @item.Sach.Gia.ToString("N0") đ
+                                                </strong>
+                                            </div>
+
+                                        </div>
+                                    }
+
+                                </div>
+
+
+                                <!-- SỐ LƯỢNG -->
+
+                                <div class="col-md-3">
+
+                                    <div class="d-flex align-items-center justify-content-center">
+
+                                        <!-- GIẢM -->
+
+                                        <form asp-controller="GioHangs"
+                                              asp-action="Giam"
+                                              method="post"
+                                              class="m-0">
+
+                                            @Html.AntiForgeryToken()
+
+                                            <input type="hidden"
+                                                   name="maGioHang"
+                                                   value="@Model.MaGioHang" />
+
+                                            <input type="hidden"
+                                                   name="maSach"
+                                                   value="@item.MaSach" />
+
+                                            <button type="submit"
+                                                    class="btn btn-outline-secondary">
+                                                −
+                                            </button>
+
+                                        </form>
+
+
+                                        <!-- SỐ LƯỢNG -->
+
+                                        <span class="mx-3 fw-bold"
+                                              style="min-width:30px; text-align:center;">
+                                            @item.SoLuong
+                                        </span>
+
+
+                                        <!-- TĂNG -->
+
+                                        <form asp-controller="GioHangs"
+                                              asp-action="Tang"
+                                              method="post"
+                                              class="m-0">
+
+                                            @Html.AntiForgeryToken()
+
+                                            <input type="hidden"
+                                                   name="maGioHang"
+                                                   value="@Model.MaGioHang" />
+
+                                            <input type="hidden"
+                                                   name="maSach"
+                                                   value="@item.MaSach" />
+
+                                            <button type="submit"
+                                                    class="btn btn-outline-secondary">
+                                                +
+                                            </button>
+
+                                        </form>
+
+                                    </div>
+
+                                </div>
+
+
+                                <!-- THÀNH TIỀN -->
+
+                                <div class="col-md-2 text-center">
+
+                                    @if (item.Sach != null)
+                                    {
+                                        <strong class="text-danger">
+                                            @((item.Sach.Gia * item.SoLuong).ToString("N0")) đ
+                                        </strong>
+                                    }
+
+                                </div>
+
+
+                                <!-- XÓA -->
+
+                                <div class="col-md-1 text-end">
+
+                                    <form asp-controller="GioHangs"
+                                          asp-action="Xoa"
+                                          method="post">
+
+                                        @Html.AntiForgeryToken()
+
+                                        <input type="hidden"
+                                               name="maGioHang"
+                                               value="@Model.MaGioHang" />
+
+                                        <input type="hidden"
+                                               name="maSach"
+                                               value="@item.MaSach" />
+
+                                        <button type="submit"
+                                                class="btn btn-outline-danger"
+                                                title="Xóa">
+                                            🗑
+                                        </button>
+
+                                    </form>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+                }
+
+
+                <!-- XÓA TOÀN BỘ -->
+
+                <div class="text-end mt-3">
+
+                    <form asp-controller="GioHangs"
+                          asp-action="XoaTatCa"
+                          method="post"
+                          onsubmit="return confirm('Bạn có chắc muốn xóa toàn bộ giỏ hàng?');">
+
+                        @Html.AntiForgeryToken()
+
+                        <button type="submit"
+                                class="btn btn-outline-danger">
+
+                            🗑 Xóa toàn bộ giỏ hàng
+
+                        </button>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+
+            <!-- =====================================================
+                 TỔNG TIỀN
+                 ===================================================== -->
+
+            <div class="col-lg-4">
+
+                <div class="card shadow-sm">
+
+                    <div class="card-body">
+
+                        <h4 class="mb-4">
+                            Tổng đơn hàng
+                        </h4>
+
+
+                        @{
+                            decimal tongTien = 0;
+                            int tongSoLuong = 0;
+
+                            foreach (var item in Model.ChiTietGioHangs)
+                            {
+                                if (item.Sach != null)
+                                {
+                                    tongTien += item.Sach.Gia * item.SoLuong;
+                                }
+
+                                tongSoLuong += item.SoLuong;
+                            }
+                        }
+
+
+                        <div class="d-flex justify-content-between mb-3">
+
+                            <span>
+                                Số lượng sản phẩm:
+                            </span>
+
+                            <strong>
+                                @tongSoLuong
+                            </strong>
+
+                        </div>
+
+
+                        <hr />
+
+
+                        <div class="d-flex justify-content-between mb-4">
+
+                            <span>
+                                Tổng tiền:
+                            </span>
+
+                            <strong class="text-danger fs-5">
+                                @tongTien.ToString("N0") đ
+                            </strong>
+
+                        </div>
+
+
+                        <button type="button"
+                                class="btn btn-success w-100"
+                                onclick="alert('Chức năng thanh toán sẽ được thực hiện sau.');">
+
+                            Thanh toán
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+    }
+
+</div>

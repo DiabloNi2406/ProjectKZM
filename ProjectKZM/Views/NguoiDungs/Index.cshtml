@@ -1,89 +1,207 @@
 @model IEnumerable<ProjectKZM.Models.NguoiDung>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Quản lý người dùng";
 }
 
-<h1>Index</h1>
+<style>
+    .user-page {
+        max-width: 1200px;
+        margin: 40px auto;
+        padding: 0 20px;
+    }
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.HoTen)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Email)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.MatKhau)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.SoDienThoai)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DiaChi)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.AnhDaiDien)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.MaVaiTro)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.VaiTro)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.GioHangs)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DonHangs)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(model => item.HoTen)
-            </td>
-            <td>
-                @Html.DisplayFor(model => item.Email)
-            </td>
-            <td>
-                @Html.DisplayFor(model => item.MatKhau)
-            </td>
-            <td>
-                @Html.DisplayFor(model => item.SoDienThoai)
-            </td>
-            <td>
-                @Html.DisplayFor(model => item.DiaChi)
-            </td>
-            <td>
-                @Html.DisplayFor(model => item.AnhDaiDien)
-            </td>
-            <td>
-                @Html.DisplayFor(model => item.MaVaiTro)
-            </td>
-            <td>
-                @Html.DisplayFor(model => item.VaiTro)
-            </td>
-            <td>
-                @Html.DisplayFor(model => item.GioHangs)
-            </td>
-            <td>
-                @Html.DisplayFor(model => item.DonHangs)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.MaNguoiDung">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.MaNguoiDung">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.MaNguoiDung">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+    .user-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 30px;
+    }
+
+    .user-title {
+        font-size: 40px;
+        font-weight: 400;
+        margin-bottom: 8px;
+        color: #222;
+    }
+
+    .user-subtitle {
+        color: #777;
+        margin: 0;
+    }
+
+    .button-area {
+        display: flex;
+        gap: 10px;
+    }
+</style>
+
+
+<div class="user-page">
+
+    <!-- HEADER -->
+    <div class="user-header">
+
+        <div>
+            <h1 class="user-title">
+                Quản lý dữ liệu người dùng
+            </h1>
+
+            <p class="user-subtitle">
+                Quản lý thông tin và tài khoản người dùng
+            </p>
+        </div>
+
+
+        <!-- 2 BUTTON -->
+        <div class="button-area">
+
+            <a asp-action="Create"
+               class="btn btn-success">
+                + Thêm người dùng
+            </a>
+
+            <a asp-controller="Admin"
+               asp-action="Index"
+               class="btn btn-secondary">
+                ← Quản lý
+            </a>
+
+        </div>
+
+    </div>
+
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success">
+            @TempData["Success"]
+        </div>
+    }
+
+
+    <!-- BẢNG NGƯỜI DÙNG -->
+
+    <div class="table-responsive">
+
+        <table class="table table-bordered table-hover align-middle">
+
+            <thead class="table-dark">
+
+                <tr>
+
+                    <th>Mã</th>
+
+                    <th>Họ tên</th>
+
+                    <th>Email</th>
+
+                    <th>Số điện thoại</th>
+
+                    <th>Địa chỉ</th>
+
+                    <th>Vai trò</th>
+
+                    <th style="width: 230px;">
+                        Thao tác
+                    </th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+                @if (!Model.Any())
+                {
+                    <tr>
+
+                        <td colspan="7"
+                            class="text-center text-muted">
+
+                            Chưa có người dùng nào.
+
+                        </td>
+
+                    </tr>
+                }
+                else
+                {
+                    foreach (var item in Model)
+                    {
+                        <tr>
+
+                            <td>
+                                @item.MaNguoiDung
+                            </td>
+
+                            <td>
+                                @item.HoTen
+                            </td>
+
+                            <td>
+                                @item.Email
+                            </td>
+
+                            <td>
+                                @item.SoDienThoai
+                            </td>
+
+                            <td>
+                                @item.DiaChi
+                            </td>
+
+                            <td>
+
+                                @if (item.VaiTro != null)
+                                {
+                                    if (item.VaiTro.TenVaiTro == "Admin")
+                                    {
+                                        <span class="badge bg-danger">
+                                            Admin
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-primary">
+                                            @item.VaiTro.TenVaiTro
+                                        </span>
+                                    }
+                                }
+
+                            </td>
+
+                            <td>
+
+                                <a asp-action="Details"
+                                   asp-route-manguoidung="@item.MaNguoiDung"
+                                   class="btn btn-info btn-sm text-white">
+                                    Xem
+                                </a>
+
+                                <a asp-action="Edit"
+                                   asp-route-manguoidung="@item.MaNguoiDung"
+                                   class="btn btn-warning btn-sm">
+                                    Sửa
+                                </a>
+
+                                <a asp-action="Delete"
+                                   asp-route-manguoidung="@item.MaNguoiDung"
+                                   class="btn btn-danger btn-sm">
+                                    Xóa
+                                </a>
+
+                            </td>
+
+                        </tr>
+                    }
+                }
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>

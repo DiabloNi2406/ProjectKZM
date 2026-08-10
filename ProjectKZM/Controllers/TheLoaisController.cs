@@ -1,150 +1,215 @@
-
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using ProjectKZM.Models;
 using ProjectKZM.Data;
+using ProjectKZM.Models;
 
-public class TheLoaisController : Controller
+namespace ProjectKZM.Controllers
 {
-    private readonly MyDbContext _context;
-
-    public TheLoaisController(MyDbContext context)
+    [Authorize(Roles = "Admin")]
+    public class TheLoaisController : Controller
     {
-        _context = context;
-    }
+        private readonly MyDbContext _context;
 
-    // GET: THELOAIS
-    public async Task<IActionResult> Index()    
-    {
-        return View(await _context.TheLoais.ToListAsync());
-    }
-
-    // GET: THELOAIS/Details/5
-    public async Task<IActionResult> Details(int? matheloai)
-    {
-        if (matheloai == null)
+        public TheLoaisController(MyDbContext context)
         {
-            return NotFound();
+            _context = context;
         }
 
-        var theloai = await _context.TheLoais
-            .FirstOrDefaultAsync(m => m.MaTheLoai == matheloai);
-        if (theloai == null)
+
+        // ==========================================================
+        // INDEX
+        // ==========================================================
+
+        public async Task<IActionResult> Index()
         {
-            return NotFound();
+            var theLoais = await _context.TheLoais
+                .Include(t => t.SachTheLoais)
+                .ThenInclude(st => st.Sach)
+                .ToListAsync();
+
+            return View(theLoais);
         }
 
-        return View(theloai);
-    }
 
-    // GET: THELOAIS/Create
-    public IActionResult Create()
-    {
-        return View();
-    }
+        // ==========================================================
+        // DETAILS
+        // ==========================================================
 
-    // POST: THELOAIS/Create
-    // To protect from overposting attacks, enable the specific properties you want to bind to.
-    // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-    [HttpPost]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create([Bind("MaTheLoai,TenTheLoai,MoTa,Hinh,Sachs")] TheLoai theloai)
-    {
-        if (ModelState.IsValid)
+        public async Task<IActionResult> Details(int? matheloai)
         {
-            _context.Add(theloai);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
-        return View(theloai);
-    }
-
-    // GET: THELOAIS/Edit/5
-    public async Task<IActionResult> Edit(int? matheloai)
-    {
-        if (matheloai == null)
-        {
-            return NotFound();
-        }
-
-        var theloai = await _context.TheLoais.FindAsync(matheloai);
-        if (theloai == null)
-        {
-            return NotFound();
-        }
-        return View(theloai);
-    }
-
-    // POST: THELOAIS/Edit/5
-    // To protect from overposting attacks, enable the specific properties you want to bind to.
-    // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-    [HttpPost]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit(int? matheloai, [Bind("MaTheLoai,TenTheLoai,MoTa,Hinh,Sachs")] TheLoai theloai)
-    {
-        if (matheloai != theloai.MaTheLoai)
-        {
-            return NotFound();
-        }
-
-        if (ModelState.IsValid)
-        {
-            try
+            if (matheloai == null)
             {
-                _context.Update(theloai);
-                await _context.SaveChangesAsync();
+                return NotFound();
             }
-            catch (DbUpdateConcurrencyException)
+
+            var theLoai = await _context.TheLoais
+                .Include(t => t.SachTheLoais)
+                .ThenInclude(st => st.Sach)
+                .FirstOrDefaultAsync(
+                    t => t.MaTheLoai == matheloai);
+
+            if (theLoai == null)
             {
-                if (!TheLoaiExists(theloai.MaTheLoai))
+                return NotFound();
+            }
+
+            return View(theLoai);
+        }
+
+
+        // ==========================================================
+        // CREATE - GET
+        // ==========================================================
+
+        public IActionResult Create()
+        {
+            return View();
+        }
+
+
+        // ==========================================================
+        // CREATE - POST
+        // ==========================================================
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(TheLoai theLoai)
+        {
+            if (ModelState.IsValid)
+            {
+                _context.TheLoais.Add(theLoai);
+
+                await _context.SaveChangesAsync();
+
+                return RedirectToAction(nameof(Index));
+            }
+
+            return View(theLoai);
+        }
+
+
+        // ==========================================================
+        // EDIT - GET
+        // ==========================================================
+
+        public async Task<IActionResult> Edit(int? matheloai)
+        {
+            if (matheloai == null)
+            {
+                return NotFound();
+            }
+
+            var theLoai = await _context.TheLoais
+                .FindAsync(matheloai);
+
+            if (theLoai == null)
+            {
+                return NotFound();
+            }
+
+            return View(theLoai);
+        }
+
+
+        // ==========================================================
+        // EDIT - POST
+        // ==========================================================
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(
+            int matheloai,
+            [Bind("MaTheLoai,TenTheLoai,MoTa,Hinh")]
+            TheLoai theLoai)
+        {
+            if (matheloai != theLoai.MaTheLoai)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
                 {
-                    return NotFound();
+                    _context.Update(theLoai);
+
+                    await _context.SaveChangesAsync();
                 }
-                else
+                catch (DbUpdateConcurrencyException)
                 {
+                    if (!TheLoaiExists(theLoai.MaTheLoai))
+                    {
+                        return NotFound();
+                    }
+
                     throw;
                 }
+
+                return RedirectToAction(nameof(Index));
             }
+
+            return View(theLoai);
+        }
+
+
+        // ==========================================================
+        // DELETE - GET
+        // ==========================================================
+
+        public async Task<IActionResult> Delete(int? matheloai)
+        {
+            if (matheloai == null)
+            {
+                return NotFound();
+            }
+
+            var theLoai = await _context.TheLoais
+                .Include(t => t.SachTheLoais)
+                .ThenInclude(st => st.Sach)
+                .FirstOrDefaultAsync(
+                    t => t.MaTheLoai == matheloai);
+
+            if (theLoai == null)
+            {
+                return NotFound();
+            }
+
+            return View(theLoai);
+        }
+
+
+        // ==========================================================
+        // DELETE - POST
+        // ==========================================================
+
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(
+            int matheloai)
+        {
+            var theLoai = await _context.TheLoais
+                .FindAsync(matheloai);
+
+            if (theLoai != null)
+            {
+                _context.TheLoais.Remove(theLoai);
+
+                await _context.SaveChangesAsync();
+            }
+
             return RedirectToAction(nameof(Index));
         }
-        return View(theloai);
-    }
 
-    // GET: THELOAIS/Delete/5
-    public async Task<IActionResult> Delete(int? matheloai)
-    {
-        if (matheloai == null)
+
+        // ==========================================================
+        // CHECK EXISTS
+        // ==========================================================
+
+        private bool TheLoaiExists(int matheloai)
         {
-            return NotFound();
+            return _context.TheLoais
+                .Any(e => e.MaTheLoai == matheloai);
         }
-
-        var theloai = await _context.TheLoais
-            .FirstOrDefaultAsync(m => m.MaTheLoai == matheloai);
-        if (theloai == null)
-        {
-            return NotFound();
-        }
-
-        return View(theloai);
-    }
-
-    // POST: THELOAIS/Delete/5
-    [HttpPost, ActionName("Delete")]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> DeleteConfirmed(int? matheloai)
-    {
-        var theloai = await _context.TheLoais.FindAsync(matheloai);
-        if (theloai != null)
-        {
-            _context.TheLoais.Remove(theloai);
-        }
-
-        await _context.SaveChangesAsync();
-        return RedirectToAction(nameof(Index));
-    }
-
-    private bool TheLoaiExists(int? matheloai)
-    {
-        return _context.TheLoais.Any(e => e.MaTheLoai == matheloai);
     }
 }

@@ -1,7 +1,40 @@
 {
   "Version": 1,
   "WorkspaceRootPath": "C:\\Users\\Asus\\Desktop\\Big Project\\ProjectKZM\\",
-  "Documents": [],
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{E41800D2-0F51-8312-DF13-9E7309DBBDD7}|ProjectKZM\\ProjectKZM.csproj|c:\\users\\asus\\desktop\\big project\\projectkzm\\projectkzm\\views\\account\\editprofile.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{E41800D2-0F51-8312-DF13-9E7309DBBDD7}|ProjectKZM\\ProjectKZM.csproj|solutionrelative:projectkzm\\views\\account\\editprofile.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E41800D2-0F51-8312-DF13-9E7309DBBDD7}|ProjectKZM\\ProjectKZM.csproj|c:\\users\\asus\\desktop\\big project\\projectkzm\\projectkzm\\controllers\\accountcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E41800D2-0F51-8312-DF13-9E7309DBBDD7}|ProjectKZM\\ProjectKZM.csproj|solutionrelative:projectkzm\\controllers\\accountcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E41800D2-0F51-8312-DF13-9E7309DBBDD7}|ProjectKZM\\ProjectKZM.csproj|c:\\users\\asus\\desktop\\big project\\projectkzm\\projectkzm\\views\\account\\accessdenied.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{E41800D2-0F51-8312-DF13-9E7309DBBDD7}|ProjectKZM\\ProjectKZM.csproj|solutionrelative:projectkzm\\views\\account\\accessdenied.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E41800D2-0F51-8312-DF13-9E7309DBBDD7}|ProjectKZM\\ProjectKZM.csproj|c:\\users\\asus\\desktop\\big project\\projectkzm\\projectkzm\\views\\account\\profile.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{E41800D2-0F51-8312-DF13-9E7309DBBDD7}|ProjectKZM\\ProjectKZM.csproj|solutionrelative:projectkzm\\views\\account\\profile.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E41800D2-0F51-8312-DF13-9E7309DBBDD7}|ProjectKZM\\ProjectKZM.csproj|c:\\users\\asus\\desktop\\big project\\projectkzm\\projectkzm\\views\\admin\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{E41800D2-0F51-8312-DF13-9E7309DBBDD7}|ProjectKZM\\ProjectKZM.csproj|solutionrelative:projectkzm\\views\\admin\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E41800D2-0F51-8312-DF13-9E7309DBBDD7}|ProjectKZM\\ProjectKZM.csproj|c:\\users\\asus\\desktop\\big project\\projectkzm\\projectkzm\\views\\account\\register.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{E41800D2-0F51-8312-DF13-9E7309DBBDD7}|ProjectKZM\\ProjectKZM.csproj|solutionrelative:projectkzm\\views\\account\\register.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E41800D2-0F51-8312-DF13-9E7309DBBDD7}|ProjectKZM\\ProjectKZM.csproj|c:\\users\\asus\\desktop\\big project\\projectkzm\\projectkzm\\views\\account\\login.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{E41800D2-0F51-8312-DF13-9E7309DBBDD7}|ProjectKZM\\ProjectKZM.csproj|solutionrelative:projectkzm\\views\\account\\login.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E41800D2-0F51-8312-DF13-9E7309DBBDD7}|ProjectKZM\\ProjectKZM.csproj|c:\\users\\asus\\desktop\\big project\\projectkzm\\projectkzm\\controllers\\homecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E41800D2-0F51-8312-DF13-9E7309DBBDD7}|ProjectKZM\\ProjectKZM.csproj|solutionrelative:projectkzm\\controllers\\homecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
   "DocumentGroupContainers": [
     {
       "Orientation": 1,
@@ -9,8 +42,12 @@
       "DocumentGroups": [
         {
           "DockedHeight": 366,
-          "SelectedChildIndex": -1,
+          "SelectedChildIndex": 5,
           "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{0ad07096-bba9-4900-a651-0598d26f6d24}"
+            },
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{d78612c7-9962-4b83-95d9-268046dad23a}"
@@ -18,6 +55,103 @@
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{34e76e81-ee4a-11d0-ae2e-00a0c90fffc3}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "AccessDenied.cshtml",
+              "DocumentMoniker": "C:\\Users\\Asus\\Desktop\\Big Project\\ProjectKZM\\ProjectKZM\\Views\\Account\\AccessDenied.cshtml",
+              "RelativeDocumentMoniker": "ProjectKZM\\Views\\Account\\AccessDenied.cshtml",
+              "ToolTip": "C:\\Users\\Asus\\Desktop\\Big Project\\ProjectKZM\\ProjectKZM\\Views\\Account\\AccessDenied.cshtml",
+              "RelativeToolTip": "ProjectKZM\\Views\\Account\\AccessDenied.cshtml",
+              "ViewState": "AgIAAEEAAAAAAAAAAAAgwFgAAAAGAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-08-10T08:44:35.272Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "AccountController.cs",
+              "DocumentMoniker": "C:\\Users\\Asus\\Desktop\\Big Project\\ProjectKZM\\ProjectKZM\\Controllers\\AccountController.cs",
+              "RelativeDocumentMoniker": "ProjectKZM\\Controllers\\AccountController.cs",
+              "ToolTip": "C:\\Users\\Asus\\Desktop\\Big Project\\ProjectKZM\\ProjectKZM\\Controllers\\AccountController.cs",
+              "RelativeToolTip": "ProjectKZM\\Controllers\\AccountController.cs",
+              "ViewState": "AgIAAPYBAAAAAAAAAAAgwA0CAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-08-10T08:41:00.559Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "EditProfile.cshtml",
+              "DocumentMoniker": "C:\\Users\\Asus\\Desktop\\Big Project\\ProjectKZM\\ProjectKZM\\Views\\Account\\EditProfile.cshtml",
+              "RelativeDocumentMoniker": "ProjectKZM\\Views\\Account\\EditProfile.cshtml",
+              "ToolTip": "C:\\Users\\Asus\\Desktop\\Big Project\\ProjectKZM\\ProjectKZM\\Views\\Account\\EditProfile.cshtml",
+              "RelativeToolTip": "ProjectKZM\\Views\\Account\\EditProfile.cshtml",
+              "ViewState": "AgIAAAMBAAAAAAAAAADwvw8BAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-08-10T08:37:48.242Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "Profile.cshtml",
+              "DocumentMoniker": "C:\\Users\\Asus\\Desktop\\Big Project\\ProjectKZM\\ProjectKZM\\Views\\Account\\Profile.cshtml",
+              "RelativeDocumentMoniker": "ProjectKZM\\Views\\Account\\Profile.cshtml",
+              "ToolTip": "C:\\Users\\Asus\\Desktop\\Big Project\\ProjectKZM\\ProjectKZM\\Views\\Account\\Profile.cshtml",
+              "RelativeToolTip": "ProjectKZM\\Views\\Account\\Profile.cshtml",
+              "ViewState": "AgIAAE4BAAAAAAAAAAAiwGMBAAAGAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-08-10T08:37:07.598Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "Index.cshtml",
+              "DocumentMoniker": "C:\\Users\\Asus\\Desktop\\Big Project\\ProjectKZM\\ProjectKZM\\Views\\Admin\\Index.cshtml",
+              "RelativeDocumentMoniker": "ProjectKZM\\Views\\Admin\\Index.cshtml",
+              "ToolTip": "C:\\Users\\Asus\\Desktop\\Big Project\\ProjectKZM\\ProjectKZM\\Views\\Admin\\Index.cshtml",
+              "RelativeToolTip": "ProjectKZM\\Views\\Admin\\Index.cshtml",
+              "ViewState": "AgIAAO0BAAAAAAAAAAAkwPYBAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-08-10T07:43:45.492Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "Register.cshtml",
+              "DocumentMoniker": "C:\\Users\\Asus\\Desktop\\Big Project\\ProjectKZM\\ProjectKZM\\Views\\Account\\Register.cshtml",
+              "RelativeDocumentMoniker": "ProjectKZM\\Views\\Account\\Register.cshtml",
+              "ToolTip": "C:\\Users\\Asus\\Desktop\\Big Project\\ProjectKZM\\ProjectKZM\\Views\\Account\\Register.cshtml",
+              "RelativeToolTip": "ProjectKZM\\Views\\Account\\Register.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-08-10T07:36:40.51Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "Login.cshtml",
+              "DocumentMoniker": "C:\\Users\\Asus\\Desktop\\Big Project\\ProjectKZM\\ProjectKZM\\Views\\Account\\Login.cshtml",
+              "RelativeDocumentMoniker": "ProjectKZM\\Views\\Account\\Login.cshtml",
+              "ToolTip": "C:\\Users\\Asus\\Desktop\\Big Project\\ProjectKZM\\ProjectKZM\\Views\\Account\\Login.cshtml",
+              "RelativeToolTip": "ProjectKZM\\Views\\Account\\Login.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-08-10T07:30:13.66Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "HomeController.cs",
+              "DocumentMoniker": "C:\\Users\\Asus\\Desktop\\Big Project\\ProjectKZM\\ProjectKZM\\Controllers\\HomeController.cs",
+              "RelativeDocumentMoniker": "ProjectKZM\\Controllers\\HomeController.cs",
+              "ToolTip": "C:\\Users\\Asus\\Desktop\\Big Project\\ProjectKZM\\ProjectKZM\\Controllers\\HomeController.cs",
+              "RelativeToolTip": "ProjectKZM\\Controllers\\HomeController.cs",
+              "ViewState": "AgIAAKcAAAAAAAAAAAAuwLQAAABEAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-08-09T16:14:47.653Z"
             }
           ]
         }

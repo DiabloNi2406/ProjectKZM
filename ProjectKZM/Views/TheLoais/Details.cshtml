@@ -1,45 +1,98 @@
 @model ProjectKZM.Models.TheLoai
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Xem thể loại";
 }
 
-<h1>Details</h1>
+<div class="container mt-5">
 
-<div>
-    <h4>TheLoai</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.TenTheLoai)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.TenTheLoai)
-        </dd>
-    </dl>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.MoTa)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.MoTa)
-        </dd>
-    </dl>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Hinh)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Hinh)
-        </dd>
-    </dl>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Sachs)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Sachs)
-        </dd>
-    </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.MaTheLoai">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1>Xem thể loại</h1>
+            <p class="text-muted">Thông tin chi tiết của thể loại</p>
+        </div>
+
+        <a asp-controller="TheLoais"
+           asp-action="Index"
+           class="btn btn-secondary">
+            ← Quản lý
+        </a>
+    </div>
+
+    <div class="card shadow-sm">
+
+        <div class="card-body">
+
+            <!-- TÊN THỂ LOẠI -->
+            <div class="mb-4">
+                <label class="fw-bold">Tên thể loại</label>
+
+                <div class="form-control bg-light">
+                    @Model.TenTheLoai
+                </div>
+            </div>
+
+            <!-- MÔ TẢ -->
+            <div class="mb-4">
+                <label class="fw-bold">Mô tả</label>
+
+                <div class="form-control bg-light"
+                     style="min-height: 100px;">
+                    @(string.IsNullOrEmpty(Model.MoTa)
+                        ? "Chưa có mô tả"
+                        : Model.MoTa)
+                </div>
+            </div>
+
+            <!-- HÌNH -->
+            <div class="mb-4">
+                <label class="fw-bold d-block">Hình ảnh</label>
+
+                @if (!string.IsNullOrEmpty(Model.Hinh))
+                {
+                    <img src="@Model.Hinh"
+                         alt="@Model.TenTheLoai"
+                         style="max-width: 300px;
+                    max-height: 300px;
+                    object-fit: contain;
+                    border: 1px solid #ddd;
+                    padding: 5px;
+                    border-radius: 6px;" />
+                }
+                else
+                {
+                    <p class="text-muted">
+                        Chưa có hình ảnh.
+                    </p>
+                }
+            </div>
+
+            <!-- MÃ THỂ LOẠI -->
+            <div class="mb-4">
+                <label class="fw-bold">Mã thể loại</label>
+
+                <div class="form-control bg-light">
+                    @Model.MaTheLoai
+                </div>
+            </div>
+
+        </div>
+
+        <div class="card-footer">
+
+            <a asp-action="Edit"
+               asp-route-matheLoai="@Model.MaTheLoai"
+               class="btn btn-warning">
+                Sửa
+            </a>
+
+            <a asp-action="Index"
+               class="btn btn-secondary">
+                Quay lại
+            </a>
+
+        </div>
+
+    </div>
+
 </div>

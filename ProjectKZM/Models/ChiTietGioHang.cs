@@ -12,7 +12,6 @@ namespace ProjectKZM.Models
 
         public int SoLuong { get; set; }
 
-        // Navigation Property
         public GioHang? GioHang { get; set; }
 
         public Sach? Sach { get; set; }

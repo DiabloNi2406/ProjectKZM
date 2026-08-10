@@ -1,95 +1,547 @@
 @model IEnumerable<ProjectKZM.Models.Sach>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Quản lý sách";
 }
 
-<h1>Index</h1>
+<style>
+    .book-page {
+        max-width: 1400px;
+        margin: 40px auto;
+        padding: 0 20px;
+    }
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.TenSach)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.TacGia)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.NhaXuatBan)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Gia)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.SoLuong)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Hinh)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.MoTa)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.MaTheLoai)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.TheLoai)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ChiTietGioHangs)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ChiTietDonHangs)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(model => item.TenSach)
-            </td>
-            <td>
-                @Html.DisplayFor(model => item.TacGia)
-            </td>
-            <td>
-                @Html.DisplayFor(model => item.NhaXuatBan)
-            </td>
-            <td>
-                @Html.DisplayFor(model => item.Gia)
-            </td>
-            <td>
-                @Html.DisplayFor(model => item.SoLuong)
-            </td>
-            <td>
-                @Html.DisplayFor(model => item.Hinh)
-            </td>
-            <td>
-                @Html.DisplayFor(model => item.MoTa)
-            </td>
-            <td>
-                @Html.DisplayFor(model => item.MaTheLoai)
-            </td>
-            <td>
-                @Html.DisplayFor(model => item.TheLoai)
-            </td>
-            <td>
-                @Html.DisplayFor(model => item.ChiTietGioHangs)
-            </td>
-            <td>
-                @Html.DisplayFor(model => item.ChiTietDonHangs)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.MaSach">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.MaSach">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.MaSach">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+    /* =========================
+           HEADER
+           ========================= */
+
+    .book-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 30px;
+    }
+
+    .book-title {
+        font-size: 40px;
+        font-weight: 400;
+        margin-bottom: 8px;
+    }
+
+    .book-subtitle {
+        color: #777;
+        margin: 0;
+    }
+
+    .button-area {
+        display: flex;
+        gap: 10px;
+    }
+
+    /* =========================
+           CARD
+           ========================= */
+
+    .book-card {
+        width: 100%;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        overflow: hidden;
+        background: white;
+    }
+
+    /* =========================
+           TABLE
+           ========================= */
+
+    .book-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+        .book-table thead tr {
+            background-color: #212529;
+        }
+
+        .book-table thead th {
+            background-color: #212529;
+            color: white;
+            padding: 15px 10px;
+            text-align: left;
+            font-weight: 500;
+            white-space: nowrap;
+            border: none;
+        }
+
+        .book-table tbody td {
+            padding: 12px 10px;
+            border-bottom: 1px solid #eee;
+            vertical-align: middle;
+        }
+
+        .book-table tbody tr:hover {
+            background-color: #f8f9fa;
+        }
+
+    /* =========================
+           HÌNH ẢNH
+           ========================= */
+
+    .book-image {
+        width: 70px;
+        height: 90px;
+        object-fit: cover;
+        border-radius: 6px;
+        border: 1px solid #ddd;
+    }
+
+    /* =========================
+           TÊN SÁCH
+           ========================= */
+
+    .book-name {
+        font-weight: 600;
+    }
+
+    /* =========================
+           GIÁ
+           ========================= */
+
+    .book-price {
+        font-weight: 600;
+        color: #dc3545;
+        white-space: nowrap;
+    }
+
+    /* =========================
+           THỂ LOẠI
+           ========================= */
+
+    .category-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 5px;
+    }
+
+    .category-badge {
+        display: inline-block;
+        padding: 5px 9px;
+        background-color: #e9ecef;
+        border-radius: 5px;
+        font-size: 13px;
+        color: #333;
+        white-space: nowrap;
+    }
+
+    .no-category {
+        color: #999;
+        font-size: 14px;
+    }
+
+    /* =========================
+           LOẠI SÁCH
+           ========================= */
+
+    .book-type {
+        display: inline-block;
+        padding: 5px 9px;
+        background-color: #f1f3f5;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        font-size: 13px;
+        color: #333;
+        white-space: nowrap;
+    }
+
+    /* =========================
+           CHƯƠNG
+           ========================= */
+
+    .chapter {
+        white-space: nowrap;
+    }
+
+    /* =========================
+           NÚT THAO TÁC
+           ========================= */
+
+    .action-buttons {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        min-width: 65px;
+    }
+
+        .action-buttons .btn {
+            width: 100%;
+        }
+
+    /* =========================
+           KHÔNG CÓ DỮ LIỆU
+           ========================= */
+
+    .empty-message {
+        padding: 50px;
+        text-align: center;
+        color: #777;
+    }
+</style>
+
+
+<div class="book-page">
+
+    <!-- =========================================
+         HEADER
+         ========================================= -->
+
+    <div class="book-header">
+
+        <div>
+
+            <h1 class="book-title">
+                Quản lý sách
+            </h1>
+
+            <p class="book-subtitle">
+                Thêm, chỉnh sửa, xem và xóa sách
+            </p>
+
+        </div>
+
+
+        <div class="button-area">
+
+            <!-- THÊM SÁCH -->
+
+            <a asp-action="Create"
+               class="btn btn-success">
+
+                + Thêm sách
+
+            </a>
+
+
+            <!-- QUẢN LÝ -->
+
+            <a href="/Admin"
+               class="btn btn-secondary">
+
+                ← Quản lý
+
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================================
+         BẢNG
+         ========================================= -->
+
+    <div class="book-card">
+
+        @if (Model != null && Model.Any())
+        {
+
+            <table class="book-table">
+
+                <!-- =====================================
+                     HEADER BẢNG
+                     ===================================== -->
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            Mã
+                        </th>
+
+                        <th>
+                            Hình ảnh
+                        </th>
+
+                        <th>
+                            Tên sách
+                        </th>
+
+                        <th>
+                            Loại sách
+                        </th>
+
+                        <th>
+                            Chương
+                        </th>
+
+                        <th>
+                            Tác giả
+                        </th>
+
+                        <th>
+                            Nhà xuất bản
+                        </th>
+
+                        <th>
+                            Giá
+                        </th>
+
+                        <th>
+                            Số lượng
+                        </th>
+
+                        <th>
+                            Thể loại
+                        </th>
+
+                        <th>
+                            Thao tác
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <!-- =====================================
+                     DỮ LIỆU
+                     ===================================== -->
+
+                <tbody>
+
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+
+                            <!-- =========================
+                                 MÃ SÁCH
+                                 ========================= -->
+
+                            <td>
+                                @item.MaSach
+                            </td>
+
+
+                            <!-- =========================
+                                 HÌNH ẢNH
+                                 ========================= -->
+
+                            <td>
+
+                                @if (!string.IsNullOrEmpty(item.Hinh))
+                                {
+                                    <img src="@item.Hinh"
+                                         class="book-image"
+                                         alt="@item.TenSach" />
+                                }
+                                else
+                                {
+                                    <span class="text-muted">
+                                        Không có hình
+                                    </span>
+                                }
+
+                            </td>
+
+
+                            <!-- =========================
+                                 TÊN SÁCH
+                                 ========================= -->
+
+                            <td>
+
+                                <span class="book-name">
+                                    @item.TenSach
+                                </span>
+
+                            </td>
+
+
+                            <!-- =========================
+                                 LOẠI SÁCH
+                                 ========================= -->
+
+                            <td>
+
+                                @if (item.LoaiSach != null)
+                                {
+                                    <span class="book-type">
+                                        @item.LoaiSach.TenLoaiSach
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="no-category">
+                                        Chưa có loại sách
+                                    </span>
+                                }
+
+                            </td>
+
+
+                            <!-- =========================
+                                 CHƯƠNG
+                                 ========================= -->
+
+                            <td>
+
+                                <span class="chapter">
+                                    @item.Chuong
+                                </span>
+
+                            </td>
+
+
+                            <!-- =========================
+                                 TÁC GIẢ
+                                 ========================= -->
+
+                            <td>
+                                @item.TacGia
+                            </td>
+
+
+                            <!-- =========================
+                                 NHÀ XUẤT BẢN
+                                 ========================= -->
+
+                            <td>
+                                @item.NhaXuatBan
+                            </td>
+
+
+                            <!-- =========================
+                                 GIÁ
+                                 ========================= -->
+
+                            <td>
+
+                                <span class="book-price">
+                                    @item.Gia.ToString("N0") ₫
+                                </span>
+
+                            </td>
+
+
+                            <!-- =========================
+                                 SỐ LƯỢNG
+                                 ========================= -->
+
+                            <td>
+                                @item.SoLuong
+                            </td>
+
+
+                            <!-- =========================
+                                 THỂ LOẠI
+                                 ========================= -->
+
+                            <td>
+
+                                @if (item.SachTheLoais != null &&
+                                     item.SachTheLoais.Any())
+                                {
+
+                                    <div class="category-list">
+
+                                        @foreach (var sachTheLoai in item.SachTheLoais)
+                                        {
+
+                                            @if (sachTheLoai.TheLoai != null)
+                                            {
+                                                <span class="category-badge">
+
+                                                    @sachTheLoai.TheLoai.TenTheLoai
+
+                                                </span>
+                                            }
+
+                                        }
+
+                                    </div>
+
+                                }
+                                else
+                                {
+
+                                    <span class="no-category">
+
+                                        Chưa có thể loại
+
+                                    </span>
+
+                                }
+
+                            </td>
+
+
+                            <!-- =========================
+                                 THAO TÁC
+                                 ========================= -->
+
+                            <td>
+
+                                <div class="action-buttons">
+
+                                    <!-- XEM -->
+
+                                    <a asp-action="Details"
+                                       asp-route-id="@item.MaSach"
+                                       class="btn btn-info btn-sm">
+
+                                        Xem
+
+                                    </a>
+
+
+                                    <!-- SỬA -->
+
+                                    <a asp-action="Edit"
+                                       asp-route-id="@item.MaSach"
+                                       class="btn btn-warning btn-sm">
+
+                                        Sửa
+
+                                    </a>
+
+
+                                    <!-- XÓA -->
+
+                                    <a asp-action="Delete"
+                                       asp-route-id="@item.MaSach"
+                                       class="btn btn-danger btn-sm">
+
+                                        Xóa
+
+                                    </a>
+
+                                </div>
+
+                            </td>
+
+                        </tr>
+                    }
+
+                </tbody>
+
+            </table>
+
+        }
+        else
+        {
+
+            <!-- =====================================
+                 KHÔNG CÓ SÁCH
+                 ===================================== -->
+
+            <div class="empty-message">
+
+                Chưa có sách nào trong hệ thống.
+
+            </div>
+
+        }
+
+    </div>
+
+</div>
