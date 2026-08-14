@@ -1,0 +1,485 @@
+﻿@model ProjectKZM.ViewModels.ThanhToanViewModel
+
+@{
+    ViewData["Title"] = "Thanh toán";
+}
+
+<style>
+    .checkout-page {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 50px 20px 80px;
+    }
+
+    .checkout-title {
+        font-size: 42px;
+        font-weight: 400;
+        margin-bottom: 40px;
+        letter-spacing: -1px;
+    }
+
+    .checkout-grid {
+        display: grid;
+        grid-template-columns: 1.5fr 1fr;
+        gap: 35px;
+        align-items: start;
+    }
+
+    .checkout-box {
+        background: #fff;
+        border: 1px solid #e5e5e5;
+        padding: 28px;
+    }
+
+    .box-title {
+        font-size: 23px;
+        font-weight: 500;
+        margin-bottom: 25px;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    .form-label {
+        display: block;
+        font-size: 14px;
+        margin-bottom: 8px;
+        font-weight: 500;
+    }
+
+    .form-control {
+        width: 100%;
+        border: 1px solid #d8d8d8;
+        padding: 13px 14px;
+        font-size: 15px;
+        outline: none;
+        box-sizing: border-box;
+    }
+
+    .form-control:focus {
+        border-color: #111;
+    }
+
+    textarea.form-control {
+        min-height: 100px;
+        resize: vertical;
+    }
+
+    .payment-option {
+        display: block;
+        border: 1px solid #111;
+        padding: 18px;
+        margin-bottom: 12px;
+        cursor: default;
+    }
+
+    .payment-option input {
+        margin-right: 10px;
+    }
+
+    .payment-name {
+        font-size: 16px;
+        font-weight: 500;
+    }
+
+    .payment-description {
+        margin-top: 7px;
+        margin-left: 25px;
+        color: #777;
+        font-size: 13px;
+        line-height: 1.5;
+    }
+
+    .product-item {
+        display: flex;
+        gap: 15px;
+        padding: 17px 0;
+        border-bottom: 1px solid #eee;
+    }
+
+    .product-image {
+        width: 75px;
+        height: 100px;
+        object-fit: cover;
+        background: #f2f2f2;
+        flex-shrink: 0;
+    }
+
+    .product-info {
+        flex: 1;
+    }
+
+    .product-name {
+        font-size: 15px;
+        font-weight: 500;
+        margin-bottom: 8px;
+    }
+
+    .product-quantity {
+        font-size: 13px;
+        color: #777;
+        margin-bottom: 5px;
+    }
+
+    .product-price {
+        font-size: 15px;
+    }
+
+    .summary-row {
+        display: flex;
+        justify-content: space-between;
+        padding: 10px 0;
+        font-size: 15px;
+    }
+
+    .summary-total {
+        display: flex;
+        justify-content: space-between;
+        padding-top: 20px;
+        margin-top: 10px;
+        border-top: 1px solid #ddd;
+        font-size: 21px;
+        font-weight: 600;
+    }
+
+    .submit-button {
+        width: 100%;
+        border: none;
+        background: #111;
+        color: #fff;
+        padding: 16px;
+        margin-top: 25px;
+        font-size: 15px;
+        cursor: pointer;
+    }
+
+    .submit-button:hover {
+        background: #333;
+    }
+
+    .back-cart {
+        display: inline-block;
+        margin-top: 18px;
+        color: #111;
+        text-decoration: none;
+        font-size: 14px;
+    }
+
+    .back-cart:hover {
+        text-decoration: underline;
+    }
+
+    .validation-summary {
+        margin-bottom: 20px;
+        color: #b00020;
+        font-size: 14px;
+    }
+
+    .field-validation-error {
+        display: block;
+        margin-top: 5px;
+        color: #b00020;
+        font-size: 13px;
+    }
+
+    @@media (max-width: 850px) {
+        .checkout-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .checkout-title {
+            font-size: 34px;
+        }
+    }
+</style>
+
+
+<div class="checkout-page">
+
+    <h1 class="checkout-title">
+        Thanh toán
+    </h1>
+
+
+    <form asp-controller="ThanhToan"
+          asp-action="DatHang"
+          method="post">
+
+        @Html.AntiForgeryToken()
+
+
+        <div asp-validation-summary="ModelOnly"
+             class="validation-summary">
+        </div>
+
+
+        <div class="checkout-grid">
+
+            <!-- ================================================= -->
+            <!-- CỘT TRÁI -->
+            <!-- ================================================= -->
+
+            <div>
+
+                <!-- ============================================= -->
+                <!-- THÔNG TIN GIAO HÀNG -->
+                <!-- ============================================= -->
+
+                <div class="checkout-box">
+
+                    <div class="box-title">
+                        Thông tin giao hàng
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label asp-for="HoTen"
+                               class="form-label">
+                        </label>
+
+                        <input asp-for="HoTen"
+                               class="form-control"
+                               placeholder="Nhập họ tên người nhận" />
+
+                        <span asp-validation-for="HoTen"
+                              class="field-validation-error">
+                        </span>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label asp-for="SoDienThoai"
+                               class="form-label">
+                        </label>
+
+                        <input asp-for="SoDienThoai"
+                               class="form-control"
+                               placeholder="Nhập số điện thoại" />
+
+                        <span asp-validation-for="SoDienThoai"
+                              class="field-validation-error">
+                        </span>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label asp-for="DiaChiGiaoHang"
+                               class="form-label">
+                        </label>
+
+                        <textarea asp-for="DiaChiGiaoHang"
+                                  class="form-control"
+                                  placeholder="Nhập địa chỉ nhận hàng"></textarea>
+
+                        <span asp-validation-for="DiaChiGiaoHang"
+                              class="field-validation-error">
+                        </span>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label asp-for="GhiChu"
+                               class="form-label">
+                            Ghi chú đơn hàng
+                        </label>
+
+                        <textarea asp-for="GhiChu"
+                                  class="form-control"
+                                  placeholder="Ví dụ: Giao giờ hành chính..."></textarea>
+
+                        <span asp-validation-for="GhiChu"
+                              class="field-validation-error">
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ============================================= -->
+                <!-- PHƯƠNG THỨC THANH TOÁN -->
+                <!-- ============================================= -->
+
+                <div class="checkout-box"
+                     style="margin-top:25px;">
+
+                    <div class="box-title">
+                        Phương thức thanh toán
+                    </div>
+
+
+                    <label class="payment-option">
+
+                        <input type="radio"
+                               asp-for="PhuongThucThanhToan"
+                               value="VNPAY"
+                               checked />
+
+                        <span class="payment-name">
+                            Thanh toán Online qua VNPAY
+                        </span>
+
+                        <div class="payment-description">
+                            Bạn sẽ được chuyển đến cổng thanh toán
+                            VNPAY để thực hiện thanh toán online.
+                        </div>
+
+                    </label>
+
+                </div>
+
+            </div>
+
+
+            <!-- ================================================= -->
+            <!-- CỘT PHẢI -->
+            <!-- ================================================= -->
+
+            <div>
+
+                <div class="checkout-box">
+
+                    <div class="box-title">
+                        Đơn hàng của bạn
+                    </div>
+
+
+                    <!-- ========================================= -->
+                    <!-- DANH SÁCH SẢN PHẨM -->
+                    <!-- ========================================= -->
+                    @for (int i = 0; i < Model.SanPhams.Count; i++)
+                    {
+                        <div class="product-item">
+
+                            @if (!string.IsNullOrWhiteSpace(
+                                Model.SanPhams[i].Hinh))
+                            {
+                                <img src="@Model.SanPhams[i].Hinh"
+                                     class="product-image"
+                                     alt="@Model.SanPhams[i].TenSach" />
+                            }
+                            else
+                            {
+                                <div class="product-image"></div>
+                            }
+
+
+                            <div class="product-info">
+
+                                <div class="product-name">
+                                    @Model.SanPhams[i].TenSach
+                                </div>
+
+                                <div class="product-quantity">
+                                    Số lượng:
+                                    @Model.SanPhams[i].SoLuong
+                                </div>
+
+                                <div class="product-price">
+                                    @Model.SanPhams[i].DonGia.ToString("N0")
+                                    VNĐ
+                                </div>
+
+                            </div>
+
+
+                            <div style="font-weight:500; white-space:nowrap;">
+
+                                @Model.SanPhams[i].ThanhTien.ToString("N0")
+                                VNĐ
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- Hidden fields -->
+
+                        <input type="hidden"
+                               asp-for="SanPhams[i].MaSach" />
+
+                        <input type="hidden"
+                               asp-for="SanPhams[i].SoLuong" />
+                    }
+
+
+                    <!-- ========================================= -->
+                    <!-- TỔNG SỐ LƯỢNG -->
+                    <!-- ========================================= -->
+
+                    <div class="summary-row"
+                         style="margin-top:15px;">
+
+                        <span>
+                            Số lượng
+                        </span>
+
+                        <strong>
+                            @Model.TongSoLuong
+                        </strong>
+
+                    </div>
+
+
+                    <!-- ========================================= -->
+                    <!-- TỔNG TIỀN -->
+                    <!-- ========================================= -->
+
+                    <div class="summary-total">
+
+                        <span>
+                            Tổng cộng
+                        </span>
+
+                        <span>
+                            @Model.TongTien.ToString("N0")
+                            VNĐ
+                        </span>
+
+                    </div>
+
+
+                    <!-- ========================================= -->
+                    <!-- ĐẶT HÀNG -->
+                    <!-- ========================================= -->
+
+                    <button type="submit"
+                            class="submit-button">
+
+                        ĐẶT HÀNG
+
+                    </button>
+
+
+                    <a asp-controller="GioHangs"
+                       asp-action="Index"
+                       class="back-cart">
+
+                        ← Quay lại giỏ hàng
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </form>
+
+</div>
+
+
+@section Scripts {
+
+    <partial name="_ValidationScriptsPartial" />
+
+}

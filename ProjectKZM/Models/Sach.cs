@@ -54,5 +54,12 @@ namespace ProjectKZM.Models
 
         public ICollection<ChiTietDonHang> ChiTietDonHangs { get; set; }
             = new List<ChiTietDonHang>();
+
+        // ==============================
+        // YÊU THÍCH
+        // ==============================
+
+        public ICollection<YeuThich> YeuThichs { get; set; }
+            = new List<YeuThich>();
     }
 }

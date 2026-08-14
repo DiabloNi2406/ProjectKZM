@@ -30,5 +30,8 @@ namespace ProjectKZM.Models
         public NguoiDung? NguoiDung { get; set; }
 
         public ICollection<ChiTietDonHang> ChiTietDonHangs { get; set; } = new List<ChiTietDonHang>();
+
+        [StringLength(500)]
+        public string? GhiChu { get; set; }
     }
 }

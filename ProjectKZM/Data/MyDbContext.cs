@@ -35,6 +35,8 @@ namespace ProjectKZM.Data
 
         public DbSet<ChiTietDonHang> ChiTietDonHangs { get; set; }
 
+        public DbSet<YeuThich> YeuThichs { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -120,23 +122,26 @@ namespace ProjectKZM.Data
             // =====================================================
 
             modelBuilder.Entity<ChiTietDonHang>()
-                .HasKey(x => new
-                {
-                    x.MaDonHang,
-                    x.MaSach
-                });
+                .HasKey(x => x.MaChiTietDonHang);
+
+
+            modelBuilder.Entity<ChiTietDonHang>()
+                .Property(x => x.MaChiTietDonHang)
+                .ValueGeneratedOnAdd();
 
 
             modelBuilder.Entity<ChiTietDonHang>()
                 .HasOne(x => x.DonHang)
                 .WithMany(x => x.ChiTietDonHangs)
-                .HasForeignKey(x => x.MaDonHang);
+                .HasForeignKey(x => x.MaDonHang)
+                .OnDelete(DeleteBehavior.Cascade);
 
 
             modelBuilder.Entity<ChiTietDonHang>()
                 .HasOne(x => x.Sach)
                 .WithMany(x => x.ChiTietDonHangs)
-                .HasForeignKey(x => x.MaSach);
+                .HasForeignKey(x => x.MaSach)
+                .OnDelete(DeleteBehavior.Restrict);
 
 
             // =====================================================
@@ -148,6 +153,37 @@ namespace ProjectKZM.Data
                 .WithMany(x => x.NguoiDungs)
                 .HasForeignKey(x => x.MaVaiTro)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            // =====================================================
+            // YÊU THÍCH
+            // =====================================================
+
+            modelBuilder.Entity<YeuThich>()
+                .HasKey(x => x.MaYeuThich);
+
+
+            modelBuilder.Entity<YeuThich>()
+                .HasOne(x => x.NguoiDung)
+                .WithMany()
+                .HasForeignKey(x => x.MaNguoiDung)
+                .OnDelete(DeleteBehavior.Cascade);
+
+
+            modelBuilder.Entity<YeuThich>()
+                .HasOne(x => x.Sach)
+                .WithMany(x => x.YeuThichs)
+                .HasForeignKey(x => x.MaSach)
+                .OnDelete(DeleteBehavior.Cascade);
+
+
+            // Một người không thể yêu thích cùng một sách 2 lần
+            modelBuilder.Entity<YeuThich>()
+                .HasIndex(x => new
+                {
+                    x.MaNguoiDung,
+                    x.MaSach
+                })
+                .IsUnique();
 
 
             // =====================================================

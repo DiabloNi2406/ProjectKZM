@@ -102,6 +102,7 @@ C:\Users\Asus\Desktop\Big Project\ProjectKZM\ProjectKZM\wwwroot\lib\bootstrap\di
 C:\Users\Asus\Desktop\Big Project\ProjectKZM\ProjectKZM\wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.rtl.css.map
 C:\Users\Asus\Desktop\Big Project\ProjectKZM\ProjectKZM\wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.rtl.min.css
 C:\Users\Asus\Desktop\Big Project\ProjectKZM\ProjectKZM\wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.rtl.min.css.map
+C:\Users\Asus\Desktop\Big Project\ProjectKZM\ProjectKZM\wwwroot\lib\jquery\LICENSE.txt
 C:\Users\Asus\Desktop\Big Project\ProjectKZM\ProjectKZM\wwwroot\lib\bootstrap\dist\css\bootstrap.css
 C:\Users\Asus\Desktop\Big Project\ProjectKZM\ProjectKZM\wwwroot\lib\bootstrap\dist\css\bootstrap.css.map
 C:\Users\Asus\Desktop\Big Project\ProjectKZM\ProjectKZM\wwwroot\lib\bootstrap\dist\css\bootstrap.min.css
@@ -136,4 +137,3 @@ C:\Users\Asus\Desktop\Big Project\ProjectKZM\ProjectKZM\wwwroot\lib\jquery\dist\
 C:\Users\Asus\Desktop\Big Project\ProjectKZM\ProjectKZM\wwwroot\lib\jquery\dist\jquery.slim.js
 C:\Users\Asus\Desktop\Big Project\ProjectKZM\ProjectKZM\wwwroot\lib\jquery\dist\jquery.slim.min.js
 C:\Users\Asus\Desktop\Big Project\ProjectKZM\ProjectKZM\wwwroot\lib\jquery\dist\jquery.slim.min.map
-C:\Users\Asus\Desktop\Big Project\ProjectKZM\ProjectKZM\wwwroot\lib\jquery\LICENSE.txt

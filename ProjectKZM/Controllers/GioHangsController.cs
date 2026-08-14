@@ -133,7 +133,8 @@ namespace ProjectKZM.Controllers
 
             if (sach.SoLuong <= 0)
             {
-                TempData["Error"] = "Sản phẩm đã hết hàng.";
+                TempData["Error"] =
+                    "Sản phẩm đã hết hàng.";
 
                 return RedirectToAction("Index", "Home");
             }
@@ -333,7 +334,11 @@ namespace ProjectKZM.Controllers
             }
             else
             {
+                // Khi giảm từ 1 xuống 0 thì sản phẩm bị xóa
                 _context.ChiTietGioHangs.Remove(chiTiet);
+
+                TempData["Success"] =
+                    "Đã xóa sản phẩm khỏi danh sách giỏ hàng.";
             }
 
 
@@ -341,6 +346,139 @@ namespace ProjectKZM.Controllers
 
 
             return RedirectToAction(nameof(Index));
+        }
+
+
+        // =========================================================
+        // THANH TOÁN SẢN PHẨM ĐÃ CHỌN
+        // =========================================================
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ThanhToan(
+    int[] maSach,
+    int[] soLuong)
+        {
+            // =====================================================
+            // KIỂM TRA DỮ LIỆU
+            // =====================================================
+
+            if (maSach == null ||
+                soLuong == null ||
+                maSach.Length == 0 ||
+                soLuong.Length == 0 ||
+                maSach.Length != soLuong.Length)
+            {
+                TempData["Error"] =
+                    "Vui lòng chọn sản phẩm để thanh toán.";
+
+                return RedirectToAction(nameof(Index));
+            }
+
+
+            // =====================================================
+            // USER
+            // =====================================================
+
+            var user = await GetCurrentUser();
+
+            if (user == null)
+            {
+                return RedirectToAction(
+                    "Login",
+                    "Account");
+            }
+
+
+            // =====================================================
+            // GIỎ HÀNG
+            // =====================================================
+
+            var gioHang = await _context.GioHangs
+                .Include(g => g.ChiTietGioHangs)
+                    .ThenInclude(ct => ct.Sach)
+                .FirstOrDefaultAsync(
+                    g => g.MaNguoiDung == user.MaNguoiDung);
+
+
+            if (gioHang == null)
+            {
+                TempData["Error"] =
+                    "Không tìm thấy giỏ hàng.";
+
+                return RedirectToAction(nameof(Index));
+            }
+
+
+            // =====================================================
+            // KIỂM TRA SẢN PHẨM ĐƯỢC CHỌN
+            // =====================================================
+
+            for (int i = 0; i < maSach.Length; i++)
+            {
+                int idSach = maSach[i];
+                int qty = soLuong[i];
+
+
+                if (qty <= 0)
+                {
+                    TempData["Error"] =
+                        "Số lượng thanh toán không hợp lệ.";
+
+                    return RedirectToAction(nameof(Index));
+                }
+
+
+                var chiTiet =
+                    gioHang.ChiTietGioHangs
+                        .FirstOrDefault(
+                            ct => ct.MaSach == idSach);
+
+
+                if (chiTiet == null ||
+                    chiTiet.Sach == null)
+                {
+                    TempData["Error"] =
+                        "Có sản phẩm không tồn tại trong giỏ hàng.";
+
+                    return RedirectToAction(nameof(Index));
+                }
+
+
+                if (qty > chiTiet.SoLuong)
+                {
+                    TempData["Error"] =
+                        $"Số lượng thanh toán của " +
+                        $"\"{chiTiet.Sach.TenSach}\" " +
+                        "vượt quá số lượng trong giỏ.";
+
+                    return RedirectToAction(nameof(Index));
+                }
+
+
+                if (qty > chiTiet.Sach.SoLuong)
+                {
+                    TempData["Error"] =
+                        $"Sách \"{chiTiet.Sach.TenSach}\" " +
+                        "không đủ số lượng trong kho.";
+
+                    return RedirectToAction(nameof(Index));
+                }
+            }
+
+
+            // =====================================================
+            // CHUYỂN SANG THANHTOANCONTROLLER.INDEX
+            // =====================================================
+
+            return RedirectToAction(
+                "Index",
+                "ThanhToan",
+                new
+                {
+                    maSach = maSach,
+                    soLuong = soLuong
+                });
         }
 
 
@@ -362,6 +500,10 @@ namespace ProjectKZM.Controllers
             }
 
 
+            // =====================================================
+            // KIỂM TRA GIỎ HÀNG CÓ THUỘC USER KHÔNG
+            // =====================================================
+
             var gioHang = await _context.GioHangs
                 .FirstOrDefaultAsync(g =>
                     g.MaGioHang == maGioHang &&
@@ -373,17 +515,38 @@ namespace ProjectKZM.Controllers
             }
 
 
+            // =====================================================
+            // TÌM SẢN PHẨM TRONG GIỎ
+            // =====================================================
+
             var chiTiet = await _context.ChiTietGioHangs
                 .FirstOrDefaultAsync(ct =>
                     ct.MaGioHang == maGioHang &&
                     ct.MaSach == maSach);
 
 
+            // =====================================================
+            // XÓA SẢN PHẨM
+            // =====================================================
+
             if (chiTiet != null)
             {
                 _context.ChiTietGioHangs.Remove(chiTiet);
 
                 await _context.SaveChangesAsync();
+
+
+                // =================================================
+                // THÔNG BÁO XÓA THÀNH CÔNG
+                // =================================================
+
+                TempData["Success"] =
+                    "Đã xóa sản phẩm khỏi danh sách giỏ hàng.";
+            }
+            else
+            {
+                TempData["Error"] =
+                    "Không tìm thấy sản phẩm trong giỏ hàng.";
             }
 
 
@@ -420,10 +583,20 @@ namespace ProjectKZM.Controllers
                     gioHang.ChiTietGioHangs);
 
                 await _context.SaveChangesAsync();
+
+
+                TempData["Success"] =
+                    "Đã xóa toàn bộ sản phẩm khỏi danh sách giỏ hàng.";
+            }
+            else
+            {
+                TempData["Error"] =
+                    "Giỏ hàng không có sản phẩm để xóa.";
             }
 
 
             return RedirectToAction(nameof(Index));
         }
     }
+
 }

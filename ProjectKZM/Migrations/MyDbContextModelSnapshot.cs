@@ -73,6 +73,10 @@ namespace ProjectKZM.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
+                    b.Property<string>("GhiChu")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
                     b.Property<int>("MaNguoiDung")
                         .HasColumnType("int");
 
@@ -295,6 +299,33 @@ namespace ProjectKZM.Migrations
                         });
                 });
 
+            modelBuilder.Entity("ProjectKZM.Models.YeuThich", b =>
+                {
+                    b.Property<int>("MaYeuThich")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("MaYeuThich"));
+
+                    b.Property<int>("MaNguoiDung")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MaSach")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("NgayThem")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("MaYeuThich");
+
+                    b.HasIndex("MaSach");
+
+                    b.HasIndex("MaNguoiDung", "MaSach")
+                        .IsUnique();
+
+                    b.ToTable("YeuThichs");
+                });
+
             modelBuilder.Entity("ProjectKZM.Models.ChiTietDonHang", b =>
                 {
                     b.HasOne("ProjectKZM.Models.DonHang", "DonHang")
@@ -395,6 +426,25 @@ namespace ProjectKZM.Migrations
                     b.Navigation("TheLoai");
                 });
 
+            modelBuilder.Entity("ProjectKZM.Models.YeuThich", b =>
+                {
+                    b.HasOne("ProjectKZM.Models.NguoiDung", "NguoiDung")
+                        .WithMany()
+                        .HasForeignKey("MaNguoiDung")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ProjectKZM.Models.Sach", "Sach")
+                        .WithMany("YeuThichs")
+                        .HasForeignKey("MaSach")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("NguoiDung");
+
+                    b.Navigation("Sach");
+                });
+
             modelBuilder.Entity("ProjectKZM.Models.DonHang", b =>
                 {
                     b.Navigation("ChiTietDonHangs");
@@ -424,6 +474,8 @@ namespace ProjectKZM.Migrations
                     b.Navigation("ChiTietGioHangs");
 
                     b.Navigation("SachTheLoais");
+
+                    b.Navigation("YeuThichs");
                 });
 
             modelBuilder.Entity("ProjectKZM.Models.TheLoai", b =>

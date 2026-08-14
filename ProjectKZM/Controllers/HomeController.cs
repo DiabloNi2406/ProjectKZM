@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ProjectKZM.Data;
 using ProjectKZM.Models;
+using System.Security.Claims;
 
 namespace ProjectKZM.Controllers
 {
@@ -40,7 +41,7 @@ namespace ProjectKZM.Controllers
             // =====================================================
 
             bool hasSearch =
-                Request.Query.ContainsKey("search");
+                !string.IsNullOrWhiteSpace(search);
 
 
             // =====================================================
@@ -68,16 +69,8 @@ namespace ProjectKZM.Controllers
             {
                 search = search?.Trim();
 
-                // Người dùng bấm Search nhưng không nhập gì
-                if (string.IsNullOrWhiteSpace(search))
-                {
-                    query = query.Where(s => false);
-                }
-                else
-                {
-                    query = query.Where(s =>
-                        s.TenSach.Contains(search));
-                }
+                query = query.Where(s =>
+                    s.TenSach.Contains(search!));
             }
 
 
@@ -148,6 +141,38 @@ namespace ProjectKZM.Controllers
 
 
             // =====================================================
+            // LẤY DANH SÁCH SÁCH ĐÃ YÊU THÍCH
+            // =====================================================
+
+            var favoriteBookIds = new List<int>();
+
+            if (User.Identity?.IsAuthenticated == true)
+            {
+                var email =
+                    User.FindFirstValue(ClaimTypes.Email);
+
+                if (!string.IsNullOrWhiteSpace(email))
+                {
+                    var user =
+                        await _context.NguoiDungs
+                            .FirstOrDefaultAsync(x =>
+                                x.Email == email);
+
+                    if (user != null)
+                    {
+                        favoriteBookIds =
+                            await _context.YeuThichs
+                                .Where(x =>
+                                    x.MaNguoiDung ==
+                                    user.MaNguoiDung)
+                                .Select(x => x.MaSach)
+                                .ToListAsync();
+                    }
+                }
+            }
+
+
+            // =====================================================
             // VIEWBAG
             // =====================================================
 
@@ -166,6 +191,14 @@ namespace ProjectKZM.Controllers
 
             ViewBag.SachMoi =
                 sachMoi;
+
+
+            // =====================================================
+            // GỬI DANH SÁCH YÊU THÍCH SANG INDEX
+            // =====================================================
+
+            ViewBag.FavoriteBookIds =
+                favoriteBookIds.ToArray();
 
 
             // =====================================================

@@ -5,9 +5,26 @@
 
     var search = ViewBag.Search as string ?? "";
 
+    // =========================================================
+    // SÁCH MỚI
+    // SẮP XẾP MÃ SÁCH LỚN -> NHỎ
+    // =========================================================
+
     var sachMoi =
-        ViewBag.SachMoi as IEnumerable<ProjectKZM.Models.Sach>
-        ?? Enumerable.Empty<ProjectKZM.Models.Sach>();
+        (ViewBag.SachMoi as IEnumerable<ProjectKZM.Models.Sach>
+        ?? Enumerable.Empty<ProjectKZM.Models.Sach>())
+        .OrderByDescending(x => x.MaSach)
+        .ToList();
+
+    // =========================================================
+    // TẤT CẢ SÁCH
+    // SẮP XẾP MÃ SÁCH LỚN -> NHỎ
+    // =========================================================
+
+    var danhSachSach =
+        (Model ?? Enumerable.Empty<ProjectKZM.Models.Sach>())
+        .OrderByDescending(x => x.MaSach)
+        .ToList();
 
     var selectedTheLoaiIds =
         ViewBag.SelectedTheLoaiIds as int[]
@@ -17,9 +34,9 @@
         ViewBag.SelectedLoaiSachIds as int[]
         ?? Array.Empty<int>();
 
-    // =========================================================
-    // CÓ TÌM KIẾM HOẶC LỌC HAY KHÔNG
-    // =========================================================
+    var favoriteBookIds =
+        ViewBag.FavoriteBookIds as int[]
+        ?? Array.Empty<int>();
 
     bool isSearchingOrFiltering =
         Context.Request.Query.ContainsKey("search")
@@ -27,12 +44,11 @@
         || selectedLoaiSachIds.Length > 0;
 }
 
-
 <style>
 
     /* =========================================================
-       PAGE
-       ========================================================= */
+               PAGE
+               ========================================================= */
 
     .store-page {
         max-width: 1400px;
@@ -42,8 +58,8 @@
 
 
     /* =========================================================
-       THẾ GIỚI SÁCH
-       ========================================================= */
+               THẾ GIỚI SÁCH
+               ========================================================= */
 
     .book-store-title {
         width: 100%;
@@ -51,26 +67,26 @@
         padding: 25px 0 35px;
     }
 
-    .book-store-title h1 {
-        margin: 0;
-        font-size: 36px;
-        font-weight: 400;
-        color: #222;
-        line-height: 1.3;
-    }
+        .book-store-title h1 {
+            margin: 0;
+            font-size: 36px;
+            font-weight: 400;
+            color: #222;
+            line-height: 1.3;
+        }
 
-    .book-store-title p {
-        margin: 10px 0 0;
-        font-size: 16px;
-        font-weight: 400;
-        color: #888;
-        line-height: 1.5;
-    }
+        .book-store-title p {
+            margin: 10px 0 0;
+            font-size: 16px;
+            font-weight: 400;
+            color: #888;
+            line-height: 1.5;
+        }
 
 
     /* =========================================================
-       SÁCH MỚI
-       ========================================================= */
+               SÁCH MỚI
+               ========================================================= */
 
     .new-books-section {
         margin-bottom: 40px;
@@ -92,20 +108,20 @@
         user-select: none;
     }
 
-    .new-books-slider:active {
-        cursor: grabbing;
-    }
+        .new-books-slider:active {
+            cursor: grabbing;
+        }
 
     .new-books-track {
         display: flex;
-        gap: 20px;
+        gap: 22px;
         width: max-content;
         will-change: transform;
     }
 
     .new-book-card {
-        width: 210px;
-        min-width: 210px;
+        width: 250px;
+        min-width: 250px;
         border: 1px solid #ddd;
         border-radius: 10px;
         background: white;
@@ -113,21 +129,22 @@
         transition: 0.2s;
     }
 
-    .new-book-card:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-    }
+        .new-book-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
 
 
     /* =========================================================
-       ẢNH SÁCH MỚI
-       ========================================================= */
+               ẢNH SÁCH MỚI
+               ========================================================= */
 
     .new-book-image-wrapper {
         position: relative;
         width: 100%;
-        height: 260px;
+        height: 300px;
         background: #f5f5f5;
+        overflow: hidden;
     }
 
     .new-book-image {
@@ -150,8 +167,34 @@
 
 
     /* =========================================================
-       LOẠI SÁCH - SÁCH MỚI
-       ========================================================= */
+               OVERLAY HẾT HÀNG
+               DÙNG CHUNG CHO SÁCH MỚI + TẤT CẢ SẢN PHẨM
+               ========================================================= */
+
+    .out-of-stock-overlay {
+        position: absolute;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.58);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 3;
+        pointer-events: none;
+    }
+
+    .out-of-stock-text {
+        color: white;
+        font-size: 36px;
+        font-weight: 500;
+        text-align: center;
+        line-height: 1.2;
+        text-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+    }
+
+
+    /* =========================================================
+               LOẠI SÁCH - SÁCH MỚI
+               ========================================================= */
 
     .new-book-type-badge {
         position: absolute;
@@ -163,13 +206,13 @@
         font-size: 12px;
         font-weight: 600;
         color: #333;
-        z-index: 2;
+        z-index: 5;
     }
 
 
     /* =========================================================
-       YÊU THÍCH - SÁCH MỚI
-       ========================================================= */
+               YÊU THÍCH - SÁCH MỚI
+               ========================================================= */
 
     .new-book-favorite {
         position: absolute;
@@ -183,31 +226,31 @@
         font-size: 22px;
         line-height: 36px;
         cursor: pointer;
-        z-index: 2;
+        z-index: 5;
         transition: all 0.2s ease;
     }
 
-    .new-book-favorite:hover {
-        transform: scale(1.1);
-    }
+        .new-book-favorite:hover {
+            transform: scale(1.1);
+        }
 
-    .new-book-favorite.active {
-        color: #dc3545;
-    }
+        .new-book-favorite.active {
+            color: #dc3545;
+        }
 
 
     /* =========================================================
-       THÔNG TIN SÁCH MỚI
-       ========================================================= */
+               THÔNG TIN SÁCH MỚI
+               ========================================================= */
 
     .new-book-info {
-        padding: 12px;
+        padding: 15px;
     }
 
     .new-book-name {
-        height: 42px;
+        height: 48px;
         overflow: hidden;
-        font-size: 15px;
+        font-size: 17px;
         font-weight: 600;
         color: #222;
         line-height: 1.4;
@@ -216,16 +259,40 @@
 
     .new-book-price {
         color: #dc3545;
-        font-size: 16px;
+        font-size: 18px;
         font-weight: 700;
         margin-bottom: 8px;
     }
+
+
+    /* =========================================================
+               TÌNH TRẠNG
+               ========================================================= */
+
+    .book-stock {
+        font-size: 13px;
+        font-weight: 600;
+        margin-bottom: 10px;
+    }
+
+        .book-stock.available {
+            color: #198754;
+        }
+
+        .book-stock.out-of-stock {
+            color: #dc3545;
+        }
+
+
+    /* =========================================================
+               CATEGORY - SÁCH MỚI
+               ========================================================= */
 
     .new-book-categories {
         display: flex;
         flex-wrap: wrap;
         gap: 5px;
-        margin-bottom: 12px;
+        margin-bottom: 15px;
         min-height: 25px;
     }
 
@@ -239,33 +306,62 @@
 
 
     /* =========================================================
-       GIỎ HÀNG - SÁCH MỚI
-       ========================================================= */
+               BUTTON - SÁCH MỚI
+               ========================================================= */
+
+    .new-book-button-group {
+        display: flex;
+        gap: 8px;
+        width: 100%;
+    }
+
+    .new-book-view-button {
+        flex: 1;
+        height: 40px;
+        border: none;
+        border-radius: 6px;
+        background: #6c757d;
+        color: white;
+        cursor: pointer;
+        font-size: 14px;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+        .new-book-view-button:hover {
+            background: #5c636a;
+            color: white;
+            text-decoration: none;
+        }
 
     .new-book-cart-button {
-        width: 100%;
-        height: 38px;
+        flex: 1;
+        width: auto;
+        height: 40px;
         border: none;
         border-radius: 6px;
         background: #212529;
         color: white;
         cursor: pointer;
-        font-size: 13px;
+        font-size: 14px;
     }
 
-    .new-book-cart-button:hover {
-        background: #000;
-    }
+        .new-book-cart-button:hover {
+            background: #000;
+        }
 
-    .new-book-cart-button:disabled {
-        opacity: 0.7;
-        cursor: not-allowed;
-    }
+        .new-book-cart-button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            background: #6c757d;
+        }
 
 
     /* =========================================================
-       KẾT QUẢ TÌM KIẾM
-       ========================================================= */
+               KẾT QUẢ TÌM KIẾM
+               ========================================================= */
 
     .result-info {
         margin-bottom: 20px;
@@ -274,8 +370,20 @@
 
 
     /* =========================================================
-       PRODUCT GRID
-       ========================================================= */
+               TẤT CẢ SẢN PHẨM
+               ========================================================= */
+
+    .all-products-title {
+        font-size: 32px;
+        font-weight: 600;
+        color: #222;
+        margin-bottom: 20px;
+    }
+
+
+    /* =========================================================
+               PRODUCT GRID
+               ========================================================= */
 
     .product-grid {
         display: grid;
@@ -285,8 +393,8 @@
 
 
     /* =========================================================
-       PRODUCT CARD
-       ========================================================= */
+               PRODUCT CARD
+               ========================================================= */
 
     .product-card {
         position: relative;
@@ -297,33 +405,35 @@
         transition: 0.2s;
     }
 
-    .product-card:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-    }
+        .product-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
 
 
     /* =========================================================
-       PRODUCT IMAGE
-       ========================================================= */
+               PRODUCT IMAGE
+               ========================================================= */
 
     .product-image-wrapper {
         position: relative;
         width: 100%;
         height: 300px;
         background: #f5f5f5;
+        overflow: hidden;
     }
 
     .product-image {
         width: 100%;
         height: 100%;
         object-fit: cover;
+        display: block;
     }
 
 
     /* =========================================================
-       LOẠI SÁCH
-       ========================================================= */
+               LOẠI SÁCH
+               ========================================================= */
 
     .book-type-badge {
         position: absolute;
@@ -335,13 +445,13 @@
         font-size: 12px;
         font-weight: 600;
         color: #333;
-        z-index: 2;
+        z-index: 5;
     }
 
 
     /* =========================================================
-       YÊU THÍCH
-       ========================================================= */
+               YÊU THÍCH
+               ========================================================= */
 
     .favorite-button {
         position: absolute;
@@ -355,26 +465,26 @@
         font-size: 22px;
         line-height: 36px;
         cursor: pointer;
-        z-index: 2;
+        z-index: 5;
         transition: all 0.2s ease;
     }
 
-    .favorite-button:hover {
-        transform: scale(1.1);
-    }
+        .favorite-button:hover {
+            transform: scale(1.1);
+        }
 
-    .favorite-button.active {
-        color: #dc3545;
-    }
+        .favorite-button.active {
+            color: #dc3545;
+        }
 
-    .favorite-button.active:hover {
-        transform: scale(1.15);
-    }
+            .favorite-button.active:hover {
+                transform: scale(1.15);
+            }
 
 
     /* =========================================================
-       PRODUCT INFO
-       ========================================================= */
+               PRODUCT INFO
+               ========================================================= */
 
     .product-info {
         padding: 15px;
@@ -396,6 +506,11 @@
         margin-bottom: 8px;
     }
 
+
+    /* =========================================================
+               PRODUCT CATEGORIES
+               ========================================================= */
+
     .product-categories {
         display: flex;
         flex-wrap: wrap;
@@ -406,9 +521,8 @@
 
 
     /* =========================================================
-       LOẠI SÁCH + THỂ LOẠI
-       XÓA GẠCH CHÂN
-       ========================================================= */
+               BADGE
+               ========================================================= */
 
     .book-type-badge,
     .new-book-type-badge,
@@ -417,23 +531,35 @@
         text-decoration: none !important;
     }
 
-    .book-type-badge:hover,
-    .new-book-type-badge:hover,
-    .category-badge:hover,
-    .new-book-category:hover {
-        text-decoration: none !important;
-        transform: translateY(-1px);
-    }
+        .book-type-badge:hover,
+        .new-book-type-badge:hover,
+        .category-badge:hover,
+        .new-book-category:hover {
+            text-decoration: none !important;
+            /* CHỈ BỎ HIỆU ỨNG NHẢY LÊN */
+            transform: none;
+        }
 
-    .book-type-badge:hover {
-        background: #212529;
-        color: white;
-    }
+        /* =====================================================
+               CHỈ ĐỔI MÀU KHI RÊ CHUỘT
+               CHO LOẠI SÁCH + THỂ LOẠI Ở SÁCH MỚI
+               ===================================================== */
 
-    .category-badge:hover {
-        background: #212529;
-        color: white;
-    }
+        .new-book-type-badge:hover,
+        .new-book-category:hover {
+            background: #212529;
+            color: white;
+        }
+
+        .book-type-badge:hover {
+            background: #212529;
+            color: white;
+        }
+
+        .category-badge:hover {
+            background: #212529;
+            color: white;
+        }
 
     .category-badge {
         padding: 4px 7px;
@@ -445,11 +571,39 @@
 
 
     /* =========================================================
-       GIỎ HÀNG
-       ========================================================= */
+               NÚT SẢN PHẨM
+               ========================================================= */
+
+    .product-button-group {
+        display: flex;
+        gap: 8px;
+        width: 100%;
+    }
+
+    .view-book-button {
+        flex: 1;
+        height: 40px;
+        border: none;
+        border-radius: 6px;
+        background: #6c757d;
+        color: white;
+        cursor: pointer;
+        font-size: 14px;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+        .view-book-button:hover {
+            background: #5c636a;
+            color: white;
+            text-decoration: none;
+        }
 
     .cart-button {
-        width: 100%;
+        flex: 1;
+        width: auto;
         height: 40px;
         border: none;
         border-radius: 6px;
@@ -459,19 +613,20 @@
         font-size: 14px;
     }
 
-    .cart-button:hover {
-        background: #000;
-    }
+        .cart-button:hover {
+            background: #000;
+        }
 
-    .cart-button:disabled {
-        opacity: 0.7;
-        cursor: not-allowed;
-    }
+        .cart-button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            background: #6c757d;
+        }
 
 
     /* =========================================================
-       KHÔNG CÓ SẢN PHẨM
-       ========================================================= */
+               KHÔNG CÓ SẢN PHẨM
+               ========================================================= */
 
     .empty-products {
         padding: 80px 20px;
@@ -483,8 +638,8 @@
 
 
     /* =========================================================
-       THÔNG BÁO
-       ========================================================= */
+               THÔNG BÁO
+               ========================================================= */
 
     .login-warning {
         position: fixed;
@@ -502,8 +657,8 @@
 
 
     /* =========================================================
-       RESPONSIVE
-       ========================================================= */
+               RESPONSIVE
+               ========================================================= */
 
     @@media (max-width: 1200px) {
 
@@ -511,6 +666,10 @@
             grid-template-columns: repeat(4, 1fr);
         }
 
+        .new-book-card {
+            width: 250px;
+            min-width: 250px;
+        }
     }
 
 
@@ -521,10 +680,9 @@
         }
 
         .new-book-card {
-            width: 190px;
-            min-width: 190px;
+            width: 250px;
+            min-width: 250px;
         }
-
     }
 
 
@@ -542,30 +700,41 @@
             padding: 15px 0 25px;
         }
 
-        .book-store-title h1 {
-            font-size: 30px;
-        }
+            .book-store-title h1 {
+                font-size: 30px;
+            }
 
-        .book-store-title p {
-            font-size: 14px;
-        }
+            .book-store-title p {
+                font-size: 14px;
+            }
 
         .new-book-card {
-            width: 160px;
-            min-width: 160px;
+            width: 100%;
+            min-width: 100%;
         }
 
         .new-book-image-wrapper {
-            height: 210px;
+            height: 300px;
         }
 
+        .product-button-group,
+        .new-book-button-group {
+            flex-direction: column;
+        }
+
+        .view-book-button,
+        .cart-button,
+        .new-book-view-button,
+        .new-book-cart-button {
+            width: 100%;
+            flex: none;
+        }
     }
 
 </style>
 
 
 <div class="store-page">
-
 
     @* =========================================================
        CHỈ HIỆN THẾ GIỚI SÁCH + SÁCH MỚI
@@ -582,11 +751,12 @@
         <div class="book-store-title">
 
             <h1>
-                Thế Giới Sách
+                Yuuji Store
             </h1>
 
             <p>
-                Manga, Novel, Light Novel và nhiều thể loại sách khác
+                Thế giới sách của Yuuji Kazami, Manga, Novel,
+                Light Novel và nhiều thể loại sách khác
             </p>
 
         </div>
@@ -595,7 +765,6 @@
         <!-- =====================================================
              SÁCH MỚI
              ===================================================== -->
-
         @if (sachMoi.Any())
         {
 
@@ -612,7 +781,8 @@
 
 
                         @* =================================================
-                           LẦN 1 - 6 SÁCH
+                           LẦN 1
+                           ĐÃ SORT MaSach DESC Ở ĐẦU FILE
                            ================================================= *@
 
                         @foreach (var item in sachMoi)
@@ -620,20 +790,20 @@
 
                             <div class="new-book-card">
 
-
-                                <!-- ẢNH -->
+                                <!-- =================================================
+                                     ẢNH
+                                     ================================================= -->
 
                                 <div class="new-book-image-wrapper">
 
 
                                     <!-- LOẠI SÁCH -->
-
                                     @if (item.LoaiSach != null)
                                     {
                                         <a asp-controller="Home"
                                            asp-action="Index"
                                            asp-route-loaiSachIds="@item.MaLoaiSach"
-                                           class="book-type-badge"
+                                           class="new-book-type-badge"
                                            title="Lọc theo loại sách"
                                            onclick="event.stopPropagation();">
 
@@ -646,18 +816,17 @@
                                     <!-- YÊU THÍCH -->
 
                                     <button type="button"
-                                            class="new-book-favorite"
-                                            title="Thêm vào yêu thích"
+                                            class="new-book-favorite @(favoriteBookIds.Contains(item.MaSach) ? "active" : "")"
+                                            title="@(favoriteBookIds.Contains(item.MaSach) ? "Bỏ yêu thích" : "Thêm vào yêu thích")"
                                             data-book-id="@item.MaSach"
                                             onclick="toggleFavorite(this)">
 
-                                        ♡
+                                        @(favoriteBookIds.Contains(item.MaSach) ? "♥" : "♡")
 
                                     </button>
 
 
                                     <!-- HÌNH -->
-
                                     @if (!string.IsNullOrEmpty(item.Hinh))
                                     {
                                         <img src="@item.Hinh"
@@ -667,8 +836,22 @@
                                     else
                                     {
                                         <div class="new-book-no-image">
-
                                             Không có hình
+                                        </div>
+                                    }
+
+
+                                    <!-- =================================================
+                                         OVERLAY HẾT HÀNG
+                                         DÙNG CHUNG VỚI TẤT CẢ SẢN PHẨM
+                                         ================================================= -->
+                                    @if (item.SoLuong <= 0)
+                                    {
+                                        <div class="out-of-stock-overlay">
+
+                                            <div class="out-of-stock-text">
+                                                Hết Hàng
+                                            </div>
 
                                         </div>
                                     }
@@ -676,7 +859,9 @@
                                 </div>
 
 
-                                <!-- THÔNG TIN -->
+                                <!-- =================================================
+                                     THÔNG TIN
+                                     ================================================= -->
 
                                 <div class="new-book-info">
 
@@ -684,19 +869,30 @@
                                     <!-- TÊN -->
 
                                     <div class="new-book-name">
-
                                         @item.TenSach
-
                                     </div>
 
 
                                     <!-- GIÁ -->
 
                                     <div class="new-book-price">
-
                                         @item.Gia.ToString("N0") ₫
-
                                     </div>
+
+
+                                    <!-- TÌNH TRẠNG -->
+                                    @if (item.SoLuong > 0)
+                                    {
+                                        <div class="book-stock available">
+                                            Còn hàng
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="book-stock out-of-stock">
+                                            Hết hàng
+                                        </div>
+                                    }
 
 
                                     <!-- THỂ LOẠI -->
@@ -706,10 +902,8 @@
                                         @if (item.SachTheLoais != null &&
                                              item.SachTheLoais.Any())
                                         {
-
                                             @foreach (var st in item.SachTheLoais)
                                             {
-
                                                 if (st.TheLoai != null)
                                                 {
                                                     <a asp-controller="Home"
@@ -723,66 +917,104 @@
 
                                                     </a>
                                                 }
-
                                             }
-
                                         }
                                         else
                                         {
-
                                             <span style="font-size:11px;color:#777;">
-
                                                 Chưa có thể loại
-
                                             </span>
-
                                         }
 
                                     </div>
 
 
-                                    <!-- GIỎ HÀNG -->
+                                    <!-- NÚT -->
 
-                                    @if (User.Identity?.IsAuthenticated == true)
-                                    {
+                                    <div class="new-book-button-group">
 
-                                        <form asp-controller="GioHangs"
-                                              asp-action="Them"
-                                              method="post"
-                                              class="add-cart-form new-book-cart-form">
 
-                                            @Html.AntiForgeryToken()
+                                        <!-- XEM SÁCH -->
 
-                                            <input type="hidden"
-                                                   name="maSach"
-                                                   value="@item.MaSach" />
+                                        <a asp-controller="Sachs"
+                                           asp-action="Details"
+                                           asp-route-id="@item.MaSach"
+                                           class="new-book-view-button">
 
-                                            <input type="hidden"
-                                                   name="soLuong"
-                                                   value="1" />
+                                            Xem sách
 
-                                            <button type="submit"
-                                                    class="new-book-cart-button">
+                                        </a>
 
-                                                🛒 Bỏ vào giỏ hàng
 
-                                            </button>
+                                        <!-- GIỎ HÀNG -->
+                                        @if (User.Identity?.IsAuthenticated == true)
+                                        {
 
-                                        </form>
+                                            <form asp-controller="GioHangs"
+                                                  asp-action="Them"
+                                                  method="post"
+                                                  class="add-cart-form new-book-cart-form">
 
-                                    }
-                                    else
-                                    {
+                                                @Html.AntiForgeryToken()
 
-                                        <button type="button"
-                                                class="new-book-cart-button"
-                                                onclick="showLoginWarning()">
+                                                <input type="hidden"
+                                                       name="maSach"
+                                                       value="@item.MaSach" />
 
-                                            🛒 Bỏ vào giỏ hàng
+                                                <input type="hidden"
+                                                       name="soLuong"
+                                                       value="1" />
 
-                                        </button>
+                                                @if (item.SoLuong > 0)
+                                                {
+                                                    <button type="submit"
+                                                            class="new-book-cart-button">
 
-                                    }
+                                                        🛒 Bỏ vào giỏ hàng
+
+                                                    </button>
+                                                }
+                                                else
+                                                {
+                                                    <button type="button"
+                                                            class="new-book-cart-button"
+                                                            disabled>
+
+                                                        🛒 Hết hàng
+
+                                                    </button>
+                                                }
+
+                                            </form>
+
+                                        }
+                                        else
+                                        {
+
+                                            @if (item.SoLuong > 0)
+                                            {
+                                                <button type="button"
+                                                        class="new-book-cart-button"
+                                                        onclick="showLoginWarning()">
+
+                                                    🛒 Bỏ vào giỏ hàng
+
+                                                </button>
+                                            }
+                                            else
+                                            {
+                                                <button type="button"
+                                                        class="new-book-cart-button"
+                                                        disabled>
+
+                                                    🛒 Hết hàng
+
+                                                </button>
+                                            }
+
+                                        }
+
+                                    </div>
 
                                 </div>
 
@@ -792,7 +1024,8 @@
 
 
                         @* =================================================
-                           LẦN 2 - NHÂN ĐÔI 6 SÁCH ĐỂ CHẠY LIÊN TỤC
+                           LẦN 2 - NHÂN ĐÔI SLIDER
+                           VẪN GIỮ NGUYÊN THỨ TỰ MaSach DESC
                            ================================================= *@
 
                         @foreach (var item in sachMoi)
@@ -800,16 +1033,16 @@
 
                             <div class="new-book-card">
 
-
                                 <div class="new-book-image-wrapper">
 
 
+                                    <!-- LOẠI SÁCH -->
                                     @if (item.LoaiSach != null)
                                     {
                                         <a asp-controller="Home"
                                            asp-action="Index"
                                            asp-route-loaiSachIds="@item.MaLoaiSach"
-                                           class="book-type-badge"
+                                           class="new-book-type-badge"
                                            title="Lọc theo loại sách"
                                            onclick="event.stopPropagation();">
 
@@ -819,17 +1052,20 @@
                                     }
 
 
+                                    <!-- YÊU THÍCH -->
+
                                     <button type="button"
-                                            class="new-book-favorite"
-                                            title="Thêm vào yêu thích"
+                                            class="new-book-favorite @(favoriteBookIds.Contains(item.MaSach) ? "active" : "")"
+                                            title="@(favoriteBookIds.Contains(item.MaSach) ? "Bỏ yêu thích" : "Thêm vào yêu thích")"
                                             data-book-id="@item.MaSach"
                                             onclick="toggleFavorite(this)">
 
-                                        ♡
+                                        @(favoriteBookIds.Contains(item.MaSach) ? "♥" : "♡")
 
                                     </button>
 
 
+                                    <!-- HÌNH -->
                                     @if (!string.IsNullOrEmpty(item.Hinh))
                                     {
                                         <img src="@item.Hinh"
@@ -839,8 +1075,19 @@
                                     else
                                     {
                                         <div class="new-book-no-image">
-
                                             Không có hình
+                                        </div>
+                                    }
+
+
+                                    <!-- OVERLAY HẾT HÀNG -->
+                                    @if (item.SoLuong <= 0)
+                                    {
+                                        <div class="out-of-stock-overlay">
+
+                                            <div class="out-of-stock-text">
+                                                Hết Hàng
+                                            </div>
 
                                         </div>
                                     }
@@ -852,17 +1099,28 @@
 
 
                                     <div class="new-book-name">
-
                                         @item.TenSach
-
                                     </div>
 
 
                                     <div class="new-book-price">
-
                                         @item.Gia.ToString("N0") ₫
-
                                     </div>
+
+
+                                    <!-- TÌNH TRẠNG -->
+                                    @if (item.SoLuong > 0)
+                                    {
+                                        <div class="book-stock available">
+                                            Còn hàng
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="book-stock out-of-stock">
+                                            Hết hàng
+                                        </div>
+                                    }
 
 
                                     <div class="new-book-categories">
@@ -870,10 +1128,8 @@
                                         @if (item.SachTheLoais != null &&
                                              item.SachTheLoais.Any())
                                         {
-
                                             @foreach (var st in item.SachTheLoais)
                                             {
-
                                                 if (st.TheLoai != null)
                                                 {
                                                     <a asp-controller="Home"
@@ -887,64 +1143,104 @@
 
                                                     </a>
                                                 }
-
                                             }
-
                                         }
                                         else
                                         {
-
                                             <span style="font-size:11px;color:#777;">
-
                                                 Chưa có thể loại
-
                                             </span>
-
                                         }
 
                                     </div>
 
 
-                                    @if (User.Identity?.IsAuthenticated == true)
-                                    {
+                                    <!-- NÚT -->
 
-                                        <form asp-controller="GioHangs"
-                                              asp-action="Them"
-                                              method="post"
-                                              class="add-cart-form new-book-cart-form">
+                                    <div class="new-book-button-group">
 
-                                            @Html.AntiForgeryToken()
 
-                                            <input type="hidden"
-                                                   name="maSach"
-                                                   value="@item.MaSach" />
+                                        <!-- XEM SÁCH -->
 
-                                            <input type="hidden"
-                                                   name="soLuong"
-                                                   value="1" />
+                                        <a asp-controller="Sachs"
+                                           asp-action="Details"
+                                           asp-route-id="@item.MaSach"
+                                           class="new-book-view-button">
 
-                                            <button type="submit"
-                                                    class="new-book-cart-button">
+                                            Xem sách
 
-                                                🛒 Bỏ vào giỏ hàng
+                                        </a>
 
-                                            </button>
 
-                                        </form>
+                                        <!-- GIỎ HÀNG -->
+                                        @if (User.Identity?.IsAuthenticated == true)
+                                        {
 
-                                    }
-                                    else
-                                    {
+                                            <form asp-controller="GioHangs"
+                                                  asp-action="Them"
+                                                  method="post"
+                                                  class="add-cart-form new-book-cart-form">
 
-                                        <button type="button"
-                                                class="new-book-cart-button"
-                                                onclick="showLoginWarning()">
+                                                @Html.AntiForgeryToken()
 
-                                            🛒 Bỏ vào giỏ hàng
+                                                <input type="hidden"
+                                                       name="maSach"
+                                                       value="@item.MaSach" />
 
-                                        </button>
+                                                <input type="hidden"
+                                                       name="soLuong"
+                                                       value="1" />
 
-                                    }
+                                                @if (item.SoLuong > 0)
+                                                {
+                                                    <button type="submit"
+                                                            class="new-book-cart-button">
+
+                                                        🛒 Bỏ vào giỏ hàng
+
+                                                    </button>
+                                                }
+                                                else
+                                                {
+                                                    <button type="button"
+                                                            class="new-book-cart-button"
+                                                            disabled>
+
+                                                        🛒 Hết hàng
+
+                                                    </button>
+                                                }
+
+                                            </form>
+
+                                        }
+                                        else
+                                        {
+
+                                            @if (item.SoLuong > 0)
+                                            {
+                                                <button type="button"
+                                                        class="new-book-cart-button"
+                                                        onclick="showLoginWarning()">
+
+                                                    🛒 Bỏ vào giỏ hàng
+
+                                                </button>
+                                            }
+                                            else
+                                            {
+                                                <button type="button"
+                                                        class="new-book-cart-button"
+                                                        disabled>
+
+                                                    🛒 Hết hàng
+
+                                                </button>
+                                            }
+
+                                        }
+
+                                    </div>
 
                                 </div>
 
@@ -985,26 +1281,20 @@
                  selectedLoaiSachIds.Length > 0)
         {
             <span>
-
                 Kết quả sau khi lọc
-
             </span>
         }
         else if (Context.Request.Query.ContainsKey("search"))
         {
             <span>
-
                 Kết quả tìm kiếm
-
             </span>
         }
         else
         {
-            <span>
-
-                Tất cả sản phẩm
-
-            </span>
+            <div class="all-products-title">
+                Tất Cả Sản Phẩm
+            </div>
         }
 
     </div>
@@ -1012,15 +1302,14 @@
 
     <!-- =========================================================
          DANH SÁCH SẢN PHẨM
+         ĐÃ SORT MaSach DESC
          ========================================================= -->
-
-    @if (Model != null && Model.Any())
+    @if (danhSachSach.Any())
     {
 
         <div class="product-grid">
 
-
-            @foreach (var item in Model)
+            @foreach (var item in danhSachSach)
             {
 
                 <div class="product-card">
@@ -1034,7 +1323,6 @@
 
 
                         <!-- LOẠI SÁCH -->
-
                         @if (item.LoaiSach != null)
                         {
                             <a asp-controller="Home"
@@ -1050,25 +1338,20 @@
                         }
 
 
-                        <!-- =================================================
-                             YÊU THÍCH
-                             ================================================= -->
+                        <!-- YÊU THÍCH -->
 
                         <button type="button"
-                                class="favorite-button"
-                                title="Thêm vào yêu thích"
+                                class="favorite-button @(favoriteBookIds.Contains(item.MaSach) ? "active" : "")"
+                                title="@(favoriteBookIds.Contains(item.MaSach) ? "Bỏ yêu thích" : "Thêm vào yêu thích")"
                                 data-book-id="@item.MaSach"
                                 onclick="toggleFavorite(this)">
 
-                            ♡
+                            @(favoriteBookIds.Contains(item.MaSach) ? "♥" : "♡")
 
                         </button>
 
 
-                        <!-- =================================================
-                             HÌNH
-                             ================================================= -->
-
+                        <!-- HÌNH -->
                         @if (!string.IsNullOrEmpty(item.Hinh))
                         {
                             <img src="@item.Hinh"
@@ -1078,8 +1361,22 @@
                         else
                         {
                             <div class="product-image d-flex align-items-center justify-content-center text-muted">
-
                                 Không có hình
+                            </div>
+                        }
+
+
+                        <!-- =================================================
+                             OVERLAY HẾT HÀNG
+                             DÙNG CHUNG VỚI SÁCH MỚI
+                             ================================================= -->
+                        @if (item.SoLuong <= 0)
+                        {
+                            <div class="out-of-stock-overlay">
+
+                                <div class="out-of-stock-text">
+                                    Hết Hàng
+                                </div>
 
                             </div>
                         }
@@ -1094,27 +1391,36 @@
                     <div class="product-info">
 
 
-                        <!-- TÊN SÁCH -->
+                        <!-- TÊN -->
 
                         <div class="product-name">
-
                             @item.TenSach
-
                         </div>
 
 
                         <!-- GIÁ -->
 
                         <div class="product-price">
-
                             @item.Gia.ToString("N0") ₫
-
                         </div>
 
 
-                        <!-- =================================================
-                             THỂ LOẠI
-                             ================================================= -->
+                        <!-- TÌNH TRẠNG -->
+                        @if (item.SoLuong > 0)
+                        {
+                            <div class="book-stock available">
+                                Còn hàng
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="book-stock out-of-stock">
+                                Hết hàng
+                            </div>
+                        }
+
+
+                        <!-- THỂ LOẠI -->
 
                         <div class="product-categories">
 
@@ -1143,63 +1449,105 @@
                             }
                             else
                             {
-
                                 <span class="text-muted"
                                       style="font-size:12px;">
 
                                     Chưa có thể loại
 
                                 </span>
-
                             }
 
                         </div>
 
 
                         <!-- =================================================
-                             BỎ VÀO GIỎ HÀNG
+                             NÚT
                              ================================================= -->
 
-                        @if (User.Identity?.IsAuthenticated == true)
-                        {
+                        <div class="product-button-group">
 
-                            <form asp-controller="GioHangs"
-                                  asp-action="Them"
-                                  method="post"
-                                  class="add-cart-form">
 
-                                @Html.AntiForgeryToken()
+                            <!-- XEM SÁCH -->
 
-                                <input type="hidden"
-                                       name="maSach"
-                                       value="@item.MaSach" />
+                            <a asp-controller="Sachs"
+                               asp-action="Details"
+                               asp-route-id="@item.MaSach"
+                               class="view-book-button">
 
-                                <input type="hidden"
-                                       name="soLuong"
-                                       value="1" />
+                                Xem sách
 
-                                <button type="submit"
-                                        class="cart-button">
+                            </a>
 
-                                    🛒 Bỏ vào giỏ hàng
 
-                                </button>
+                            <!-- GIỎ HÀNG -->
+                            @if (User.Identity?.IsAuthenticated == true)
+                            {
 
-                            </form>
+                                <form asp-controller="GioHangs"
+                                      asp-action="Them"
+                                      method="post"
+                                      class="add-cart-form">
 
-                        }
-                        else
-                        {
+                                    @Html.AntiForgeryToken()
 
-                            <button type="button"
-                                    class="cart-button"
-                                    onclick="showLoginWarning()">
+                                    <input type="hidden"
+                                           name="maSach"
+                                           value="@item.MaSach" />
 
-                                🛒 Bỏ vào giỏ hàng
+                                    <input type="hidden"
+                                           name="soLuong"
+                                           value="1" />
 
-                            </button>
+                                    @if (item.SoLuong > 0)
+                                    {
+                                        <button type="submit"
+                                                class="cart-button">
 
-                        }
+                                            🛒 Bỏ vào giỏ hàng
+
+                                        </button>
+                                    }
+                                    else
+                                    {
+                                        <button type="button"
+                                                class="cart-button"
+                                                disabled>
+
+                                            🛒 Hết hàng
+
+                                        </button>
+                                    }
+
+                                </form>
+
+                            }
+                            else
+                            {
+
+                                @if (item.SoLuong > 0)
+                                {
+                                    <button type="button"
+                                            class="cart-button"
+                                            onclick="showLoginWarning()">
+
+                                        🛒 Bỏ vào giỏ hàng
+
+                                    </button>
+                                }
+                                else
+                                {
+                                    <button type="button"
+                                            class="cart-button"
+                                            disabled>
+
+                                        🛒 Hết hàng
+
+                                    </button>
+                                }
+
+                            }
+
+                        </div>
 
                     </div>
 
@@ -1220,16 +1568,12 @@
         <div class="empty-products">
 
             <h4>
-
                 Không tìm thấy sản phẩm
-
             </h4>
 
             <p>
-
                 Không có sách nào phù hợp
                 với điều kiện tìm kiếm hoặc bộ lọc.
-
             </p>
 
             <a asp-controller="Home"
@@ -1259,10 +1603,21 @@
 </div>
 
 
+<!-- =========================================================
+     ANTI FORGERY TOKEN CHO YÊU THÍCH
+     ========================================================= -->
+
+<form id="favoriteTokenForm"
+      style="display:none;">
+
+    @Html.AntiForgeryToken()
+
+</form>
+
+
 @section Scripts {
 
     <script>
-
 
         /* =====================================================
            THÔNG BÁO ĐĂNG NHẬP
@@ -1286,7 +1641,6 @@
             warning.style.display =
                 "block";
 
-
             setTimeout(function() {
 
                 warning.style.display =
@@ -1299,7 +1653,6 @@
 
         /* =====================================================
            THÊM SẢN PHẨM VÀO GIỎ
-           KHÔNG CHUYỂN TRANG
            ===================================================== */
 
         document.querySelectorAll(".add-cart-form")
@@ -1311,29 +1664,26 @@
 
                         event.preventDefault();
 
-
                         const button =
                             form.querySelector(
                                 ".cart-button, .new-book-cart-button"
                             );
 
-
                         if (!button) {
                             return;
                         }
 
+                        if (button.disabled) {
+                            return;
+                        }
 
                         const originalText =
                             button.innerHTML;
 
+                        const originalBackground =
+                            button.style.backgroundColor;
 
-                        button.disabled =
-                            true;
-
-
-                        button.innerHTML =
-                            "⏳ Đang thêm...";
-
+                        button.disabled = true;
 
                         try {
 
@@ -1346,12 +1696,19 @@
                                     }
                                 );
 
-
                             if (response.ok) {
+
+                                button.innerHTML =
+                                    "🛒 Đã thêm vào giỏ";
+
+                                button.style.backgroundColor =
+                                    "#198754";
+
+                                button.style.borderColor =
+                                    "#198754";
 
                                 let productCard =
                                     form.closest(".product-card");
-
 
                                 if (!productCard) {
 
@@ -1360,19 +1717,16 @@
 
                                 }
 
-
                                 const bookNameElement =
                                     productCard
                                         ?.querySelector(
                                             ".product-name, .new-book-name"
                                         );
 
-
                                 const bookName =
                                     bookNameElement
                                         ?.innerText
                                         ?.trim();
-
 
                                 showCartSuccess(
                                     'Đã thêm "' +
@@ -1380,8 +1734,36 @@
                                     '" vào giỏ hàng.'
                                 );
 
+                                setTimeout(function() {
+
+                                    button.disabled =
+                                        false;
+
+                                    button.innerHTML =
+                                        originalText;
+
+                                    button.style.backgroundColor =
+                                        originalBackground;
+
+                                    button.style.borderColor =
+                                        "";
+
+                                }, 2000);
+
                             }
                             else {
+
+                                button.disabled =
+                                    false;
+
+                                button.innerHTML =
+                                    originalText;
+
+                                button.style.backgroundColor =
+                                    originalBackground;
+
+                                button.style.borderColor =
+                                    "";
 
                                 showCartError(
                                     "Không thể thêm sản phẩm vào giỏ hàng."
@@ -1392,19 +1774,23 @@
                         }
                         catch (error) {
 
-                            showCartError(
-                                "Có lỗi xảy ra khi thêm vào giỏ hàng."
-                            );
-
-                        }
-                        finally {
+                            console.error(error);
 
                             button.disabled =
                                 false;
 
-
                             button.innerHTML =
                                 originalText;
+
+                            button.style.backgroundColor =
+                                originalBackground;
+
+                            button.style.borderColor =
+                                "";
+
+                            showCartError(
+                                "Có lỗi xảy ra khi thêm vào giỏ hàng."
+                            );
 
                         }
 
@@ -1423,29 +1809,23 @@
             const warning =
                 document.getElementById("loginWarning");
 
-
             if (!warning) {
                 return;
             }
 
-
             warning.innerText =
                 message;
-
 
             warning.style.background =
                 "#198754";
 
-
             warning.style.display =
                 "block";
-
 
             setTimeout(function() {
 
                 warning.style.display =
                     "none";
-
 
                 warning.style.background =
                     "#dc3545";
@@ -1464,23 +1844,18 @@
             const warning =
                 document.getElementById("loginWarning");
 
-
             if (!warning) {
                 return;
             }
 
-
             warning.innerText =
                 message;
-
 
             warning.style.background =
                 "#dc3545";
 
-
             warning.style.display =
                 "block";
-
 
             setTimeout(function() {
 
@@ -1496,15 +1871,10 @@
            YÊU THÍCH
            ===================================================== */
 
-        function toggleFavorite(button) {
+        async function toggleFavorite(button) {
 
             const isAuthenticated =
-                @((User.Identity?.IsAuthenticated == true).ToString().ToLower());
-
-
-            // =================================================
-            // CHƯA ĐĂNG NHẬP
-            // =================================================
+                                @(User.Identity?.IsAuthenticated == true ? "true" : "false");
 
             if (!isAuthenticated) {
 
@@ -1513,36 +1883,141 @@
                 return;
             }
 
+            const maSach =
+                button.getAttribute("data-book-id");
 
-            // =================================================
-            // ĐỔI TRẠNG THÁI YÊU THÍCH
-            // =================================================
+            if (!maSach) {
+                return;
+            }
 
-            button.classList.toggle("active");
+            const isFavorite =
+                button.classList.contains("active");
 
+            const tokenElement =
+                document.querySelector(
+                    '#favoriteTokenForm input[name="__RequestVerificationToken"]'
+                );
 
-            if (button.classList.contains("active")) {
+            if (!tokenElement) {
 
-                button.innerHTML = "♥";
+                showFavoriteError(
+                    "Không tìm thấy mã bảo mật."
+                );
 
-                button.title = "Bỏ yêu thích";
+                return;
+            }
 
+            const token =
+                tokenElement.value;
 
-                showFavoriteSuccess(
-                    "Đã thêm sách vào danh sách yêu thích."
+            const url =
+                isFavorite
+                    ? "/YeuThichs/Xoa"
+                    : "/YeuThichs/Them";
+
+            button.disabled =
+                true;
+
+            try {
+
+                const formData =
+                    new FormData();
+
+                formData.append(
+                    "maSach",
+                    maSach
+                );
+
+                formData.append(
+                    "__RequestVerificationToken",
+                    token
+                );
+
+                const response =
+                    await fetch(
+                        url,
+                        {
+                            method: "POST",
+                            headers: {
+                                "X-Requested-With":
+                                    "XMLHttpRequest"
+                            },
+                            body: formData
+                        }
+                    );
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        "Không thể cập nhật yêu thích."
+                    );
+
+                }
+
+                const result =
+                    await response.json();
+
+                if (result.success &&
+                    result.active === true) {
+
+                    button.classList.add(
+                        "active"
+                    );
+
+                    button.innerHTML =
+                        "♥";
+
+                    button.title =
+                        "Bỏ yêu thích";
+
+                    showFavoriteSuccess(
+                        "Đã thêm sách vào danh sách yêu thích."
+                    );
+
+                }
+                else if (result.success &&
+                    result.active === false) {
+
+                    button.classList.remove(
+                        "active"
+                    );
+
+                    button.innerHTML =
+                        "♡";
+
+                    button.title =
+                        "Thêm vào yêu thích";
+
+                    showFavoriteSuccess(
+                        "Đã bỏ sách khỏi danh sách yêu thích."
+                    );
+
+                }
+                else {
+
+                    throw new Error(
+                        "Dữ liệu trả về không hợp lệ."
+                    );
+
+                }
+
+            }
+            catch (error) {
+
+                console.error(
+                    "Favorite error:",
+                    error
+                );
+
+                showFavoriteError(
+                    "Không thể cập nhật danh sách yêu thích."
                 );
 
             }
-            else {
+            finally {
 
-                button.innerHTML = "♡";
-
-                button.title = "Thêm vào yêu thích";
-
-
-                showFavoriteSuccess(
-                    "Đã bỏ sách khỏi danh sách yêu thích."
-                );
+                button.disabled =
+                    false;
 
             }
 
@@ -1558,23 +2033,18 @@
             const warning =
                 document.getElementById("loginWarning");
 
-
             if (!warning) {
                 return;
             }
 
-
             warning.innerText =
                 message;
-
 
             warning.style.background =
                 "#198754";
 
-
             warning.style.display =
                 "block";
-
 
             setTimeout(function() {
 
@@ -1590,31 +2060,26 @@
 
 
         /* =====================================================
-           THÔNG BÁO ĐĂNG NHẬP KHI BẤM YÊU THÍCH
+           THÔNG BÁO LỖI YÊU THÍCH
            ===================================================== */
 
-        function showFavoriteLoginWarning() {
+        function showFavoriteError(message) {
 
             const warning =
                 document.getElementById("loginWarning");
-
 
             if (!warning) {
                 return;
             }
 
-
             warning.innerText =
-                "Hãy đăng nhập để thêm sách vào yêu thích";
-
+                message;
 
             warning.style.background =
                 "#dc3545";
 
-
             warning.style.display =
                 "block";
-
 
             setTimeout(function() {
 
@@ -1626,10 +2091,42 @@
         }
 
 
-        // =====================================================
-        // SÁCH MỚI
-        // TỰ ĐỘNG CHẠY + CÓ THỂ DÙNG CHUỘT KÉO QUA LẠI
-        // =====================================================
+        /* =====================================================
+           THÔNG BÁO ĐĂNG NHẬP YÊU THÍCH
+           ===================================================== */
+
+        function showFavoriteLoginWarning() {
+
+            const warning =
+                document.getElementById("loginWarning");
+
+            if (!warning) {
+                return;
+            }
+
+            warning.innerText =
+                "Hãy đăng nhập để thêm sách vào danh sách yêu thích";
+
+            warning.style.background =
+                "#dc3545";
+
+            warning.style.display =
+                "block";
+
+            setTimeout(function() {
+
+                warning.style.display =
+                    "none";
+
+            }, 2000);
+
+        }
+
+
+        /* =====================================================
+           SÁCH MỚI
+           TỰ ĐỘNG CHẠY + KÉO CHUỘT
+           ===================================================== */
 
         const newBooksSlider =
             document.querySelector(".new-books-slider");
@@ -1650,10 +2147,6 @@
             let startPosition = 0;
 
 
-            // =================================================
-            // DI CHUYỂN TỰ ĐỘNG
-            // =================================================
-
             function moveNewBooks() {
 
                 if (!isMouseDown && !isHovering) {
@@ -1664,24 +2157,28 @@
                         newBooksTrack.scrollWidth / 2;
 
                     if (Math.abs(position) >= firstSetWidth) {
+
                         position = 0;
+
                     }
 
                     newBooksTrack.style.transform =
-                        "translateX(" + position + "px)";
+                        "translateX(" +
+                        position +
+                        "px)";
+
                 }
 
-                requestAnimationFrame(moveNewBooks);
+                requestAnimationFrame(
+                    moveNewBooks
+                );
+
             }
 
 
-            // =================================================
-            // RÊ CHUỘT VÀO -> DỪNG
-            // =================================================
-
             newBooksSlider.addEventListener(
                 "mouseenter",
-                function () {
+                function() {
 
                     isHovering = true;
 
@@ -1689,13 +2186,9 @@
             );
 
 
-            // =================================================
-            // RỜI CHUỘT -> CHẠY LẠI
-            // =================================================
-
             newBooksSlider.addEventListener(
                 "mouseleave",
-                function () {
+                function() {
 
                     isHovering = false;
 
@@ -1705,19 +2198,17 @@
             );
 
 
-            // =================================================
-            // BẮT ĐẦU KÉO
-            // =================================================
-
             newBooksSlider.addEventListener(
                 "mousedown",
-                function (event) {
+                function(event) {
 
                     isMouseDown = true;
 
-                    startX = event.clientX;
+                    startX =
+                        event.clientX;
 
-                    startPosition = position;
+                    startPosition =
+                        position;
 
                     newBooksSlider.style.cursor =
                         "grabbing";
@@ -1726,13 +2217,9 @@
             );
 
 
-            // =================================================
-            // KÉO CHUỘT
-            // =================================================
-
             newBooksSlider.addEventListener(
                 "mousemove",
-                function (event) {
+                function(event) {
 
                     if (!isMouseDown) {
                         return;
@@ -1744,53 +2231,52 @@
                     position =
                         startPosition + distance;
 
-
                     const firstSetWidth =
                         newBooksTrack.scrollWidth / 2;
 
-
-                    // Nếu kéo quá bên trái
                     if (position <= -firstSetWidth) {
 
                         position = 0;
 
-                        startX = event.clientX;
-                        startPosition = position;
+                        startX =
+                            event.clientX;
+
+                        startPosition =
+                            position;
 
                     }
 
-
-                    // Nếu kéo quá bên phải
                     if (position > 0) {
 
                         position = 0;
 
-                        startX = event.clientX;
-                        startPosition = position;
+                        startX =
+                            event.clientX;
+
+                        startPosition =
+                            position;
 
                     }
 
-
                     newBooksTrack.style.transform =
-                        "translateX(" + position + "px";
+                        "translateX(" +
+                        position +
+                        "px)";
 
                 }
             );
 
 
-            // =================================================
-            // THẢ CHUỘT
-            // =================================================
-
             document.addEventListener(
                 "mouseup",
-                function () {
+                function() {
 
                     if (!isMouseDown) {
                         return;
                     }
 
-                    isMouseDown = false;
+                    isMouseDown =
+                        false;
 
                     newBooksSlider.style.cursor =
                         "grab";
@@ -1798,10 +2284,6 @@
                 }
             );
 
-
-            // =================================================
-            // BẮT ĐẦU
-            // =================================================
 
             moveNewBooks();
 

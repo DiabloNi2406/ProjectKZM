@@ -24,8 +24,9 @@ namespace ProjectKZM.Models
         [Display(Name = "Mật khẩu")]
         public string MatKhau { get; set; } = string.Empty;
 
-        [StringLength(15)]
         [Display(Name = "Số điện thoại")]
+        [StringLength(10, ErrorMessage = "Số điện thoại không đúng")]
+        [RegularExpression(@"^[0-9]*$", ErrorMessage = "Số điện thoại không đúng")]
         public string? SoDienThoai { get; set; }
 
         [StringLength(255)]

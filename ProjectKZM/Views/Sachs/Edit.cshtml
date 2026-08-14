@@ -315,8 +315,9 @@
 
                 <div class="input-group">
 
-                    <input asp-for="Gia"
-                           type="number"
+                    <input type="number"
+                           name="Gia"
+                           value="@Model.Gia.ToString("0")"
                            step="1000"
                            min="0"
                            class="form-control"

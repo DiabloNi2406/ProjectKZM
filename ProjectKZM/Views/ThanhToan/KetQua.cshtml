@@ -1,0 +1,257 @@
+﻿@{
+    ViewData["Title"] = "Kết quả thanh toán";
+
+    bool success =
+        ViewData["Success"] is bool b && b;
+
+    string message =
+        ViewData["Message"]?.ToString()
+        ?? "Không có thông tin kết quả.";
+
+    string? maDonHang =
+        ViewData["MaDonHang"]?.ToString();
+
+    string? transactionNo =
+        ViewData["TransactionNo"]?.ToString();
+
+    string? tongTien =
+        ViewData["TongTien"]?.ToString();
+}
+
+<style>
+    .result-page {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 80px 20px;
+    }
+
+    .result-box {
+        background: #fff;
+        border: 1px solid #e5e5e5;
+        padding: 45px;
+        text-align: center;
+    }
+
+    .result-icon {
+        font-size: 55px;
+        margin-bottom: 20px;
+    }
+
+    .result-title {
+        font-size: 32px;
+        font-weight: 500;
+        margin-bottom: 15px;
+    }
+
+    .result-message {
+        color: #666;
+        font-size: 16px;
+        line-height: 1.7;
+        margin-bottom: 30px;
+    }
+
+    .result-info {
+        text-align: left;
+        border-top: 1px solid #eee;
+        border-bottom: 1px solid #eee;
+        padding: 20px 0;
+        margin-bottom: 30px;
+    }
+
+    .result-row {
+        display: flex;
+        justify-content: space-between;
+        padding: 9px 0;
+        font-size: 15px;
+    }
+
+    .result-button {
+        display: inline-block;
+        background: #111;
+        color: #fff;
+        text-decoration: none;
+        padding: 14px 25px;
+        margin: 5px;
+    }
+
+        .result-button:hover {
+            background: #333;
+        }
+
+        .result-button.secondary {
+            background: #eee;
+            color: #111;
+        }
+
+            .result-button.secondary:hover {
+                background: #ddd;
+            }
+</style>
+
+
+<div class="result-page">
+
+    <div class="result-box">
+
+        @if (success)
+        {
+            <div class="result-icon">
+                ✓
+            </div>
+
+            <div class="result-title">
+                Thanh toán thành công
+            </div>
+
+            <div class="result-message">
+                @message
+            </div>
+
+            <div class="result-info">
+
+                @if (!string.IsNullOrWhiteSpace(maDonHang))
+                {
+                    <div class="result-row">
+                        <span>
+                            Mã đơn hàng
+                        </span>
+
+                        <strong>
+                            #@maDonHang
+                        </strong>
+                    </div>
+                }
+
+
+                @if (!string.IsNullOrWhiteSpace(transactionNo))
+                {
+                    <div class="result-row">
+                        <span>
+                            Mã giao dịch VNPAY
+                        </span>
+
+                        <strong>
+                            @transactionNo
+                        </strong>
+                    </div>
+                }
+
+
+                @if (!string.IsNullOrWhiteSpace(tongTien))
+                {
+                    <div class="result-row">
+                        <span>
+                            Tổng tiền
+                        </span>
+
+                        <strong>
+                            @tongTien VNĐ
+                        </strong>
+                    </div>
+                }
+
+
+                <div class="result-row">
+
+                    <span>
+                        Phương thức
+                    </span>
+
+                    <strong>
+                        VNPAY
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <a asp-controller="Home"
+               asp-action="Index"
+               class="result-button">
+
+                Về trang chủ
+
+            </a>
+
+
+            <a asp-controller="GioHangs"
+               asp-action="Index"
+               class="result-button secondary">
+
+                Xem giỏ hàng
+
+            </a>
+        }
+        else
+        {
+            <div class="result-icon">
+                ✕
+            </div>
+
+            <div class="result-title">
+                Thanh toán thất bại
+            </div>
+
+            <div class="result-message">
+                @message
+            </div>
+
+
+            @if (!string.IsNullOrWhiteSpace(maDonHang))
+            {
+                <div class="result-info">
+
+                    <div class="result-row">
+
+                        <span>
+                            Mã đơn hàng
+                        </span>
+
+                        <strong>
+                            #@maDonHang
+                        </strong>
+
+                    </div>
+
+
+                    @if (!string.IsNullOrWhiteSpace(transactionNo))
+                    {
+                        <div class="result-row">
+
+                            <span>
+                                Mã giao dịch VNPAY
+                            </span>
+
+                            <strong>
+                                @transactionNo
+                            </strong>
+
+                        </div>
+                    }
+
+                </div>
+            }
+
+
+            <a asp-controller="GioHangs"
+               asp-action="Index"
+               class="result-button">
+
+                Quay lại giỏ hàng
+
+            </a>
+
+
+            <a asp-controller="Home"
+               asp-action="Index"
+               class="result-button secondary">
+
+                Về trang chủ
+
+            </a>
+        }
+
+    </div>
+
+</div>

@@ -153,10 +153,46 @@
                 font-size: 14px;
                 white-space: nowrap;
                 transition: 0.2s;
+                box-sizing: border-box;
             }
 
                 .navbar-link:hover {
                     background-color: #343a40;
+                    color: white;
+                }
+
+
+            /* =========================================================
+                       4 NÚT CHÍNH
+
+                       Trang chủ
+                       Yêu thích
+                       Giỏ hàng
+                       Quản lý / Người dùng
+                       ========================================================= */
+
+            .navbar-action-link {
+                width: 110px;
+                min-width: 110px;
+                height: 38px;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                padding: 0 8px;
+                box-sizing: border-box;
+                background-color: #2b3035;
+                border: 1px solid #3d4349;
+                border-radius: 6px;
+                color: #f1f3f5;
+                text-decoration: none;
+                font-size: 14px;
+                white-space: nowrap;
+                transition: background-color 0.2s, border-color 0.2s, color 0.2s, transform 0.15s;
+            }
+
+                .navbar-action-link:hover {
+                    background-color: #3a4046;
+                    border-color: #495057;
                     color: white;
                 }
 
@@ -310,27 +346,36 @@
 
 
             /* =========================================================
-                       CART BUTTON
+                       CART
+
+                       Đồng bộ kích thước với:
+                       Trang chủ
+                       Yêu thích
+                       Quản lý
                        ========================================================= */
 
             .cart-button {
+                width: 110px;
+                min-width: 110px;
                 height: 38px;
-                padding: 0 10px;
                 display: inline-flex;
                 align-items: center;
                 justify-content: center;
+                padding: 0 8px;
+                box-sizing: border-box;
                 border-radius: 6px;
-                border: 1px solid #495057;
-                background-color: #343a40;
-                color: white;
+                background-color: #2b3035;
+                border: 1px solid #3d4349;
+                color: #f1f3f5;
                 text-decoration: none;
-                font-size: 13px;
+                font-size: 14px;
                 white-space: nowrap;
                 transition: 0.2s;
             }
 
                 .cart-button:hover {
-                    background-color: #495057;
+                    background-color: #3a4046;
+                    border-color: #495057;
                     color: white;
                 }
 
@@ -398,8 +443,7 @@
             }
 
             .user-button {
-                border: none;
-                background: transparent;
+                border: 1px solid #3d4349;
                 cursor: pointer;
             }
 
@@ -490,8 +534,12 @@
                     max-width: 550px;
                 }
 
-                .navbar-link {
-                    padding: 0 9px;
+                .navbar-link,
+                .cart-button,
+                .navbar-action-link {
+                    width: 100px;
+                    min-width: 100px;
+                    padding: 0 6px;
                 }
 
                 .user-name {
@@ -545,11 +593,18 @@
                 .navbar-link,
                 .filter-button,
                 .cart-button,
+                .navbar-action-link,
                 .login-button,
                 .logout-button {
                     padding-left: 8px;
                     padding-right: 8px;
                     font-size: 13px;
+                }
+
+                .navbar-action-link,
+                .cart-button {
+                    width: 95px;
+                    min-width: 95px;
                 }
 
                 .user-name {
@@ -600,6 +655,12 @@
                     right: 10px;
                     width: auto;
                     max-height: calc(100vh - 90px);
+                }
+
+                .navbar-action-link,
+                .cart-button {
+                    width: 90px;
+                    min-width: 90px;
                 }
             }
 
@@ -695,8 +756,6 @@
                               asp-action="Index"
                               method="get">
 
-                            <!-- GIỮ LẠI TỪ KHÓA TÌM KIẾM -->
-
                             <input type="hidden"
                                    name="search"
                                    value="@Context.Request.Query["search"].ToString()" />
@@ -713,6 +772,7 @@
                                 </div>
 
                                 @{
+
                                     var filterTheLoais =
                                         ViewBag.TheLoais as IEnumerable<ProjectKZM.Models.TheLoai>
                                         ?? Enumerable.Empty<ProjectKZM.Models.TheLoai>();
@@ -720,6 +780,7 @@
                                     var selectedTheLoaiIds =
                                         ViewBag.SelectedTheLoaiIds as int[]
                                         ?? Array.Empty<int>();
+
                                 }
 
                                 @foreach (var theLoai in filterTheLoais)
@@ -756,6 +817,7 @@
                                 </div>
 
                                 @{
+
                                     var filterLoaiSachs =
                                         ViewBag.LoaiSachs as IEnumerable<ProjectKZM.Models.LoaiSach>
                                         ?? Enumerable.Empty<ProjectKZM.Models.LoaiSach>();
@@ -763,6 +825,7 @@
                                     var selectedLoaiSachIds =
                                         ViewBag.SelectedLoaiSachIds as int[]
                                         ?? Array.Empty<int>();
+
                                 }
 
                                 @foreach (var loaiSach in filterLoaiSachs)
@@ -825,11 +888,29 @@
 
                 <a asp-controller="Home"
                    asp-action="Index"
-                   class="navbar-link">
+                   class="navbar-link navbar-action-link">
 
                     🏠 Trang chủ
 
                 </a>
+
+
+                <!-- =================================================
+                     YÊU THÍCH
+                     USER + ADMIN ĐỀU CÓ
+                     ================================================= -->
+                @if (User.Identity?.IsAuthenticated == true)
+                {
+
+                    <a asp-controller="YeuThichs"
+                       asp-action="Index"
+                       class="navbar-link navbar-action-link">
+
+                        ❤️ Yêu thích
+
+                    </a>
+
+                }
 
             </div>
 
@@ -843,12 +924,11 @@
 
                 <!-- =================================================
                      GIỎ HÀNG
-                     LUÔN HIỆN
                      ================================================= -->
 
                 <a asp-controller="GioHangs"
                    asp-action="Index"
-                   class="cart-button">
+                   class="navbar-link navbar-action-link">
 
                     🛒 Giỏ hàng
 
@@ -869,7 +949,7 @@
 
                         <a asp-controller="Admin"
                            asp-action="Index"
-                           class="navbar-link">
+                           class="navbar-link navbar-action-link">
 
                             Quản lý
 
@@ -886,7 +966,7 @@
                         <div class="user-dropdown">
 
                             <button type="button"
-                                    class="navbar-link user-button"
+                                    class="navbar-link navbar-action-link user-button"
                                     onclick="toggleUserMenu()">
 
                                 Người dùng ▾
@@ -1141,6 +1221,146 @@
                     !button.contains(event.target)) {
 
                     menu.classList.remove("show");
+
+                }
+
+            });
+
+    </script>
+
+
+    <!-- =========================================================
+         GIỎ HÀNG - CARD SẢN PHẨM
+         ========================================================= -->
+
+    <script>
+
+            document.addEventListener("submit", async function(event) {
+
+                const form = event.target;
+
+
+                /*
+                 * Chỉ bắt các form thêm sách vào giỏ.
+                 */
+
+                if (!form.matches(
+                    'form[action*="/GioHangs/Them"]'
+                )) {
+
+                    return;
+
+                }
+
+
+                /*
+                 * Chặn chuyển trang.
+                 */
+
+                event.preventDefault();
+
+
+                const button =
+                    form.querySelector(
+                        'button[type="submit"]'
+                    );
+
+
+                if (!button) {
+
+                    return;
+
+                }
+
+
+                /*
+                 * Lưu nội dung ban đầu.
+                 */
+
+                const originalText =
+                    button.innerHTML;
+
+
+                /*
+                 * Gửi request.
+                 */
+
+                try {
+
+                    const response =
+                        await fetch(
+                            form.action,
+                            {
+                                method: "POST",
+                                body: new FormData(form)
+                            }
+                        );
+
+
+                    if (response.ok) {
+
+                        /*
+                         * Đổi button thành công
+                         */
+
+                        button.innerHTML =
+                            "✓ Đã thêm vào giỏ";
+
+                        button.style.backgroundColor =
+                            "#198754";
+
+                        button.style.borderColor =
+                            "#198754";
+
+                        button.style.color =
+                            "white";
+
+                        button.disabled =
+                            true;
+
+
+                        /*
+                         * Sau 2 giây trả lại.
+                         */
+
+                        setTimeout(function() {
+
+                            button.innerHTML =
+                                originalText;
+
+                            button.style.backgroundColor =
+                                "";
+
+                            button.style.borderColor =
+                                "";
+
+                            button.style.color =
+                                "";
+
+                            button.disabled =
+                                false;
+
+                        }, 2000);
+
+                    }
+                    else {
+
+                        button.innerHTML =
+                            originalText;
+
+                        button.disabled =
+                            false;
+
+                    }
+
+                }
+                catch (error) {
+
+                    button.innerHTML =
+                        originalText;
+
+                    button.disabled =
+                        false;
 
                 }
 

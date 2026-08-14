@@ -55,6 +55,22 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/Asus/Desktop/Big Project/ProjectKZM/ProjectKZM/Views/CashOnDelivery/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2FzaE9uRGVsaXZlcnlcSW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Asus/Desktop/Big Project/ProjectKZM/ProjectKZM/Views/CashOnDelivery/KetQua.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2FzaE9uRGVsaXZlcnlcS2V0UXVhLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Asus/Desktop/Big Project/ProjectKZM/ProjectKZM/Views/ChuyenKhoan/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2h1eWVuS2hvYW5cSW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Asus/Desktop/Big Project/ProjectKZM/ProjectKZM/Views/ChuyenKhoan/KetQua.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2h1eWVuS2hvYW5cS2V0UXVhLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/Asus/Desktop/Big Project/ProjectKZM/ProjectKZM/Views/GioHangs/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcR2lvSGFuZ3NcSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
@@ -135,6 +151,14 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9WYWxpZGF0aW9uU2NyaXB0c1BhcnRpYWwuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/Asus/Desktop/Big Project/ProjectKZM/ProjectKZM/Views/ThanhToan/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVGhhbmhUb2FuXEluZGV4LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Asus/Desktop/Big Project/ProjectKZM/ProjectKZM/Views/ThanhToan/KetQua.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVGhhbmhUb2FuXEtldFF1YS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/Asus/Desktop/Big Project/ProjectKZM/ProjectKZM/Views/TheLoais/Create.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVGhlTG9haXNcQ3JlYXRlLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
@@ -173,6 +197,10 @@ build_metadata.AdditionalFiles.CssScope =
 
 [C:/Users/Asus/Desktop/Big Project/ProjectKZM/ProjectKZM/Views/VaiTros/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVmFpVHJvc1xJbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Asus/Desktop/Big Project/ProjectKZM/ProjectKZM/Views/YeuThichs/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcWWV1VGhpY2hzXEluZGV4LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/Asus/Desktop/Big Project/ProjectKZM/ProjectKZM/Views/_ViewImports.cshtml]

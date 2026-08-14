@@ -4,157 +4,783 @@
     ViewData["Title"] = "Giỏ hàng";
 }
 
+<style>
+
+    /* =========================================================
+                                           CHECKBOX
+                                           ========================================================= */
+
+    .cart-check {
+        width: 20px;
+        height: 20px;
+        cursor: pointer;
+    }
+
+
+    /* =========================================================
+                                           SỐ LƯỢNG THANH TOÁN
+                                           ========================================================= */
+
+    .payment-quantity-control {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 4px;
+    }
+
+    .payment-quantity-button {
+        width: 28px;
+        height: 28px;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid #ced4da;
+        background: white;
+        color: #212529;
+        border-radius: 5px;
+        font-size: 16px;
+        line-height: 1;
+        cursor: pointer;
+        transition: 0.15s;
+    }
+
+        .payment-quantity-button:hover {
+            background: #212529;
+            color: white;
+            border-color: #212529;
+        }
+
+        .payment-quantity-button:active {
+            transform: scale(0.95);
+        }
+
+        .payment-quantity-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+    .payment-quantity {
+        width: 50px;
+        height: 28px;
+        text-align: center;
+        border: 1px solid #ced4da;
+        border-radius: 5px;
+        font-size: 14px;
+        padding: 3px 5px;
+    }
+
+        .payment-quantity::-webkit-outer-spin-button,
+        .payment-quantity::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        .payment-quantity[type=number] {
+            -moz-appearance: textfield;
+        }
+
+
+    /* =========================================================
+                                           CARD SẢN PHẨM
+                                           ========================================================= */
+
+    .cart-item-card {
+        transition: opacity 0.3s ease, transform 0.3s ease, max-height 0.3s ease, margin 0.3s ease, padding 0.3s ease;
+        overflow: hidden;
+    }
+
+        .cart-item-card.selected {
+            border: 2px solid #198754;
+        }
+
+        .cart-item-card.removing {
+            opacity: 0;
+            transform: translateX(60px);
+            max-height: 0 !important;
+            margin-top: 0 !important;
+            margin-bottom: 0 !important;
+        }
+
+
+    /* =========================================================
+                                           THÔNG TIN ĐÃ CHỌN
+                                           ========================================================= */
+
+    .selected-info {
+        font-size: 14px;
+        color: #666;
+    }
+
+
+    /* =========================================================
+                                           BUTTON THANH TOÁN
+                                           ========================================================= */
+
+    .checkout-button:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+
+
+    /* =========================================================
+                                           CHỌN TẤT CẢ
+                                           ========================================================= */
+
+    .select-all-area {
+        background: #f8f9fa;
+        border-radius: 6px;
+        padding: 10px 15px;
+        margin-bottom: 15px;
+    }
+
+
+    /* =========================================================
+                                           THÔNG BÁO
+                                           ========================================================= */
+
+    .cart-notification-container {
+        position: fixed;
+        top: 25px;
+        right: 25px;
+        width: min(420px, calc(100vw - 50px));
+        z-index: 99999;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        justify-content: flex-start;
+        gap: 10px;
+        pointer-events: none;
+        overflow: visible;
+    }
+
+    .cart-notification {
+        min-width: 280px;
+        max-width: 420px;
+        width: fit-content;
+        color: white;
+        padding: 14px 22px;
+        border-radius: 7px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        display: block;
+        font-size: 15px;
+        font-weight: 500;
+        line-height: 1.4;
+        pointer-events: none;
+        flex: 0 0 auto;
+        animation: cartNotificationIn 0.25s ease;
+        box-sizing: border-box;
+    }
+
+        .cart-notification.hiding {
+            animation: cartNotificationOut 0.25s ease forwards;
+        }
+
+    @@keyframes cartNotificationIn {
+        from {
+            opacity: 0;
+            transform: translateX(30px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
+
+    @@keyframes cartNotificationOut {
+        from {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        to {
+            opacity: 0;
+            transform: translateX(30px);
+        }
+    }
+
+
+    /* =========================================================
+                                           OVERLAY HẾT HÀNG
+                                           ========================================================= */
+
+    .cart-product-image-wrapper {
+        position: relative;
+        display: inline-block;
+        width: 90px;
+        height: 120px;
+    }
+
+        .cart-product-image-wrapper img {
+            width: 90px;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 6px;
+            display: block;
+        }
+
+    .cart-product-out-of-stock-overlay {
+        position: absolute;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.58);
+        border-radius: 6px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 2;
+    }
+
+    .cart-product-out-of-stock-text {
+        color: white;
+        font-size: 16px;
+        font-weight: 600;
+        text-align: center;
+        line-height: 1.2;
+    }
+
+</style>
+
+
 <div class="container py-4">
 
+    <!-- =========================================================
+         HEADER
+         ========================================================= -->
+
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 class="mb-0">🛒 Giỏ hàng</h2>
+
+        <h2 class="mb-0">
+            🛒 Giỏ hàng
+        </h2>
 
         <a asp-controller="Home"
            asp-action="Index"
            class="btn btn-secondary">
+
             ← Tiếp tục mua hàng
+
         </a>
+
     </div>
 
 
-    @if (TempData["Success"] != null)
-    {
-        <div class="alert alert-success">
-            @TempData["Success"]
-        </div>
-    }
+    <!-- =========================================================
+         THÔNG BÁO
+         ========================================================= -->
 
-    @if (TempData["Error"] != null)
-    {
-        <div class="alert alert-danger">
-            @TempData["Error"]
-        </div>
-    }
+    <div id="cartNotification"
+         class="cart-notification-container">
+    </div>
 
 
+    <!-- =========================================================
+         GIỎ HÀNG
+         ========================================================= -->
     @if (Model == null ||
-         Model.ChiTietGioHangs == null ||
-         !Model.ChiTietGioHangs.Any())
+                         Model.ChiTietGioHangs == null ||
+                         !Model.ChiTietGioHangs.Any())
     {
-        <div class="text-center py-5">
+        <div class="row"
+             id="cartMainContent">
 
-            <div style="font-size:70px;">
-                🛒
+            <div class="col-lg-8">
+
+                <div class="select-all-area">
+
+                    <div class="d-flex justify-content-between align-items-center">
+
+                        <div>
+
+                            <input type="checkbox"
+                                   id="selectAll"
+                                   class="cart-check" />
+
+                            <label for="selectAll"
+                                   class="fw-bold ms-2"
+                                   style="cursor:pointer;">
+
+                                Chọn tất cả
+
+                            </label>
+
+                        </div>
+
+                        <span class="selected-info"
+                              id="selectedInfo">
+
+                            Chưa chọn sản phẩm
+
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div id="cartItemsContainer">
+
+                    <div class="text-center py-5"
+                         id="emptyCartMessage">
+
+                        <div style="font-size:70px;">
+                            🛒
+                        </div>
+
+                        <h4 class="mt-3">
+                            Giỏ hàng đang trống
+                        </h4>
+
+                        <p class="text-muted">
+                            Bạn chưa có sản phẩm nào trong giỏ hàng.
+                        </p>
+
+                        <a asp-controller="Home"
+                           asp-action="Index"
+                           class="btn btn-success mt-2">
+
+                            Xem sản phẩm
+
+                        </a>
+
+                    </div>
+
+                </div>
+
             </div>
 
-            <h4 class="mt-3">
-                Giỏ hàng đang trống
-            </h4>
 
-            <p class="text-muted">
-                Bạn chưa có sản phẩm nào trong giỏ hàng.
-            </p>
+            <div class="col-lg-4">
 
-            <a asp-controller="Home"
-               asp-action="Index"
-               class="btn btn-success mt-2">
-                Xem sản phẩm
-            </a>
+                <div class="card shadow-sm">
+
+                    <div class="card-body">
+
+                        <h4 class="mb-4">
+                            Tổng đơn hàng
+                        </h4>
+
+
+                        <div class="d-flex justify-content-between mb-3">
+
+                            <span>
+                                Số lượng sản phẩm:
+                            </span>
+
+                            <strong id="selectedQuantity">
+                                0
+                            </strong>
+
+                        </div>
+
+
+                        <hr />
+
+
+                        <div class="d-flex justify-content-between mb-4">
+
+                            <span>
+                                Tổng tiền:
+                            </span>
+
+                            <strong class="text-danger fs-5"
+                                    id="selectedTotal">
+
+                                0 đ
+
+                            </strong>
+
+                        </div>
+
+
+                        <form asp-controller="GioHangs"
+                              asp-action="ThanhToan"
+                              method="post"
+                              id="checkoutForm">
+
+                            @Html.AntiForgeryToken()
+
+                            <div id="checkoutItems">
+                            </div>
+
+                            <button type="submit"
+                                    class="btn btn-success w-100 checkout-button"
+                                    id="checkoutButton"
+                                    disabled>
+
+                                Thanh toán sản phẩm đã chọn
+
+                            </button>
+
+                        </form>
+
+                    </div>
+
+                </div>
+
+            </div>
 
         </div>
     }
     else
     {
-        <div class="row">
-
-            <!-- =====================================================
-                 DANH SÁCH SẢN PHẨM
-                 ===================================================== -->
+        <div class="row"
+             id="cartMainContent">
 
             <div class="col-lg-8">
 
-                @foreach (var item in Model.ChiTietGioHangs)
-                {
-                    <div class="card mb-3 shadow-sm">
+                <div class="select-all-area">
 
-                        <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
 
-                            <div class="row align-items-center">
+                        <div>
 
-                                <!-- HÌNH ẢNH -->
+                            <input type="checkbox"
+                                   id="selectAll"
+                                   class="cart-check" />
 
-                                <div class="col-md-2 text-center">
+                            <label for="selectAll"
+                                   class="fw-bold ms-2"
+                                   style="cursor:pointer;">
 
-                                    @if (item.Sach != null && !string.IsNullOrEmpty(item.Sach.Hinh))
-                                    {
-                                        <img src="@item.Sach.Hinh"
-                                             alt="@item.Sach.TenSach"
-                                             style="
-                                        width:90px;
-                                        height:120px;
-                                        object-fit:cover;
-                                        border-radius:6px;
-                                        " />
-                                    }
-                                    else
-                                    {
-                                        <div style="
-                                            width:90px;
-                                            height:120px;
-                                            background:#eee;
-                                            display:flex;
-                                            align-items:center;
-                                            justify-content:center;
-                                            border-radius:6px;
-                                            margin:auto;
-                                            ">
-                                            Không có ảnh
-                                        </div>
-                                    }
+                                Chọn tất cả
 
-                                </div>
+                            </label>
+
+                        </div>
+
+                        <span class="selected-info"
+                              id="selectedInfo">
+
+                            Chưa chọn sản phẩm
+
+                        </span>
+
+                    </div>
+
+                </div>
 
 
-                                <!-- THÔNG TIN SÁCH -->
+                <div id="cartItemsContainer">
 
-                                <div class="col-md-4">
+                    @foreach (var item in Model.ChiTietGioHangs)
+                    {
+                        var sachHetHang =
+                            item.Sach == null ||
+                            item.Sach.SoLuong <= 0;
 
-                                    <h5 class="mb-2">
-                                        @(item.Sach?.TenSach ?? "Sản phẩm")
-                                    </h5>
+                        var tenSach =
+                            item.Sach?.TenSach ?? "Sản phẩm";
 
-                                    @if (item.Sach != null)
-                                    {
-                                        <div class="text-muted small">
+                        var tonKho =
+                            item.Sach?.SoLuong ?? 0;
 
-                                            @if (!string.IsNullOrEmpty(item.Sach.TacGia))
-                                            {
+                        <div class="card mb-3 shadow-sm cart-item-card"
+                             data-price="@(item.Sach?.Gia ?? 0)"
+                             data-max="@Math.Max(0, tonKho)"
+                             data-ma-sach="@item.MaSach"
+                             data-book-name="@tenSach">
+
+                            <div class="card-body">
+
+                                <div class="row align-items-center">
+
+                                    <!-- =================================
+                                         CHECKBOX
+                                         ================================= -->
+
+                                    <div class="col-md-1 text-center">
+
+                                        <input type="checkbox"
+                                               class="cart-check product-check"
+                                               data-ma-sach="@item.MaSach" />
+
+                                    </div>
+
+
+                                    <!-- =================================
+                                         HÌNH ẢNH
+                                         ================================= -->
+
+                                    <div class="col-md-2 text-center">
+
+                                        @if (item.Sach != null &&
+                                             !string.IsNullOrEmpty(item.Sach.Hinh))
+                                        {
+                                            <div class="cart-product-image-wrapper">
+
+                                                <img src="@item.Sach.Hinh"
+                                                     alt="@item.Sach.TenSach" />
+
+                                                @if (sachHetHang)
+                                                {
+                                                    <div class="cart-product-out-of-stock-overlay">
+
+                                                        <div class="cart-product-out-of-stock-text">
+                                                            Hết Hàng
+                                                        </div>
+
+                                                    </div>
+                                                }
+
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <div class="cart-product-image-wrapper"
+                                                 style="
+                                                background:#eee;
+                                                display:flex;
+                                                align-items:center;
+                                                justify-content:center;
+                                                border-radius:6px;
+                                                ">
+
+                                                <span style="font-size:12px;color:#777;">
+                                                    Không có ảnh
+                                                </span>
+
+                                                @if (sachHetHang)
+                                                {
+                                                    <div class="cart-product-out-of-stock-overlay">
+
+                                                        <div class="cart-product-out-of-stock-text">
+                                                            Hết Hàng
+                                                        </div>
+
+                                                    </div>
+                                                }
+
+                                            </div>
+                                        }
+
+                                    </div>
+
+
+                                    <!-- =================================
+                                         THÔNG TIN SẢN PHẨM
+                                         ================================= -->
+
+                                    <div class="col-md-3">
+
+                                        <h5 class="mb-2">
+                                            @tenSach
+                                        </h5>
+
+
+                                        @if (item.Sach != null)
+                                        {
+                                            <div class="text-muted small">
+
+                                                @if (!string.IsNullOrEmpty(item.Sach.TacGia))
+                                                {
+                                                    <div>
+                                                        Tác giả:
+                                                        @item.Sach.TacGia
+                                                    </div>
+                                                }
+
                                                 <div>
-                                                    Tác giả:
-                                                    @item.Sach.TacGia
-                                                </div>
-                                            }
 
-                                            <div>
-                                                Giá:
-                                                <strong class="text-danger">
-                                                    @item.Sach.Gia.ToString("N0") đ
-                                                </strong>
+                                                    Giá:
+
+                                                    <strong class="text-danger">
+
+                                                        @item.Sach.Gia.ToString("N0") đ
+
+                                                    </strong>
+
+                                                </div>
+
+                                            </div>
+                                        }
+
+                                    </div>
+
+
+                                    <!-- =================================
+                                         SỐ LƯỢNG TRONG GIỎ
+                                         ================================= -->
+
+                                    <div class="col-md-3">
+
+                                        <div class="d-flex align-items-center justify-content-center">
+
+                                            <!-- GIẢM -->
+
+                                            <form asp-controller="GioHangs"
+                                                  asp-action="Giam"
+                                                  method="post"
+                                                  class="m-0 cart-quantity-form">
+
+                                                @Html.AntiForgeryToken()
+
+                                                <input type="hidden"
+                                                       name="maGioHang"
+                                                       value="@Model.MaGioHang" />
+
+                                                <input type="hidden"
+                                                       name="maSach"
+                                                       value="@item.MaSach" />
+
+                                                <button type="submit"
+                                                        class="btn btn-outline-secondary quantity-decrease-button"
+                                                        title="Giảm số lượng">
+
+                                                    −
+
+                                                </button>
+
+                                            </form>
+
+
+                                            <!-- SỐ LƯỢNG -->
+
+                                            <span class="mx-3 fw-bold cart-current-quantity"
+                                                  style="
+                                                min-width:30px;
+                                                text-align:center;
+                                                ">
+
+                                                @item.SoLuong
+
+                                            </span>
+
+
+                                            <!-- TĂNG -->
+
+                                            <form asp-controller="GioHangs"
+                                                  asp-action="Tang"
+                                                  method="post"
+                                                  class="m-0 cart-quantity-form">
+
+                                                @Html.AntiForgeryToken()
+
+                                                <input type="hidden"
+                                                       name="maGioHang"
+                                                       value="@Model.MaGioHang" />
+
+                                                <input type="hidden"
+                                                       name="maSach"
+                                                       value="@item.MaSach" />
+
+                                                <button type="submit"
+                                                        class="btn btn-outline-secondary quantity-increase-button"
+                                                        title="Tăng số lượng">
+
+                                                    +
+
+                                                </button>
+
+                                            </form>
+
+                                        </div>
+
+
+                                        <!-- =================================
+                                             SỐ LƯỢNG MUỐN THANH TOÁN
+                                             ================================= -->
+
+                                        <div class="text-center mt-3">
+
+                                            <small class="text-muted d-block mb-2">
+
+                                                Số lượng thanh toán:
+
+                                            </small>
+
+                                            <div class="payment-quantity-control">
+
+                                                <button type="button"
+                                                        class="payment-quantity-button payment-minus"
+                                                        title="Giảm số lượng">
+
+                                                    −
+
+                                                </button>
+
+                                                <input type="number"
+                                                       class="payment-quantity"
+                                                       value="1"
+                                                       min="1"
+                                                       max="@Math.Max(1, item.SoLuong)"
+                                                       data-ma-sach="@item.MaSach" />
+
+                                                <button type="button"
+                                                        class="payment-quantity-button payment-plus"
+                                                        title="Tăng số lượng">
+
+                                                    +
+
+                                                </button>
+
                                             </div>
 
                                         </div>
-                                    }
 
-                                </div>
+                                    </div>
 
 
-                                <!-- SỐ LƯỢNG -->
+                                    <!-- =================================
+                                         THÀNH TIỀN + TÌNH TRẠNG
+                                         ================================= -->
 
-                                <div class="col-md-3">
+                                    <div class="col-md-2 text-center">
 
-                                    <div class="d-flex align-items-center justify-content-center">
+                                        @if (item.Sach != null)
+                                        {
+                                            <strong class="text-danger d-block cart-item-total">
 
-                                        <!-- GIẢM -->
+                                                @((item.Sach.Gia * item.SoLuong).ToString("N0")) đ
+
+                                            </strong>
+
+
+                                            @if (item.Sach.SoLuong > 0)
+                                            {
+                                                <div class="text-success small mt-1 cart-stock-status">
+
+                                                    Còn hàng
+
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <div class="text-danger small mt-1 cart-stock-status">
+
+                                                    Hết hàng
+
+                                                </div>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <strong class="text-danger d-block cart-item-total">
+
+                                                0 đ
+
+                                            </strong>
+
+                                            <div class="text-danger small mt-1 cart-stock-status">
+
+                                                Sản phẩm không tồn tại
+
+                                            </div>
+                                        }
+
+                                    </div>
+
+
+                                    <!-- =================================
+                                         XÓA
+                                         ================================= -->
+
+                                    <div class="col-md-1 text-end">
 
                                         <form asp-controller="GioHangs"
-                                              asp-action="Giam"
+                                              asp-action="Xoa"
                                               method="post"
-                                              class="m-0">
+                                              class="delete-cart-form">
 
                                             @Html.AntiForgeryToken()
 
@@ -167,41 +793,11 @@
                                                    value="@item.MaSach" />
 
                                             <button type="submit"
-                                                    class="btn btn-outline-secondary">
-                                                −
-                                            </button>
+                                                    class="btn btn-outline-danger"
+                                                    title="Xóa">
 
-                                        </form>
+                                                🗑
 
-
-                                        <!-- SỐ LƯỢNG -->
-
-                                        <span class="mx-3 fw-bold"
-                                              style="min-width:30px; text-align:center;">
-                                            @item.SoLuong
-                                        </span>
-
-
-                                        <!-- TĂNG -->
-
-                                        <form asp-controller="GioHangs"
-                                              asp-action="Tang"
-                                              method="post"
-                                              class="m-0">
-
-                                            @Html.AntiForgeryToken()
-
-                                            <input type="hidden"
-                                                   name="maGioHang"
-                                                   value="@Model.MaGioHang" />
-
-                                            <input type="hidden"
-                                                   name="maSach"
-                                                   value="@item.MaSach" />
-
-                                            <button type="submit"
-                                                    class="btn btn-outline-secondary">
-                                                +
                                             </button>
 
                                         </form>
@@ -210,65 +806,24 @@
 
                                 </div>
 
-
-                                <!-- THÀNH TIỀN -->
-
-                                <div class="col-md-2 text-center">
-
-                                    @if (item.Sach != null)
-                                    {
-                                        <strong class="text-danger">
-                                            @((item.Sach.Gia * item.SoLuong).ToString("N0")) đ
-                                        </strong>
-                                    }
-
-                                </div>
-
-
-                                <!-- XÓA -->
-
-                                <div class="col-md-1 text-end">
-
-                                    <form asp-controller="GioHangs"
-                                          asp-action="Xoa"
-                                          method="post">
-
-                                        @Html.AntiForgeryToken()
-
-                                        <input type="hidden"
-                                               name="maGioHang"
-                                               value="@Model.MaGioHang" />
-
-                                        <input type="hidden"
-                                               name="maSach"
-                                               value="@item.MaSach" />
-
-                                        <button type="submit"
-                                                class="btn btn-outline-danger"
-                                                title="Xóa">
-                                            🗑
-                                        </button>
-
-                                    </form>
-
-                                </div>
-
                             </div>
 
                         </div>
+                    }
 
-                    </div>
-                }
+                </div>
 
 
-                <!-- XÓA TOÀN BỘ -->
+                <!-- =================================================
+                     XÓA TOÀN BỘ
+                     ================================================= -->
 
                 <div class="text-end mt-3">
 
                     <form asp-controller="GioHangs"
                           asp-action="XoaTatCa"
                           method="post"
-                          onsubmit="return confirm('Bạn có chắc muốn xóa toàn bộ giỏ hàng?');">
+                          id="deleteAllCartForm">
 
                         @Html.AntiForgeryToken()
 
@@ -287,7 +842,7 @@
 
 
             <!-- =====================================================
-                 TỔNG TIỀN
+                 TỔNG ĐƠN HÀNG
                  ===================================================== -->
 
             <div class="col-lg-4">
@@ -301,30 +856,14 @@
                         </h4>
 
 
-                        @{
-                            decimal tongTien = 0;
-                            int tongSoLuong = 0;
-
-                            foreach (var item in Model.ChiTietGioHangs)
-                            {
-                                if (item.Sach != null)
-                                {
-                                    tongTien += item.Sach.Gia * item.SoLuong;
-                                }
-
-                                tongSoLuong += item.SoLuong;
-                            }
-                        }
-
-
                         <div class="d-flex justify-content-between mb-3">
 
                             <span>
                                 Số lượng sản phẩm:
                             </span>
 
-                            <strong>
-                                @tongSoLuong
+                            <strong id="selectedQuantity">
+                                0
                             </strong>
 
                         </div>
@@ -339,20 +878,36 @@
                                 Tổng tiền:
                             </span>
 
-                            <strong class="text-danger fs-5">
-                                @tongTien.ToString("N0") đ
+                            <strong class="text-danger fs-5"
+                                    id="selectedTotal">
+
+                                0 đ
+
                             </strong>
 
                         </div>
 
 
-                        <button type="button"
-                                class="btn btn-success w-100"
-                                onclick="alert('Chức năng thanh toán sẽ được thực hiện sau.');">
+                        <form asp-controller="GioHangs"
+                              asp-action="ThanhToan"
+                              method="post"
+                              id="checkoutForm">
 
-                            Thanh toán
+                            @Html.AntiForgeryToken()
 
-                        </button>
+                            <div id="checkoutItems">
+                            </div>
+
+                            <button type="submit"
+                                    class="btn btn-success w-100 checkout-button"
+                                    id="checkoutButton"
+                                    disabled>
+
+                                Thanh toán sản phẩm đã chọn
+
+                            </button>
+
+                        </form>
 
                     </div>
 
@@ -364,3 +919,2983 @@
     }
 
 </div>
+
+
+@section Scripts {
+
+    <script>
+
+        document.addEventListener("DOMContentLoaded", function() {
+
+            /* =====================================================
+               ELEMENT
+               ===================================================== */
+
+            const selectAll =
+                document.getElementById("selectAll");
+
+            const selectedQuantity =
+                document.getElementById("selectedQuantity");
+
+            const selectedTotal =
+                document.getElementById("selectedTotal");
+
+            const selectedInfo =
+                document.getElementById("selectedInfo");
+
+            const checkoutButton =
+                document.getElementById("checkoutButton");
+
+            const checkoutItems =
+                document.getElementById("checkoutItems");
+
+            const cartNotification =
+                document.getElementById("cartNotification");
+
+
+            /* =====================================================
+               HỆ THỐNG THÔNG BÁO
+               - Mỗi thông báo xử lý theo thứ tự
+               - Thời gian: 3 giây
+               - Không xóa thông báo mới
+               - Có thể chồng lên nhau
+               ===================================================== */
+
+            let notificationQueue = [];
+
+            let notificationProcessing =
+                false;
+
+
+            function showCartNotification(message, type) {
+
+                if (!cartNotification) {
+                    return;
+                }
+
+
+                const notification =
+                    document.createElement("div");
+
+                notification.className =
+                    "cart-notification";
+
+                notification.innerText =
+                    message;
+
+
+                /* =========================================
+                   MÀU ĐỎ
+                   ========================================= */
+
+                if (type === "danger") {
+
+                    notification.style.background =
+                        "#dc3545";
+
+                    notification.style.color =
+                        "#fff";
+
+                }
+
+
+                /* =========================================
+                   MÀU VÀNG
+                   ========================================= */
+
+                else if (type === "warning") {
+
+                    notification.style.background =
+                        "#ffc107";
+
+                    notification.style.color =
+                        "#212529";
+
+                }
+
+
+                /* =========================================
+                   MÀU XANH
+                   ========================================= */
+
+                else {
+
+                    notification.style.background =
+                        "#198754";
+
+                    notification.style.color =
+                        "#fff";
+
+                }
+
+
+                /*
+                 * Đưa thông báo vào hàng đợi.
+                 */
+
+                notificationQueue.push(
+                    notification
+                );
+
+
+                /*
+                 * Thông báo vẫn được thêm ngay vào DOM
+                 * nên có thể nhìn thấy nhiều thông báo
+                 * cùng lúc.
+                 */
+
+                cartNotification.appendChild(
+                    notification
+                );
+
+
+                /*
+                 * Bắt đầu xử lý theo thứ tự.
+                 */
+
+                processNotificationQueue();
+
+            }
+
+
+            /* =====================================================
+               XỬ LÝ THÔNG BÁO THEO THỨ TỰ
+               ===================================================== */
+
+            function processNotificationQueue() {
+
+                /*
+                 * Đang xử lý một thông báo
+                 * thì không xử lý cái tiếp theo.
+                 */
+
+                if (notificationProcessing) {
+                    return;
+                }
+
+
+                /*
+                 * Không còn thông báo.
+                 */
+
+                if (
+                    notificationQueue.length ===
+                    0
+                ) {
+
+                    return;
+
+                }
+
+
+                notificationProcessing =
+                    true;
+
+
+                const currentNotification =
+                    notificationQueue.shift();
+
+
+                /*
+                 * Giữ thông báo đầu tiên trong 3 giây.
+                 */
+
+                setTimeout(function() {
+
+                    if (
+                        currentNotification &&
+                        currentNotification.isConnected
+                    ) {
+
+                        currentNotification.classList.add(
+                            "hiding"
+                        );
+
+
+                        /*
+                         * Đợi animation biến mất.
+                         */
+
+                        setTimeout(function() {
+
+                            if (
+                                currentNotification.isConnected
+                            ) {
+
+                                currentNotification.remove();
+
+                            }
+
+                        }, 250);
+
+                    }
+
+
+                    /*
+                     * Sau khi thông báo hiện tại hoàn tất,
+                     * bắt đầu thông báo kế tiếp.
+                     *
+                     * Thông báo kế tiếp cũng có 3 giây.
+                     */
+
+                    setTimeout(function() {
+
+                        notificationProcessing =
+                            false;
+
+                        processNotificationQueue();
+
+                    }, 250);
+
+                }, 3000);
+
+            }
+
+
+            /* =====================================================
+               LẤY DANH SÁCH CHECKBOX
+               ===================================================== */
+
+            function getProductChecks() {
+
+                return document.querySelectorAll(
+                    ".product-check"
+                );
+
+            }
+
+
+            /* =====================================================
+               CẬP NHẬT TỔNG
+               ===================================================== */
+
+            function updateCartSummary() {
+
+                const productChecks =
+                    getProductChecks();
+
+
+                let total = 0;
+                let quantity = 0;
+                let selectedCount = 0;
+
+
+                productChecks.forEach(function(checkbox) {
+
+                    const card =
+                        checkbox.closest(
+                            ".cart-item-card"
+                        );
+
+
+                    if (!card) {
+                        return;
+                    }
+
+
+                    if (!checkbox.checked) {
+
+                        card.classList.remove(
+                            "selected"
+                        );
+
+                        return;
+
+                    }
+
+
+                    selectedCount++;
+
+                    card.classList.add(
+                        "selected"
+                    );
+
+
+                    const price =
+                        parseFloat(
+                            card.dataset.price
+                        ) || 0;
+
+
+                    const quantityInput =
+                        card.querySelector(
+                            ".payment-quantity"
+                        );
+
+
+                    if (!quantityInput) {
+                        return;
+                    }
+
+
+                    let qty =
+                        parseInt(
+                            quantityInput.value
+                        );
+
+
+                    const max =
+                        parseInt(
+                            quantityInput.max
+                        );
+
+
+                    /*
+                     * Khi hết hàng:
+                     * số lượng thanh toán được phép là 0.
+                     */
+
+                    if (isNaN(qty)) {
+
+                        qty = 0;
+
+                    }
+
+
+                    if (qty < 0) {
+
+                        qty = 0;
+
+                        quantityInput.value =
+                            0;
+
+                    }
+
+
+                    if (
+                        !isNaN(max) &&
+                        qty > max
+                    ) {
+
+                        qty = max;
+
+                        quantityInput.value =
+                            max;
+
+                    }
+
+
+                    total +=
+                        price * qty;
+
+                    quantity +=
+                        qty;
+
+                });
+
+
+                if (selectedQuantity) {
+
+                    selectedQuantity.innerText =
+                        quantity;
+
+                }
+
+
+                if (selectedTotal) {
+
+                    selectedTotal.innerText =
+                        total.toLocaleString(
+                            "vi-VN"
+                        ) + " đ";
+
+                }
+
+
+                if (selectedInfo) {
+
+                    if (selectedCount === 0) {
+
+                        selectedInfo.innerText =
+                            "Chưa chọn sản phẩm";
+
+
+                        if (checkoutButton) {
+
+                            checkoutButton.disabled =
+                                true;
+
+                        }
+
+                    }
+                    else {
+
+                        selectedInfo.innerText =
+                            "Đã chọn " +
+                            selectedCount +
+                            " sản phẩm";
+
+
+                        if (checkoutButton) {
+
+                            checkoutButton.disabled =
+                                false;
+
+                        }
+
+                    }
+
+                }
+
+
+                if (productChecks.length > 0) {
+
+                    const checkedCount =
+                        document.querySelectorAll(
+                            ".product-check:checked"
+                        ).length;
+
+
+                    if (selectAll) {
+
+                        selectAll.checked =
+                            checkedCount ===
+                            productChecks.length;
+
+                    }
+
+                }
+                else {
+
+                    if (selectAll) {
+
+                        selectAll.checked =
+                            false;
+
+                    }
+
+                }
+
+            }
+
+
+            /* =====================================================
+               CHECKBOX
+               ===================================================== */
+
+            function bindCheckboxes() {
+
+                getProductChecks().forEach(
+                    function(checkbox) {
+
+                        if (
+                            checkbox.dataset.bound ===
+                            "true"
+                        ) {
+
+                            return;
+
+                        }
+
+
+                        checkbox.dataset.bound =
+                            "true";
+
+
+                        checkbox.addEventListener(
+                            "change",
+                            function() {
+
+                                updateCartSummary();
+
+                            }
+                        );
+
+                    }
+                );
+
+            }
+
+
+            /* =====================================================
+               CẬP NHẬT CARD SAU TĂNG / GIẢM
+               ===================================================== */
+
+            function updateCardQuantity(
+                card,
+                newQuantity,
+                stock
+            ) {
+
+                if (!card) {
+                    return;
+                }
+
+
+                const quantityElement =
+                    card.querySelector(
+                        ".cart-current-quantity"
+                    );
+
+
+                if (quantityElement) {
+
+                    quantityElement.innerText =
+                        newQuantity;
+
+                }
+
+
+                const paymentInput =
+                    card.querySelector(
+                        ".payment-quantity"
+                    );
+
+
+                if (paymentInput) {
+
+                    if (stock <= 0) {
+
+                        paymentInput.min =
+                            0;
+
+                        paymentInput.max =
+                            0;
+
+                        paymentInput.value =
+                            0;
+
+                    }
+                    else {
+
+                        paymentInput.min =
+                            1;
+
+                        paymentInput.max =
+                            newQuantity;
+
+
+                        let paymentQuantity =
+                            parseInt(
+                                paymentInput.value
+                            );
+
+
+                        if (isNaN(paymentQuantity)) {
+
+                            paymentQuantity =
+                                1;
+
+                        }
+
+
+                        if (
+                            paymentQuantity >
+                            newQuantity
+                        ) {
+
+                            paymentInput.value =
+                                newQuantity;
+
+                        }
+
+
+                        if (
+                            paymentQuantity <
+                            1
+                        ) {
+
+                            paymentInput.value =
+                                1;
+
+                        }
+
+                    }
+
+                }
+
+
+                const price =
+                    parseFloat(
+                        card.dataset.price
+                    ) || 0;
+
+
+                const totalElement =
+                    card.querySelector(
+                        ".cart-item-total"
+                    );
+
+
+                if (totalElement) {
+
+                    totalElement.innerText =
+                        (
+                            price *
+                            newQuantity
+                        ).toLocaleString(
+                            "vi-VN"
+                        ) + " đ";
+
+                }
+
+
+                updateFreshStockOnCard(
+                    card,
+                    stock,
+                    false,
+                    newQuantity
+                );
+
+
+                updateCartSummary();
+
+            }
+
+
+            /* =====================================================
+               CẬP NHẬT TỒN KHO MỚI
+               ===================================================== */
+
+            function updateFreshStockOnCard(
+                card,
+                freshStock,
+                resetPaymentQuantity,
+                currentCartQuantityOverride
+            ) {
+
+                if (!card) {
+                    return;
+                }
+
+
+                const stock =
+                    parseInt(freshStock) || 0;
+
+
+                card.dataset.max =
+                    Math.max(
+                        0,
+                        stock
+                    );
+
+
+                const quantityElement =
+                    card.querySelector(
+                        ".cart-current-quantity"
+                    );
+
+
+                let currentCartQuantity =
+                    parseInt(
+                        quantityElement?.innerText
+                    );
+
+
+                if (
+                    isNaN(
+                        currentCartQuantity
+                    )
+                ) {
+
+                    currentCartQuantity =
+                        0;
+
+                }
+
+
+                if (
+                    currentCartQuantityOverride !== undefined &&
+                    currentCartQuantityOverride !== null
+                ) {
+
+                    currentCartQuantity =
+                        parseInt(
+                            currentCartQuantityOverride
+                        );
+
+
+                    if (
+                        isNaN(
+                            currentCartQuantity
+                        )
+                    ) {
+
+                        currentCartQuantity =
+                            0;
+
+                    }
+
+                }
+
+
+                /* =================================================
+                   HẾT HÀNG
+                   ================================================= */
+
+                if (stock <= 0) {
+
+                    currentCartQuantity =
+                        0;
+
+
+                    if (quantityElement) {
+
+                        quantityElement.innerText =
+                            0;
+
+                    }
+
+
+                    const paymentInput =
+                        card.querySelector(
+                            ".payment-quantity"
+                        );
+
+
+                    if (paymentInput) {
+
+                        paymentInput.min =
+                            0;
+
+                        paymentInput.max =
+                            0;
+
+                        paymentInput.value =
+                            0;
+
+                    }
+
+
+                    const stockStatus =
+                        card.querySelector(
+                            ".cart-stock-status"
+                        );
+
+
+                    if (stockStatus) {
+
+                        stockStatus.innerText =
+                            "Hết hàng";
+
+                        stockStatus.classList.remove(
+                            "text-success"
+                        );
+
+                        stockStatus.classList.add(
+                            "text-danger"
+                        );
+
+                    }
+
+
+                    const imageWrapper =
+                        card.querySelector(
+                            ".cart-product-image-wrapper"
+                        );
+
+
+                    if (imageWrapper) {
+
+                        const oldOverlay =
+                            imageWrapper.querySelector(
+                                ".cart-product-out-of-stock-overlay"
+                            );
+
+
+                        if (!oldOverlay) {
+
+                            const overlay =
+                                document.createElement(
+                                    "div"
+                                );
+
+
+                            overlay.className =
+                                "cart-product-out-of-stock-overlay";
+
+
+                            const overlayText =
+                                document.createElement(
+                                    "div"
+                                );
+
+
+                            overlayText.className =
+                                "cart-product-out-of-stock-text";
+
+
+                            overlayText.innerText =
+                                "Hết Hàng";
+
+
+                            overlay.appendChild(
+                                overlayText
+                            );
+
+
+                            imageWrapper.appendChild(
+                                overlay
+                            );
+
+                        }
+
+                    }
+
+
+                    const topPlus =
+                        card.querySelector(
+                            ".quantity-increase-button"
+                        );
+
+
+                    const topMinus =
+                        card.querySelector(
+                            ".quantity-decrease-button"
+                        );
+
+
+                    if (topPlus) {
+
+                        topPlus.disabled =
+                            false;
+
+                    }
+
+
+                    if (topMinus) {
+
+                        topMinus.disabled =
+                            false;
+
+                    }
+
+
+                    const paymentMinus =
+                        card.querySelector(
+                            ".payment-minus"
+                        );
+
+
+                    const paymentPlus =
+                        card.querySelector(
+                            ".payment-plus"
+                        );
+
+
+                    if (paymentMinus) {
+
+                        paymentMinus.disabled =
+                            true;
+
+                    }
+
+
+                    if (paymentPlus) {
+
+                        paymentPlus.disabled =
+                            true;
+
+                    }
+
+
+                    const totalElement =
+                        card.querySelector(
+                            ".cart-item-total"
+                        );
+
+
+                    if (totalElement) {
+
+                        totalElement.innerText =
+                            "0 đ";
+
+                    }
+
+
+                    return;
+
+                }
+
+
+                /* =================================================
+                   CÒN HÀNG
+                   ================================================= */
+
+                if (
+                    currentCartQuantity >
+                    stock
+                ) {
+
+                    currentCartQuantity =
+                        stock;
+
+
+                    if (quantityElement) {
+
+                        quantityElement.innerText =
+                            stock;
+
+                    }
+
+                }
+
+
+                if (
+                    currentCartQuantity <
+                    1
+                ) {
+
+                    currentCartQuantity =
+                        1;
+
+
+                    if (quantityElement) {
+
+                        quantityElement.innerText =
+                            1;
+
+                    }
+
+                }
+
+
+                const price =
+                    parseFloat(
+                        card.dataset.price
+                    ) || 0;
+
+
+                const totalElement =
+                    card.querySelector(
+                        ".cart-item-total"
+                    );
+
+
+                if (totalElement) {
+
+                    totalElement.innerText =
+                        (
+                            price *
+                            currentCartQuantity
+                        ).toLocaleString(
+                            "vi-VN"
+                        ) + " đ";
+
+                }
+
+
+                const stockStatus =
+                    card.querySelector(
+                        ".cart-stock-status"
+                    );
+
+
+                if (stockStatus) {
+
+                    stockStatus.innerText =
+                        "Còn hàng";
+
+                    stockStatus.classList.remove(
+                        "text-danger"
+                    );
+
+                    stockStatus.classList.add(
+                        "text-success"
+                    );
+
+                }
+
+
+                const imageWrapper =
+                    card.querySelector(
+                        ".cart-product-image-wrapper"
+                    );
+
+
+                if (imageWrapper) {
+
+                    const oldOverlay =
+                        imageWrapper.querySelector(
+                            ".cart-product-out-of-stock-overlay"
+                        );
+
+
+                    if (oldOverlay) {
+
+                        oldOverlay.remove();
+
+                    }
+
+                }
+
+
+                const paymentInput =
+                    card.querySelector(
+                        ".payment-quantity"
+                    );
+
+
+                if (paymentInput) {
+
+                    paymentInput.min =
+                        1;
+
+                    paymentInput.max =
+                        currentCartQuantity;
+
+
+                    let paymentQuantity =
+                        parseInt(
+                            paymentInput.value
+                        );
+
+
+                    if (
+                        isNaN(
+                            paymentQuantity
+                        )
+                    ) {
+
+                        paymentQuantity =
+                            1;
+
+                    }
+
+
+                    if (
+                        paymentQuantity <
+                        1
+                    ) {
+
+                        paymentInput.value =
+                            1;
+
+                    }
+
+
+                    if (
+                        paymentQuantity >
+                        currentCartQuantity
+                    ) {
+
+                        paymentInput.value =
+                            currentCartQuantity;
+
+                    }
+
+                }
+
+
+                const topMinus =
+                    card.querySelector(
+                        ".quantity-decrease-button"
+                    );
+
+
+                const topPlus =
+                    card.querySelector(
+                        ".quantity-increase-button"
+                    );
+
+
+                if (topMinus) {
+
+                    topMinus.disabled =
+                        false;
+
+                }
+
+
+                if (topPlus) {
+
+                    topPlus.disabled =
+                        false;
+
+                }
+
+
+                const paymentMinus =
+                    card.querySelector(
+                        ".payment-minus"
+                    );
+
+
+                const paymentPlus =
+                    card.querySelector(
+                        ".payment-plus"
+                    );
+
+
+                if (paymentMinus) {
+
+                    paymentMinus.disabled =
+                        false;
+
+                }
+
+
+                if (paymentPlus) {
+
+                    paymentPlus.disabled =
+                        false;
+
+                }
+
+            }
+
+
+            /* =====================================================
+               AJAX FORM
+               ===================================================== */
+
+            async function submitAjaxForm(form) {
+
+                const response =
+                    await fetch(
+                        form.action,
+                        {
+                            method: "POST",
+                            body: new FormData(form),
+                            headers: {
+                                "X-Requested-With":
+                                    "XMLHttpRequest"
+                            }
+                        }
+                    );
+
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        "Request failed"
+                    );
+
+                }
+
+
+                return response;
+
+            }
+
+
+            /* =====================================================
+               XÓA CARD KHÔNG RELOAD
+               ===================================================== */
+
+            function animateRemoveCard(card) {
+
+                if (!card) {
+                    return;
+                }
+
+
+                const height =
+                    card.offsetHeight;
+
+
+                card.style.maxHeight =
+                    height + "px";
+
+
+                card.offsetHeight;
+
+
+                card.classList.add(
+                    "removing"
+                );
+
+
+                setTimeout(
+                    function() {
+
+                        card.remove();
+
+                        bindCheckboxes();
+
+                        updateCartSummary();
+
+
+                        const remainingCards =
+                            document.querySelectorAll(
+                                ".cart-item-card"
+                            );
+
+
+                        if (
+                            remainingCards.length ===
+                            0
+                        ) {
+
+                            const container =
+                                document.getElementById(
+                                    "cartItemsContainer"
+                                );
+
+
+                            if (container) {
+
+                                container.innerHTML =
+                                    `
+                                                    <div class="text-center py-5">
+
+                                                        <div style="font-size:70px;">
+                                                            🛒
+                                                        </div>
+
+                                                        <h4 class="mt-3">
+                                                            Giỏ hàng đang trống
+                                                        </h4>
+
+                                                        <p class="text-muted">
+                                                            Bạn chưa có sản phẩm nào trong giỏ hàng.
+                                                        </p>
+
+                                                        <a href="/Home/Index"
+                                                           class="btn btn-success mt-2">
+
+                                                            Xem sản phẩm
+
+                                                        </a>
+
+                                                    </div>
+                                                    `;
+
+                            }
+
+
+                            const deleteAllForm =
+                                document.getElementById(
+                                    "deleteAllCartForm"
+                                );
+
+
+                            if (deleteAllForm) {
+
+                                deleteAllForm.style.display =
+                                    "none";
+
+                            }
+
+                        }
+
+                    },
+                    320
+                );
+
+            }
+
+
+            /* =====================================================
+               TĂNG / GIẢM SỐ LƯỢNG TRONG GIỎ
+               ===================================================== */
+
+            function bindQuantityForms() {
+
+                document
+                    .querySelectorAll(
+                        ".cart-quantity-form"
+                    )
+                    .forEach(
+                        function(form) {
+
+                            if (
+                                form.dataset.bound ===
+                                "true"
+                            ) {
+
+                                return;
+
+                            }
+
+
+                            form.dataset.bound =
+                                "true";
+
+
+                            form.addEventListener(
+                                "submit",
+                                async function(event) {
+
+                                    event.preventDefault();
+
+
+                                    const card =
+                                        form.closest(
+                                            ".cart-item-card"
+                                        );
+
+
+                                    if (!card) {
+
+                                        return;
+
+                                    }
+
+
+                                    const isIncrease =
+                                        form.querySelector(
+                                            ".quantity-increase-button"
+                                        ) !== null;
+
+
+                                    const isDecrease =
+                                        form.querySelector(
+                                            ".quantity-decrease-button"
+                                        ) !== null;
+
+
+                                    const bookName =
+                                        card.dataset.bookName ||
+                                        "Sản phẩm";
+
+
+                                    const quantityElement =
+                                        card.querySelector(
+                                            ".cart-current-quantity"
+                                        );
+
+
+                                    let currentQuantity =
+                                        parseInt(
+                                            quantityElement?.innerText
+                                        );
+
+
+                                    if (
+                                        isNaN(
+                                            currentQuantity
+                                        )
+                                    ) {
+
+                                        currentQuantity =
+                                            0;
+
+                                    }
+
+
+                                    const maxQuantity =
+                                        parseInt(
+                                            card.dataset.max
+                                        ) || 0;
+
+
+                                    /* =================================
+                                       TĂNG
+                                       ================================= */
+
+                                    if (isIncrease) {
+
+                                        if (
+                                            maxQuantity <= 0
+                                        ) {
+
+                                            showCartNotification(
+                                                'Sản phẩm "' +
+                                                bookName +
+                                                '" đã hết hàng',
+                                                "danger"
+                                            );
+
+                                            return;
+
+                                        }
+
+
+                                        if (
+                                            currentQuantity >=
+                                            maxQuantity
+                                        ) {
+
+                                            showCartNotification(
+                                                'Sản phẩm "' +
+                                                bookName +
+                                                '" đã đạt đến giới hạn tồn kho',
+                                                "warning"
+                                            );
+
+                                            return;
+
+                                        }
+
+                                    }
+
+
+                                    /* =================================
+                                       GIẢM
+                                       ================================= */
+
+                                    if (isDecrease) {
+
+                                        if (
+                                            currentQuantity <=
+                                            1
+                                        ) {
+
+                                            const deleteForm =
+                                                card.querySelector(
+                                                    ".delete-cart-form"
+                                                );
+
+
+                                            if (!deleteForm) {
+
+                                                return;
+
+                                            }
+
+
+                                            const deleteButton =
+                                                deleteForm.querySelector(
+                                                    "button"
+                                                );
+
+
+                                            if (deleteButton) {
+
+                                                deleteButton.disabled =
+                                                    true;
+
+                                            }
+
+
+                                            try {
+
+                                                await submitAjaxForm(
+                                                    deleteForm
+                                                );
+
+
+                                                animateRemoveCard(
+                                                    card
+                                                );
+
+                                            }
+                                            catch (error) {
+
+                                                console.error(
+                                                    error
+                                                );
+
+
+                                                if (deleteButton) {
+
+                                                    deleteButton.disabled =
+                                                        false;
+
+                                                }
+
+
+                                                showCartNotification(
+                                                    "Không thể xóa sản phẩm.",
+                                                    "danger"
+                                                );
+
+                                            }
+
+
+                                            return;
+
+                                        }
+
+                                    }
+
+
+                                    const button =
+                                        form.querySelector(
+                                            "button"
+                                        );
+
+
+                                    if (button) {
+
+                                        button.disabled =
+                                            true;
+
+                                    }
+
+
+                                    try {
+
+                                        await submitAjaxForm(
+                                            form
+                                        );
+
+
+                                        let newQuantity =
+                                            currentQuantity;
+
+
+                                        if (isIncrease) {
+
+                                            newQuantity =
+                                                currentQuantity + 1;
+
+                                        }
+
+
+                                        if (isDecrease) {
+
+                                            newQuantity =
+                                                currentQuantity - 1;
+
+                                        }
+
+
+                                        if (
+                                            maxQuantity > 0 &&
+                                            newQuantity >
+                                            maxQuantity
+                                        ) {
+
+                                            newQuantity =
+                                                maxQuantity;
+
+                                        }
+
+
+                                        if (
+                                            newQuantity <
+                                            1
+                                        ) {
+
+                                            newQuantity =
+                                                1;
+
+                                        }
+
+
+                                        updateCardQuantity(
+                                            card,
+                                            newQuantity,
+                                            maxQuantity
+                                        );
+
+                                    }
+                                    catch (error) {
+
+                                        console.error(
+                                            error
+                                        );
+
+
+                                        showCartNotification(
+                                            "Không thể cập nhật số lượng sản phẩm.",
+                                            "danger"
+                                        );
+
+                                    }
+                                    finally {
+
+                                        if (button) {
+
+                                            button.disabled =
+                                                false;
+
+                                        }
+
+                                    }
+
+                                }
+                            );
+
+                        }
+                    );
+
+            }
+
+
+            /* =====================================================
+               NÚT + / - SỐ LƯỢNG THANH TOÁN
+               ===================================================== */
+
+            function bindPaymentQuantityControls() {
+
+                document
+                    .querySelectorAll(
+                        ".payment-quantity-control"
+                    )
+                    .forEach(
+                        function(control) {
+
+                            if (
+                                control.dataset.bound ===
+                                "true"
+                            ) {
+
+                                return;
+
+                            }
+
+
+                            control.dataset.bound =
+                                "true";
+
+
+                            const input =
+                                control.querySelector(
+                                    ".payment-quantity"
+                                );
+
+
+                            const minusButton =
+                                control.querySelector(
+                                    ".payment-minus"
+                                );
+
+
+                            const plusButton =
+                                control.querySelector(
+                                    ".payment-plus"
+                                );
+
+
+                            if (
+                                !input ||
+                                !minusButton ||
+                                !plusButton
+                            ) {
+
+                                return;
+
+                            }
+
+
+                            const card =
+                                control.closest(
+                                    ".cart-item-card"
+                                );
+
+
+                            /* =================================
+                               GIẢM
+                               ================================= */
+
+                            minusButton.addEventListener(
+                                "click",
+                                function() {
+
+                                    if (
+                                        minusButton.disabled
+                                    ) {
+
+                                        return;
+
+                                    }
+
+
+                                    let value =
+                                        parseInt(
+                                            input.value
+                                        );
+
+
+                                    if (
+                                        isNaN(value)
+                                    ) {
+
+                                        value =
+                                            1;
+
+                                    }
+
+
+                                    const min =
+                                        parseInt(
+                                            input.min
+                                        );
+
+
+                                    if (
+                                        !isNaN(min) &&
+                                        value >
+                                        min
+                                    ) {
+
+                                        value--;
+
+                                    }
+
+
+                                    input.value =
+                                        value;
+
+
+                                    updateCartSummary();
+
+                                }
+                            );
+
+
+                            /* =================================
+                               TĂNG
+                               ================================= */
+
+                            plusButton.addEventListener(
+                                "click",
+                                function() {
+
+                                    if (
+                                        plusButton.disabled
+                                    ) {
+
+                                        return;
+
+                                    }
+
+
+                                    let value =
+                                        parseInt(
+                                            input.value
+                                        );
+
+
+                                    if (
+                                        isNaN(value)
+                                    ) {
+
+                                        value =
+                                            1;
+
+                                    }
+
+
+                                    const max =
+                                        parseInt(
+                                            input.max
+                                        );
+
+
+                                    if (
+                                        isNaN(max) ||
+                                        max <= 0
+                                    ) {
+
+                                        return;
+
+                                    }
+
+
+                                    if (
+                                        value >=
+                                        max
+                                    ) {
+
+                                        return;
+
+                                    }
+
+
+                                    value++;
+
+
+                                    if (
+                                        value >
+                                        max
+                                    ) {
+
+                                        value =
+                                            max;
+
+                                    }
+
+
+                                    input.value =
+                                        value;
+
+
+                                    updateCartSummary();
+
+                                }
+                            );
+
+
+                            /* =================================
+                               NHẬP TRỰC TIẾP
+                               ================================= */
+
+                            input.addEventListener(
+                                "input",
+                                function() {
+
+                                    const stock =
+                                        parseInt(
+                                            card?.dataset.max
+                                        ) || 0;
+
+
+                                    if (
+                                        stock <= 0
+                                    ) {
+
+                                        input.min =
+                                            0;
+
+                                        input.max =
+                                            0;
+
+                                        input.value =
+                                            0;
+
+                                        updateCartSummary();
+
+                                        return;
+
+                                    }
+
+
+                                    let value =
+                                        parseInt(
+                                            input.value
+                                        );
+
+
+                                    if (
+                                        isNaN(value)
+                                    ) {
+
+                                        value =
+                                            1;
+
+                                    }
+
+
+                                    const min =
+                                        parseInt(
+                                            input.min
+                                        ) || 1;
+
+
+                                    const max =
+                                        parseInt(
+                                            input.max
+                                        ) || 1;
+
+
+                                    if (
+                                        value <
+                                        min
+                                    ) {
+
+                                        value =
+                                            min;
+
+                                    }
+
+
+                                    if (
+                                        value >
+                                        max
+                                    ) {
+
+                                        value =
+                                            max;
+
+                                    }
+
+
+                                    input.value =
+                                        value;
+
+
+                                    updateCartSummary();
+
+                                }
+                            );
+
+
+                            input.addEventListener(
+                                "change",
+                                function() {
+
+                                    const stock =
+                                        parseInt(
+                                            card?.dataset.max
+                                        ) || 0;
+
+
+                                    if (
+                                        stock <= 0
+                                    ) {
+
+                                        input.min =
+                                            0;
+
+                                        input.max =
+                                            0;
+
+                                        input.value =
+                                            0;
+
+                                        updateCartSummary();
+
+                                        return;
+
+                                    }
+
+
+                                    let value =
+                                        parseInt(
+                                            input.value
+                                        );
+
+
+                                    if (
+                                        isNaN(value)
+                                    ) {
+
+                                        value =
+                                            1;
+
+                                    }
+
+
+                                    const min =
+                                        parseInt(
+                                            input.min
+                                        ) || 1;
+
+
+                                    const max =
+                                        parseInt(
+                                            input.max
+                                        ) || 1;
+
+
+                                    if (
+                                        value <
+                                        min
+                                    ) {
+
+                                        value =
+                                            min;
+
+                                    }
+
+
+                                    if (
+                                        value >
+                                        max
+                                    ) {
+
+                                        value =
+                                            max;
+
+                                    }
+
+
+                                    input.value =
+                                        value;
+
+
+                                    updateCartSummary();
+
+                                }
+                            );
+
+                        }
+                    );
+
+            }
+
+
+            /* =====================================================
+               XÓA TỪNG SẢN PHẨM
+               ===================================================== */
+
+            function bindDeleteForms() {
+
+                document
+                    .querySelectorAll(
+                        ".delete-cart-form"
+                    )
+                    .forEach(
+                        function(form) {
+
+                            if (
+                                form.dataset.bound ===
+                                "true"
+                            ) {
+
+                                return;
+
+                            }
+
+
+                            form.dataset.bound =
+                                "true";
+
+
+                            form.addEventListener(
+                                "submit",
+                                async function(event) {
+
+                                    event.preventDefault();
+
+
+                                    const card =
+                                        form.closest(
+                                            ".cart-item-card"
+                                        );
+
+
+                                    if (!card) {
+
+                                        return;
+
+                                    }
+
+
+                                    const button =
+                                        form.querySelector(
+                                            "button"
+                                        );
+
+
+                                    if (button) {
+
+                                        button.disabled =
+                                            true;
+
+                                    }
+
+
+                                    try {
+
+                                        await submitAjaxForm(
+                                            form
+                                        );
+
+
+                                        animateRemoveCard(
+                                            card
+                                        );
+
+                                    }
+                                    catch (error) {
+
+                                        console.error(
+                                            error
+                                        );
+
+
+                                        if (button) {
+
+                                            button.disabled =
+                                                false;
+
+                                        }
+
+
+                                        showCartNotification(
+                                            "Không thể xóa sản phẩm.",
+                                            "danger"
+                                        );
+
+                                    }
+
+                                }
+                            );
+
+                        }
+                    );
+
+            }
+
+
+            /* =====================================================
+               XÓA TOÀN BỘ
+               ===================================================== */
+
+            const deleteAllForm =
+                document.getElementById(
+                    "deleteAllCartForm"
+                );
+
+
+            if (deleteAllForm) {
+
+                deleteAllForm.addEventListener(
+                    "submit",
+                    async function(event) {
+
+                        event.preventDefault();
+
+
+                        const confirmed =
+                            confirm(
+                                "Bạn có chắc muốn xóa toàn bộ giỏ hàng?"
+                            );
+
+
+                        if (!confirmed) {
+
+                            return;
+
+                        }
+
+
+                        const button =
+                            deleteAllForm.querySelector(
+                                "button"
+                            );
+
+
+                        if (button) {
+
+                            button.disabled =
+                                true;
+
+                        }
+
+
+                        try {
+
+                            await submitAjaxForm(
+                                deleteAllForm
+                            );
+
+
+                            const cards =
+                                document.querySelectorAll(
+                                    ".cart-item-card"
+                                );
+
+
+                            cards.forEach(
+                                function(card) {
+
+                                    const height =
+                                        card.offsetHeight;
+
+
+                                    card.style.maxHeight =
+                                        height + "px";
+
+
+                                    card.offsetHeight;
+
+
+                                    card.classList.add(
+                                        "removing"
+                                    );
+
+                                }
+                            );
+
+
+                            setTimeout(
+                                function() {
+
+                                    const container =
+                                        document.getElementById(
+                                            "cartItemsContainer"
+                                        );
+
+
+                                    if (container) {
+
+                                        container.innerHTML =
+                                            `
+                                                            <div class="text-center py-5"
+                                                                 id="emptyCartMessage">
+
+                                                                <div style="font-size:70px;">
+                                                                    🛒
+                                                                </div>
+
+                                                                <h4 class="mt-3">
+                                                                    Giỏ hàng đang trống
+                                                                </h4>
+
+                                                                <p class="text-muted">
+                                                                    Bạn chưa có sản phẩm nào trong giỏ hàng.
+                                                                </p>
+
+                                                                <a href="/Home/Index"
+                                                                   class="btn btn-success mt-2">
+
+                                                                    Xem sản phẩm
+
+                                                                </a>
+
+                                                            </div>
+                                                            `;
+
+                                    }
+
+
+                                    deleteAllForm.style.display =
+                                        "none";
+
+
+                                    if (selectAll) {
+
+                                        selectAll.checked =
+                                            false;
+
+                                    }
+
+
+                                    if (selectedQuantity) {
+
+                                        selectedQuantity.innerText =
+                                            "0";
+
+                                    }
+
+
+                                    if (selectedTotal) {
+
+                                        selectedTotal.innerText =
+                                            "0 đ";
+
+                                    }
+
+
+                                    if (selectedInfo) {
+
+                                        selectedInfo.innerText =
+                                            "Chưa chọn sản phẩm";
+
+                                    }
+
+
+                                    if (checkoutButton) {
+
+                                        checkoutButton.disabled =
+                                            true;
+
+                                    }
+
+
+                                    if (checkoutItems) {
+
+                                        checkoutItems.innerHTML =
+                                            "";
+
+                                    }
+
+                                },
+                                320
+                            );
+
+                        }
+                        catch (error) {
+
+                            console.error(
+                                error
+                            );
+
+
+                            if (button) {
+
+                                button.disabled =
+                                    false;
+
+                            }
+
+
+                            showCartNotification(
+                                "Không thể xóa toàn bộ giỏ hàng.",
+                                "danger"
+                            );
+
+                        }
+
+                    }
+                );
+
+            }
+
+
+            /* =====================================================
+               CHỌN TẤT CẢ
+               ===================================================== */
+
+            if (selectAll) {
+
+                selectAll.addEventListener(
+                    "change",
+                    function() {
+
+                        getProductChecks().forEach(
+                            function(checkbox) {
+
+                                checkbox.checked =
+                                    selectAll.checked;
+
+                            }
+                        );
+
+
+                        updateCartSummary();
+
+                    }
+                );
+
+            }
+
+
+            /* =====================================================
+               KIỂM TRA TỒN KHO MỚI NHẤT
+               ===================================================== */
+
+            async function getFreshStockSnapshot() {
+
+                try {
+
+                    const response =
+                        await fetch(
+                            window.location.href,
+                            {
+                                method: "GET",
+                                cache: "no-store",
+                                headers: {
+                                    "X-Requested-With":
+                                        "XMLHttpRequest"
+                                }
+                            }
+                        );
+
+
+                    if (!response.ok) {
+
+                        throw new Error(
+                            "Không thể kiểm tra tồn kho."
+                        );
+
+                    }
+
+
+                    const html =
+                        await response.text();
+
+
+                    const parser =
+                        new DOMParser();
+
+
+                    const doc =
+                        parser.parseFromString(
+                            html,
+                            "text/html"
+                        );
+
+
+                    const freshCards =
+                        doc.querySelectorAll(
+                            ".cart-item-card"
+                        );
+
+
+                    const stockMap =
+                        new Map();
+
+
+                    freshCards.forEach(
+                        function(card) {
+
+                            const maSach =
+                                card.dataset.maSach;
+
+
+                            const bookName =
+                                card.dataset.bookName ||
+                                "Sản phẩm";
+
+
+                            const stock =
+                                parseInt(
+                                    card.dataset.max
+                                ) || 0;
+
+
+                            const cartQuantityElement =
+                                card.querySelector(
+                                    ".cart-current-quantity"
+                                );
+
+
+                            const cartQuantity =
+                                parseInt(
+                                    cartQuantityElement?.innerText
+                                ) || 0;
+
+
+                            if (maSach) {
+
+                                stockMap.set(
+                                    String(maSach),
+                                    {
+                                        stock: stock,
+                                        bookName: bookName,
+                                        cartQuantity: cartQuantity
+                                    }
+                                );
+
+                            }
+
+                        }
+                    );
+
+
+                    return stockMap;
+
+                }
+                catch (error) {
+
+                    console.error(
+                        error
+                    );
+
+
+                    showCartNotification(
+                        "Không thể kiểm tra số lượng sản phẩm trong kho.",
+                        "danger"
+                    );
+
+
+                    return null;
+
+                }
+
+            }
+
+
+            /* =====================================================
+               THANH TOÁN
+               ===================================================== */
+
+            const checkoutForm =
+                document.getElementById(
+                    "checkoutForm"
+                );
+
+
+            if (checkoutForm) {
+
+                checkoutForm.addEventListener(
+                    "submit",
+                    async function(event) {
+
+                        event.preventDefault();
+
+
+                        if (checkoutButton) {
+
+                            checkoutButton.disabled =
+                                true;
+
+                        }
+
+
+                        checkoutItems.innerHTML =
+                            "";
+
+
+                        let hasSelected =
+                            false;
+
+
+                        getProductChecks().forEach(
+                            function(checkbox) {
+
+                                if (
+                                    checkbox.checked
+                                ) {
+
+                                    hasSelected =
+                                        true;
+
+                                }
+
+                            }
+                        );
+
+
+                        if (!hasSelected) {
+
+                            showCartNotification(
+                                "Vui lòng chọn ít nhất một sản phẩm để thanh toán.",
+                                "danger"
+                            );
+
+
+                            if (checkoutButton) {
+
+                                checkoutButton.disabled =
+                                    false;
+
+                            }
+
+
+                            return;
+
+                        }
+
+
+                        const freshStockMap =
+                            await getFreshStockSnapshot();
+
+
+                        if (!freshStockMap) {
+
+                            if (checkoutButton) {
+
+                                checkoutButton.disabled =
+                                    false;
+
+                            }
+
+
+                            return;
+
+                        }
+
+
+                        const selectedCheckoutItems =
+                            [];
+
+
+                        let hasStockChanged =
+                            false;
+
+
+                        let hasOutOfStock =
+                            false;
+
+
+                        getProductChecks().forEach(
+                            function(checkbox) {
+
+                                if (
+                                    !checkbox.checked
+                                ) {
+
+                                    return;
+
+                                }
+
+
+                                const card =
+                                    checkbox.closest(
+                                        ".cart-item-card"
+                                    );
+
+
+                                if (!card) {
+
+                                    return;
+
+                                }
+
+
+                                const maSach =
+                                    checkbox.dataset.maSach;
+
+
+                                const bookName =
+                                    card.dataset.bookName ||
+                                    "Sản phẩm";
+
+
+                                const freshStock =
+                                    freshStockMap.get(
+                                        String(maSach)
+                                    );
+
+
+                                if (!freshStock) {
+
+                                    hasStockChanged =
+                                        true;
+
+                                    hasOutOfStock =
+                                        true;
+
+
+                                    updateFreshStockOnCard(
+                                        card,
+                                        0,
+                                        true
+                                    );
+
+
+                                    showCartNotification(
+                                        'Sản phẩm "' +
+                                        bookName +
+                                        '" đã hết hàng',
+                                        "danger"
+                                    );
+
+
+                                    return;
+
+                                }
+
+
+                                const freshStockQuantity =
+                                    parseInt(
+                                        freshStock.stock
+                                    ) || 0;
+
+
+                                const displayedStock =
+                                    parseInt(
+                                        card.dataset.max
+                                    ) || 0;
+
+
+                                if (
+                                    displayedStock !==
+                                    freshStockQuantity
+                                ) {
+
+                                    hasStockChanged =
+                                        true;
+
+
+                                    updateFreshStockOnCard(
+                                        card,
+                                        freshStockQuantity,
+                                        true
+                                    );
+
+
+                                    if (
+                                        freshStockQuantity <= 0
+                                    ) {
+
+                                        hasOutOfStock =
+                                            true;
+
+
+                                        showCartNotification(
+                                            'Sản phẩm "' +
+                                            freshStock.bookName +
+                                            '" đã hết hàng',
+                                            "danger"
+                                        );
+
+                                    }
+                                    else {
+
+                                        showCartNotification(
+                                            'Sản phẩm "' +
+                                            freshStock.bookName +
+                                            '" vừa thay đổi số lượng hàng tồn',
+                                            "warning"
+                                        );
+
+                                    }
+
+
+                                    return;
+
+                                }
+
+
+                                updateFreshStockOnCard(
+                                    card,
+                                    freshStockQuantity,
+                                    false
+                                );
+
+
+                                const paymentInput =
+                                    card.querySelector(
+                                        ".payment-quantity"
+                                    );
+
+
+                                let soLuong =
+                                    parseInt(
+                                        paymentInput?.value
+                                    );
+
+
+                                if (
+                                    isNaN(
+                                        soLuong
+                                    )
+                                ) {
+
+                                    soLuong =
+                                        0;
+
+                                }
+
+
+                                /*
+                                 * Nếu hết hàng:
+                                 * đưa cả 2 ô về 0,
+                                 * không thanh toán.
+                                 */
+
+                                if (
+                                    freshStockQuantity <= 0
+                                ) {
+
+                                    hasOutOfStock =
+                                        true;
+
+
+                                    updateFreshStockOnCard(
+                                        card,
+                                        0,
+                                        true
+                                    );
+
+
+                                    showCartNotification(
+                                        'Sản phẩm "' +
+                                        freshStock.bookName +
+                                        '" đã hết hàng',
+                                        "danger"
+                                    );
+
+
+                                    return;
+
+                                }
+
+
+                                /*
+                                 * Nếu còn hàng,
+                                 * số lượng thanh toán tối thiểu = 1.
+                                 */
+
+                                if (
+                                    soLuong <
+                                    1
+                                ) {
+
+                                    soLuong =
+                                        1;
+
+
+                                    paymentInput.value =
+                                        1;
+
+                                }
+
+
+                                if (
+                                    soLuong >
+                                    freshStockQuantity
+                                ) {
+
+                                    hasOutOfStock =
+                                        true;
+
+
+                                    paymentInput.max =
+                                        freshStockQuantity;
+
+
+                                    paymentInput.value =
+                                        freshStockQuantity;
+
+
+                                    updateCartSummary();
+
+
+                                    showCartNotification(
+                                        'Sản phẩm "' +
+                                        freshStock.bookName +
+                                        '" đã hết hàng',
+                                        "danger"
+                                    );
+
+
+                                    return;
+
+                                }
+
+
+                                selectedCheckoutItems.push({
+                                    maSach: maSach,
+                                    soLuong: soLuong
+                                });
+
+                            }
+                        );
+
+
+                        if (hasOutOfStock) {
+
+                            updateCartSummary();
+
+
+                            if (checkoutButton) {
+
+                                checkoutButton.disabled =
+                                    false;
+
+                            }
+
+
+                            return;
+
+                        }
+
+
+                        if (hasStockChanged) {
+
+                            updateCartSummary();
+
+
+                            if (checkoutButton) {
+
+                                checkoutButton.disabled =
+                                    false;
+
+                            }
+
+
+                            return;
+
+                        }
+
+
+                        if (
+                            selectedCheckoutItems.length === 0
+                        ) {
+
+                            showCartNotification(
+                                "Vui lòng chọn ít nhất một sản phẩm để thanh toán.",
+                                "danger"
+                            );
+
+
+                            if (checkoutButton) {
+
+                                checkoutButton.disabled =
+                                    false;
+
+                            }
+
+
+                            return;
+
+                        }
+
+
+                        selectedCheckoutItems.forEach(
+                            function(item) {
+
+                                const maSachInput =
+                                    document.createElement(
+                                        "input"
+                                    );
+
+
+                                maSachInput.type =
+                                    "hidden";
+
+                                maSachInput.name =
+                                    "maSach";
+
+                                maSachInput.value =
+                                    item.maSach;
+
+
+                                checkoutItems.appendChild(
+                                    maSachInput
+                                );
+
+
+                                const soLuongInput =
+                                    document.createElement(
+                                        "input"
+                                    );
+
+
+                                soLuongInput.type =
+                                    "hidden";
+
+                                soLuongInput.name =
+                                    "soLuong";
+
+                                soLuongInput.value =
+                                    item.soLuong;
+
+
+                                checkoutItems.appendChild(
+                                    soLuongInput
+                                );
+
+                            }
+                        );
+
+
+                        checkoutForm.submit();
+
+                    }
+                );
+
+            }
+
+
+            /* =====================================================
+               KHỞI TẠO
+               ===================================================== */
+
+            bindCheckboxes();
+
+            bindQuantityForms();
+
+            bindPaymentQuantityControls();
+
+            bindDeleteForms();
+
+            updateCartSummary();
+
+
+            document
+                .querySelectorAll(
+                    ".cart-item-card"
+                )
+                .forEach(
+                    function(card) {
+
+                        const stock =
+                            parseInt(
+                                card.dataset.max
+                            ) || 0;
+
+
+                        const currentQuantity =
+                            parseInt(
+                                card.querySelector(
+                                    ".cart-current-quantity"
+                                )?.innerText
+                            );
+
+
+                        /*
+                         * Hết hàng ngay từ lúc load:
+                         * cả hai ô đều về 0.
+                         */
+
+                        if (stock <= 0) {
+
+                            updateFreshStockOnCard(
+                                card,
+                                0,
+                                true
+                            );
+
+                        }
+                        else {
+
+                            updateFreshStockOnCard(
+                                card,
+                                stock,
+                                false,
+                                isNaN(currentQuantity)
+                                    ? 1
+                                    : currentQuantity
+                            );
+
+                        }
+
+                    }
+                );
+
+        });
+
+    </script>
+
+}

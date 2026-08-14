@@ -1,0 +1,1497 @@
+﻿@model IEnumerable<ProjectKZM.Models.YeuThich>
+
+@{
+    ViewData["Title"] = "Yêu thích";
+}
+
+<style>
+
+    /* =========================================================
+               TRANG YÊU THÍCH
+               ========================================================= */
+
+    .favorite-page {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 40px 20px 60px;
+    }
+
+
+    /* =========================================================
+               HEADER
+               ========================================================= */
+
+    .favorite-title {
+        font-size: 40px;
+        font-weight: 400;
+        margin-bottom: 8px;
+        color: #222;
+    }
+
+    .favorite-subtitle {
+        color: #777;
+        margin-bottom: 30px;
+    }
+
+
+    /* =========================================================
+               GRID - 5 CARD / HÀNG
+               ========================================================= */
+
+    .favorite-grid {
+        display: grid;
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+        gap: 20px;
+        width: 100%;
+    }
+
+
+    /* =========================================================
+               CARD
+               ========================================================= */
+
+    .favorite-card {
+        height: 100%;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        background: #fff;
+        padding: 15px;
+        transition: 0.2s;
+        display: flex;
+        flex-direction: column;
+        min-width: 0;
+    }
+
+        .favorite-card:hover {
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.10);
+            transform: translateY(-2px);
+        }
+
+
+    /* =========================================================
+               KHU VỰC HÌNH
+               ========================================================= */
+
+    .favorite-image-wrapper {
+        position: relative;
+        width: 100%;
+        height: 260px;
+        margin-bottom: 15px;
+        overflow: hidden;
+        border-radius: 6px;
+        background: #f5f5f5;
+    }
+
+    .favorite-image {
+        width: 100%;
+        height: 260px;
+        object-fit: cover;
+        border-radius: 6px;
+        display: block;
+    }
+
+
+    /* =========================================================
+               OVERLAY HẾT HÀNG
+               GIỐNG HOME/INDEX
+               ========================================================= */
+
+    .favorite-out-of-stock-overlay {
+        position: absolute;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.58);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 3;
+        pointer-events: none;
+        border-radius: 6px;
+    }
+
+    .favorite-out-of-stock-text {
+        color: white;
+        font-size: 36px;
+        font-weight: 500;
+        text-align: center;
+        line-height: 1.2;
+        text-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+    }
+
+
+    /* =========================================================
+               LOẠI SÁCH
+               NHỎ HƠN MỘT CHÚT
+               ========================================================= */
+
+    .favorite-type-badge {
+        position: absolute;
+        top: 8px;
+        left: 8px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #f1f3f5;
+        border: 1px solid #ddd;
+        color: #333;
+        padding: 4px 7px;
+        border-radius: 4px;
+        font-size: 11px;
+        font-weight: 400;
+        white-space: nowrap;
+        z-index: 5;
+        text-decoration: none;
+        cursor: pointer;
+        transition: 0.2s;
+    }
+
+        .favorite-type-badge:hover {
+            background-color: #343a40;
+            border-color: #343a40;
+            color: white;
+            text-decoration: none;
+            transform: translateY(-1px);
+        }
+
+
+    /* =========================================================
+               TÊN SÁCH
+               ========================================================= */
+
+    .favorite-name {
+        font-size: 18px;
+        font-weight: 500;
+        color: #222;
+        margin-bottom: 8px;
+        min-height: 44px;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+
+    /* =========================================================
+               TÁC GIẢ
+               ========================================================= */
+
+    .favorite-author {
+        font-size: 14px;
+        color: #777;
+        margin-bottom: 8px;
+        min-height: 21px;
+    }
+
+
+    /* =========================================================
+               THỂ LOẠI
+               NHỎ HƠN MỘT CHÚT
+               ========================================================= */
+
+    .favorite-categories {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 4px;
+        margin-bottom: 10px;
+        min-height: 28px;
+    }
+
+    .favorite-category-badge {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 4px 7px;
+        background-color: #f1f3f5;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        font-size: 11px;
+        color: #333;
+        white-space: nowrap;
+        text-decoration: none;
+        cursor: pointer;
+        transition: 0.2s;
+    }
+
+        .favorite-category-badge:hover {
+            background-color: #343a40;
+            border-color: #343a40;
+            color: white;
+            text-decoration: none;
+            transform: translateY(-1px);
+        }
+
+    .favorite-no-category {
+        font-size: 14px;
+        color: #999;
+    }
+
+
+    /* =========================================================
+               GIÁ
+               ========================================================= */
+
+    .favorite-price {
+        font-size: 18px;
+        font-weight: 600;
+        color: #dc3545;
+        margin-bottom: 8px;
+    }
+
+
+    /* =========================================================
+               TÌNH TRẠNG
+               ========================================================= */
+
+    .favorite-stock {
+        font-size: 14px;
+        margin-bottom: 15px;
+    }
+
+        .favorite-stock.available {
+            color: #198754;
+        }
+
+        .favorite-stock.out-of-stock {
+            color: #dc3545;
+        }
+
+
+    /* =========================================================
+               2 BUTTON
+               GIỐNG HOME
+               ========================================================= */
+
+    .favorite-actions {
+        display: flex;
+        width: 100%;
+        gap: 8px;
+        margin-top: auto;
+        margin-bottom: 10px;
+        min-width: 0;
+    }
+
+
+    /* =========================================================
+               BUTTON XEM SÁCH
+               HẸP HƠN
+               ========================================================= */
+
+    .favorite-view-button {
+        flex: 0 0 32%;
+        min-width: 0;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #6c757d;
+        color: #fff;
+        border: none;
+        border-radius: 6px;
+        text-decoration: none;
+        font-size: 14px;
+        font-weight: 400;
+        padding: 6px 3px;
+        transition: 0.2s;
+        white-space: nowrap;
+        overflow: hidden;
+    }
+
+        .favorite-view-button:hover {
+            background: #5c636a;
+            border-color: #5c636a;
+            color: #fff;
+            text-decoration: none;
+            transform: translateY(-1px);
+        }
+
+
+    /* =========================================================
+               FORM GIỎ HÀNG
+               ========================================================= */
+
+    .favorite-cart-form {
+        flex: 1 1 auto;
+        width: 68%;
+        margin: 0;
+        min-width: 0;
+    }
+
+
+    /* =========================================================
+               BUTTON GIỎ HÀNG
+               GIỐNG HOME
+               ========================================================= */
+
+    .favorite-cart-button {
+        width: 100%;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 3px;
+        background: #212529;
+        color: #fff;
+        border: none;
+        border-radius: 6px;
+        padding: 6px 3px;
+        font-size: 14px;
+        font-weight: 400;
+        transition: 0.2s;
+        cursor: pointer;
+        white-space: nowrap;
+        overflow: hidden;
+    }
+
+        .favorite-cart-button:hover {
+            background: #000;
+            border-color: #000;
+            color: #fff;
+        }
+
+        .favorite-cart-button:active {
+            transform: translateY(0);
+        }
+
+
+        /* =========================================================
+               KHI ĐÃ THÊM VÀO GIỎ
+               MÀU XANH GIỐNG HOME
+               ========================================================= */
+
+        .favorite-cart-button.cart-added {
+            background: #198754 !important;
+            border-color: #198754 !important;
+            color: #fff !important;
+        }
+
+
+    /* =========================================================
+               HẾT HÀNG
+               ========================================================= */
+
+    .favorite-out-of-stock-button {
+        flex: 1;
+        min-width: 0;
+        height: 40px;
+        background: #adb5bd;
+        color: #fff;
+        border: none;
+        border-radius: 6px;
+        padding: 6px 5px;
+        font-size: 14px;
+        cursor: not-allowed;
+        white-space: nowrap;
+    }
+
+
+    /* =========================================================
+               XÓA YÊU THÍCH
+               ========================================================= */
+
+    .favorite-remove-form {
+        width: 100%;
+        margin: 0;
+    }
+
+    .favorite-remove-button {
+        width: 100%;
+        transition: 0.2s;
+    }
+
+        .favorite-remove-button:hover {
+            transform: translateY(-1px);
+        }
+
+
+    /* =========================================================
+               THÔNG BÁO
+               GIỐNG HOME
+               ========================================================= */
+
+    .favorite-notification {
+        position: fixed;
+        top: 25px;
+        right: 25px;
+        z-index: 9999;
+        background: #198754;
+        color: white;
+        padding: 14px 22px;
+        border-radius: 7px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        display: none;
+        font-size: 15px;
+        font-weight: 400;
+        white-space: nowrap;
+        width: auto;
+        max-width: none;
+        line-height: 1.4;
+        overflow: visible;
+    }
+
+
+    /* =========================================================
+               GIỎ HÀNG TRỐNG
+               ========================================================= */
+
+    .favorite-empty {
+        text-align: center;
+        padding: 80px 20px;
+    }
+
+    .favorite-empty-icon {
+        font-size: 70px;
+        margin-bottom: 15px;
+    }
+
+
+    /* =========================================================
+               RESPONSIVE
+               ========================================================= */
+
+    @@media (max-width: 1200px) {
+
+        .favorite-grid {
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+        }
+    }
+
+
+    @@media (max-width: 992px) {
+
+        .favorite-grid {
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+        }
+    }
+
+
+    @@media (max-width: 767px) {
+
+        .favorite-page {
+            padding: 30px 15px 50px;
+        }
+
+        .favorite-title {
+            font-size: 32px;
+        }
+
+        .favorite-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 15px;
+        }
+
+        .favorite-image-wrapper {
+            height: 300px;
+        }
+
+        .favorite-image {
+            height: 300px;
+        }
+
+        .favorite-actions {
+            gap: 6px;
+        }
+
+        .favorite-view-button {
+            flex: 0 0 32%;
+            font-size: 13px;
+        }
+
+        .favorite-cart-form {
+            width: 68%;
+        }
+
+        .favorite-cart-button {
+            font-size: 13px;
+        }
+
+        .favorite-out-of-stock-text {
+            font-size: 36px;
+        }
+    }
+
+
+    @@media (max-width: 500px) {
+
+        .favorite-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .favorite-notification {
+            right: 15px;
+            left: 15px;
+            width: auto;
+            text-align: center;
+            white-space: nowrap;
+            font-size: 14px;
+        }
+
+        .favorite-out-of-stock-text {
+            font-size: 36px;
+        }
+    }
+
+</style>
+
+
+<div class="favorite-page">
+
+    <!-- =========================================================
+         HEADER
+         ========================================================= -->
+
+    <h1 class="favorite-title">
+        ❤️ Yêu thích
+    </h1>
+
+    <p class="favorite-subtitle">
+        Danh sách những sản phẩm bạn yêu thích
+    </p>
+
+
+    <!-- =========================================================
+         DANH SÁCH
+         ========================================================= -->
+    @if (Model == null || !Model.Any())
+    {
+
+        <div class="favorite-empty">
+
+            <div class="favorite-empty-icon">
+                ❤️
+            </div>
+
+            <h4>
+                Chưa có sản phẩm yêu thích
+            </h4>
+
+            <p class="text-muted">
+                Bạn chưa thêm sản phẩm nào vào danh sách yêu thích.
+            </p>
+
+            <a asp-controller="Home"
+               asp-action="Index"
+               class="btn btn-success">
+
+                Xem sản phẩm
+
+            </a>
+
+        </div>
+
+    }
+    else
+    {
+
+        <!-- =====================================================
+             GRID
+             ===================================================== -->
+
+        <div class="favorite-grid">
+
+            @foreach (var item in Model)
+            {
+
+                <div class="favorite-card">
+
+
+                    <!-- =================================================
+                         HÌNH + LOẠI SÁCH
+                         ================================================= -->
+
+                    <div class="favorite-image-wrapper">
+
+
+                        <!-- =================================================
+                             LOẠI SÁCH
+                             ================================================= -->
+                        @if (item.Sach?.LoaiSach != null)
+                        {
+
+                            <a asp-controller="Home"
+                               asp-action="Index"
+                               asp-route-loaiSachIds="@item.Sach.MaLoaiSach"
+                               class="favorite-type-badge">
+
+                                @item.Sach.LoaiSach.TenLoaiSach
+
+                            </a>
+
+                        }
+
+
+                        <!-- =================================================
+                             HÌNH ẢNH
+                             ================================================= -->
+                        @if (item.Sach != null &&
+                                                     !string.IsNullOrEmpty(item.Sach.Hinh))
+                        {
+
+                            <img src="@item.Sach.Hinh"
+                                 class="favorite-image"
+                                 alt="@item.Sach.TenSach" />
+
+                        }
+                        else
+                        {
+
+                            <div class="favorite-image
+                                d-flex
+                                align-items-center
+                                justify-content-center
+                                bg-light">
+
+                                Không có ảnh
+
+                            </div>
+
+                        }
+
+
+                        <!-- =================================================
+                             OVERLAY HẾT HÀNG
+                             GIỐNG HOME/INDEX
+                             ================================================= -->
+                        @if (item.Sach != null &&
+                                                     item.Sach.SoLuong <= 0)
+                        {
+
+                            <div class="favorite-out-of-stock-overlay">
+
+                                <div class="favorite-out-of-stock-text">
+                                    Hết Hàng
+                                </div>
+
+                            </div>
+
+                        }
+
+                    </div>
+
+
+                    <!-- =================================================
+                         TÊN SÁCH
+                         ================================================= -->
+
+                    <div class="favorite-name">
+
+                        @(item.Sach?.TenSach ?? "Sản phẩm")
+
+                    </div>
+
+
+                    <!-- =================================================
+                         TÁC GIẢ
+                         ================================================= -->
+
+                    <div class="favorite-author">
+
+                        @if (item.Sach != null &&
+                             !string.IsNullOrEmpty(item.Sach.TacGia))
+                        {
+
+                            <span>
+                                Tác giả:
+                                @item.Sach.TacGia
+                            </span>
+
+                        }
+                        else
+                        {
+
+                            <span>
+                                Tác giả: Chưa cập nhật
+                            </span>
+
+                        }
+
+                    </div>
+
+
+                    <!-- =================================================
+                         THỂ LOẠI
+                         ================================================= -->
+
+                    <div class="favorite-categories">
+
+                        @if (item.Sach != null &&
+                             item.Sach.SachTheLoais != null &&
+                             item.Sach.SachTheLoais.Any())
+                        {
+
+                            @foreach (var sachTheLoai in item.Sach.SachTheLoais)
+                            {
+
+                                @if (sachTheLoai.TheLoai != null)
+                                {
+
+                                    <a asp-controller="Home"
+                                       asp-action="Index"
+                                       asp-route-theLoaiIds="@sachTheLoai.MaTheLoai"
+                                       class="favorite-category-badge">
+
+                                        @sachTheLoai.TheLoai.TenTheLoai
+
+                                    </a>
+
+                                }
+
+                            }
+
+                        }
+                        else
+                        {
+
+                            <span class="favorite-no-category">
+                                Chưa cập nhật
+                            </span>
+
+                        }
+
+                    </div>
+
+
+                    <!-- =================================================
+                         GIÁ
+                         ================================================= -->
+                    @if (item.Sach != null)
+                    {
+
+                        <div class="favorite-price">
+
+                            @item.Sach.Gia.ToString("N0") đ
+
+                        </div>
+
+                    }
+                    else
+                    {
+
+                        <div class="favorite-price">
+                            0 đ
+                        </div>
+
+                    }
+
+
+                    <!-- =================================================
+                         TÌNH TRẠNG
+                         ================================================= -->
+                    @if (item.Sach != null)
+                    {
+
+                        @if (item.Sach.SoLuong > 0)
+                        {
+
+                            <div class="favorite-stock available">
+                                Còn hàng
+                            </div>
+
+                        }
+                        else
+                        {
+
+                            <div class="favorite-stock out-of-stock">
+                                Hết hàng
+                            </div>
+
+                        }
+
+                    }
+                    else
+                    {
+
+                        <div class="favorite-stock out-of-stock">
+                            Sản phẩm không tồn tại
+                        </div>
+
+                    }
+
+
+                    <!-- =================================================
+                         BUTTON
+                         ================================================= -->
+
+                    <div class="favorite-actions">
+
+
+                        <!-- =================================================
+                             XEM SÁCH
+                             ================================================= -->
+
+                        <a asp-controller="Sachs"
+                           asp-action="Details"
+                           asp-route-id="@item.MaSach"
+                           class="favorite-view-button">
+
+                            Xem sách
+
+                        </a>
+
+
+                        <!-- =================================================
+                             GIỎ HÀNG
+                             ================================================= -->
+                        @if (item.Sach != null &&
+                                                                             item.Sach.SoLuong > 0)
+                        {
+
+                            <form asp-controller="GioHangs"
+                                  asp-action="Them"
+                                  method="post"
+                                  class="favorite-cart-form add-cart-form">
+
+                                @Html.AntiForgeryToken()
+
+                                <input type="hidden"
+                                       name="maSach"
+                                       value="@item.MaSach" />
+
+                                <input type="hidden"
+                                       name="soLuong"
+                                       value="1" />
+
+                                <button type="submit"
+                                        class="favorite-cart-button">
+
+                                    🛒 Bỏ vào giỏ hàng
+
+                                </button>
+
+                            </form>
+
+                        }
+                        else
+                        {
+
+                            <button type="button"
+                                    class="favorite-out-of-stock-button"
+                                    disabled>
+
+                                Hết hàng
+
+                            </button>
+
+                        }
+
+                    </div>
+
+
+                    <!-- =================================================
+                         XÓA YÊU THÍCH
+                         ================================================= -->
+
+                    <form asp-controller="YeuThichs"
+                          asp-action="Xoa"
+                          method="post"
+                          class="favorite-remove-form">
+
+                        @Html.AntiForgeryToken()
+
+                        <input type="hidden"
+                               name="maSach"
+                               value="@item.MaSach" />
+
+                        <button type="submit"
+                                class="btn btn-outline-danger favorite-remove-button">
+
+                            🗑 Xóa yêu thích
+
+                        </button>
+
+                    </form>
+
+
+                </div>
+
+            }
+
+        </div>
+
+    }
+
+</div>
+
+
+<!-- =========================================================
+     THÔNG BÁO
+     ========================================================= -->
+
+<div id="favoriteNotification"
+     class="favorite-notification">
+
+    Đã thêm sản phẩm vào giỏ hàng.
+
+</div>
+
+
+<!-- =========================================================
+     TOKEN YÊU THÍCH
+     ========================================================= -->
+
+<form id="favoriteTokenForm"
+      style="display:none;">
+
+    @Html.AntiForgeryToken()
+
+</form>
+
+
+@section Scripts {
+
+    <script>
+
+        /* =====================================================
+           BIẾN THÔNG BÁO
+           ===================================================== */
+
+        let favoriteNotificationTimer = null;
+
+
+        /* =====================================================
+           HIỆN THÔNG BÁO
+           GIỐNG HOME
+           ===================================================== */
+
+        function showFavoriteNotification(message, background) {
+
+            const notification =
+                document.getElementById(
+                    "favoriteNotification"
+                );
+
+            if (!notification) {
+                return;
+            }
+
+            notification.innerText =
+                message;
+
+            notification.style.background =
+                background;
+
+            notification.style.display =
+                "block";
+
+            /*
+             * Xóa timer cũ nếu người dùng
+             * click liên tục.
+             */
+
+            if (favoriteNotificationTimer) {
+
+                clearTimeout(
+                    favoriteNotificationTimer
+                );
+
+            }
+
+            /*
+             * Hiện đúng 2 giây
+             */
+
+            favoriteNotificationTimer =
+                setTimeout(function() {
+
+                    notification.style.display =
+                        "none";
+
+                    notification.style.background =
+                        "#198754";
+
+                }, 2000);
+
+        }
+
+
+        /* =====================================================
+           THÔNG BÁO THÊM GIỎ HÀNG
+           ===================================================== */
+
+        function showCartSuccess(message) {
+
+            showFavoriteNotification(
+                message,
+                "#198754"
+            );
+
+        }
+
+
+        /* =====================================================
+           THÔNG BÁO LỖI
+           ===================================================== */
+
+        function showCartError(message) {
+
+            showFavoriteNotification(
+                message,
+                "#dc3545"
+            );
+
+        }
+
+
+        /* =====================================================
+           THÔNG BÁO ĐĂNG NHẬP
+           ===================================================== */
+
+        function showLoginWarning() {
+
+            showFavoriteNotification(
+                "Hãy đăng nhập để bỏ vào giỏ hàng",
+                "#dc3545"
+            );
+
+        }
+
+
+        /* =====================================================
+           THÊM VÀO GIỎ HÀNG
+           GIỐNG HOME
+           ===================================================== */
+
+        document
+            .querySelectorAll(".add-cart-form")
+            .forEach(function(form) {
+
+                form.addEventListener(
+                    "submit",
+                    async function(event) {
+
+                        event.preventDefault();
+
+
+                        const button =
+                            form.querySelector(
+                                ".favorite-cart-button"
+                            );
+
+                        if (!button) {
+                            return;
+                        }
+
+
+                        if (button.disabled) {
+                            return;
+                        }
+
+
+                        /*
+                         * Lưu trạng thái ban đầu
+                         */
+
+                        const originalText =
+                            button.innerHTML;
+
+
+                        button.disabled =
+                            true;
+
+
+                        try {
+
+                            const response =
+                                await fetch(
+                                    form.action,
+                                    {
+                                        method: "POST",
+                                        body:
+                                            new FormData(form)
+                                    }
+                                );
+
+
+                            /* =================================================
+                               THÀNH CÔNG
+                               ================================================= */
+
+                            if (response.ok) {
+
+
+                                /*
+                                 * Đổi chữ giống Home
+                                 */
+
+                                button.innerHTML =
+                                    "🛒 Đã thêm vào giỏ";
+
+
+                                /*
+                                 * Đổi sang màu xanh
+                                 * #198754 giống Home
+                                 */
+
+                                button.classList.add(
+                                    "cart-added"
+                                );
+
+
+                                /*
+                                 * Tìm card hiện tại
+                                 */
+
+                                const productCard =
+                                    form.closest(
+                                        ".favorite-card"
+                                    );
+
+
+                                /*
+                                 * Lấy tên sách
+                                 */
+
+                                const bookNameElement =
+                                    productCard
+                                        ?.querySelector(
+                                            ".favorite-name"
+                                        );
+
+
+                                const bookName =
+                                    bookNameElement
+                                        ?.innerText
+                                        ?.trim();
+
+
+                                /*
+                                 * Hiện thông báo
+                                 */
+
+                                showCartSuccess(
+                                    'Đã thêm "' +
+                                    (
+                                        bookName ||
+                                        "sản phẩm"
+                                    ) +
+                                    '" vào giỏ hàng.'
+                                );
+
+
+                                /*
+                                 * Sau 2 giây
+                                 * trở lại bình thường
+                                 */
+
+                                setTimeout(
+                                    function() {
+
+                                        button.disabled =
+                                            false;
+
+                                        button.innerHTML =
+                                            originalText;
+
+                                        button.classList.remove(
+                                            "cart-added"
+                                        );
+
+                                    },
+                                    2000
+                                );
+
+                            }
+
+
+                            /* =================================================
+                               LỖI
+                               ================================================= */
+
+                            else {
+
+                                button.disabled =
+                                    false;
+
+                                button.innerHTML =
+                                    originalText;
+
+                                button.classList.remove(
+                                    "cart-added"
+                                );
+
+                                showCartError(
+                                    "Không thể thêm sản phẩm vào giỏ hàng."
+                                );
+
+                            }
+
+                        }
+
+
+                        /* =====================================================
+                           CATCH
+                           ===================================================== */
+
+                        catch (error) {
+
+                            console.error(
+                                "Cart error:",
+                                error
+                            );
+
+
+                            button.disabled =
+                                false;
+
+
+                            button.innerHTML =
+                                originalText;
+
+
+                            button.classList.remove(
+                                "cart-added"
+                            );
+
+
+                            showCartError(
+                                "Có lỗi xảy ra khi thêm vào giỏ hàng."
+                            );
+
+                        }
+
+                    }
+                );
+
+            });
+
+
+        /* =====================================================
+           YÊU THÍCH
+           ===================================================== */
+
+        async function toggleFavorite(button) {
+
+            const isAuthenticated =
+                                @(User.Identity?.IsAuthenticated == true
+        ? "true"
+        : "false");
+
+
+            if (!isAuthenticated) {
+
+                showFavoriteLoginWarning();
+
+                return;
+            }
+
+
+            const maSach =
+                button.getAttribute(
+                    "data-book-id"
+                );
+
+
+            if (!maSach) {
+                return;
+            }
+
+
+            const isFavorite =
+                button.classList.contains(
+                    "active"
+                );
+
+
+            const tokenElement =
+                document.querySelector(
+                    '#favoriteTokenForm input[name="__RequestVerificationToken"]'
+                );
+
+
+            if (!tokenElement) {
+
+                showFavoriteError(
+                    "Không tìm thấy mã bảo mật."
+                );
+
+                return;
+            }
+
+
+            const token =
+                tokenElement.value;
+
+
+            const url =
+                isFavorite
+                    ? "/YeuThichs/Xoa"
+                    : "/YeuThichs/Them";
+
+
+            button.disabled =
+                true;
+
+
+            try {
+
+                const formData =
+                    new FormData();
+
+
+                formData.append(
+                    "maSach",
+                    maSach
+                );
+
+
+                formData.append(
+                    "__RequestVerificationToken",
+                    token
+                );
+
+
+                const response =
+                    await fetch(
+                        url,
+                        {
+                            method: "POST",
+                            headers: {
+                                "X-Requested-With":
+                                    "XMLHttpRequest"
+                            },
+                            body: formData
+                        }
+                    );
+
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        "Không thể cập nhật yêu thích."
+                    );
+
+                }
+
+
+                const result =
+                    await response.json();
+
+
+                if (
+                    result.success &&
+                    result.active === true
+                ) {
+
+                    button.classList.add(
+                        "active"
+                    );
+
+
+                    button.innerHTML =
+                        "♥";
+
+
+                    button.title =
+                        "Bỏ yêu thích";
+
+
+                    showFavoriteSuccess(
+                        "Đã thêm sách vào danh sách yêu thích."
+                    );
+
+                }
+
+
+                else if (
+                    result.success &&
+                    result.active === false
+                ) {
+
+                    button.classList.remove(
+                        "active"
+                    );
+
+
+                    button.innerHTML =
+                        "♡";
+
+
+                    button.title =
+                        "Thêm vào yêu thích";
+
+
+                    showFavoriteSuccess(
+                        "Đã bỏ sách khỏi danh sách yêu thích."
+                    );
+
+                }
+
+
+                else {
+
+                    throw new Error(
+                        "Dữ liệu trả về không hợp lệ."
+                    );
+
+                }
+
+            }
+
+
+            catch (error) {
+
+                console.error(
+                    "Favorite error:",
+                    error
+                );
+
+
+                showFavoriteError(
+                    "Không thể cập nhật danh sách yêu thích."
+                );
+
+            }
+
+
+            finally {
+
+                button.disabled =
+                    false;
+
+            }
+
+        }
+
+
+        /* =====================================================
+           THÔNG BÁO YÊU THÍCH THÀNH CÔNG
+           ===================================================== */
+
+        function showFavoriteSuccess(message) {
+
+            showFavoriteNotification(
+                message,
+                "#198754"
+            );
+
+        }
+
+
+        /* =====================================================
+           THÔNG BÁO YÊU THÍCH LỖI
+           ===================================================== */
+
+        function showFavoriteError(message) {
+
+            showFavoriteNotification(
+                message,
+                "#dc3545"
+            );
+
+        }
+
+
+        /* =====================================================
+           THÔNG BÁO ĐĂNG NHẬP YÊU THÍCH
+           ===================================================== */
+
+        function showFavoriteLoginWarning() {
+
+            showFavoriteNotification(
+                "Hãy đăng nhập để thêm sách vào danh sách yêu thích",
+                "#dc3545"
+            );
+
+        }
+
+    </script>
+
+}
