@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using ProjectKZM.Data;
 using ProjectKZM.Models;
+using ProjectKZM.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,6 +12,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllersWithViews();
 
+builder.Services.AddScoped<EmailService>();
 
 // ======================================================
 // SQL SERVER

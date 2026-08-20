@@ -1,0 +1,161 @@
+﻿@model ProjectKZM.ViewModels.DatLaiMatKhauViewModel
+
+@{
+    ViewData["Title"] = "Đặt lại mật khẩu";
+}
+
+<style>
+    .reset-page {
+        max-width: 500px;
+        margin: 0 auto;
+        padding: 70px 20px;
+    }
+
+    .reset-box {
+        background: #fff;
+        border: 1px solid #e5e5e5;
+        padding: 35px;
+        border-radius: 10px;
+    }
+
+    .reset-title {
+        margin: 0 0 10px;
+        font-size: 32px;
+        font-weight: 500;
+    }
+
+    .reset-description {
+        margin-bottom: 25px;
+        color: #777;
+        line-height: 1.7;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    .form-label {
+        display: block;
+        margin-bottom: 8px;
+        font-size: 14px;
+        font-weight: 500;
+    }
+
+    .form-control {
+        width: 100%;
+        box-sizing: border-box;
+        padding: 13px 14px;
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        outline: none;
+        font-size: 15px;
+    }
+
+        .form-control:focus {
+            border-color: #222;
+        }
+
+    .validation {
+        display: block;
+        margin-top: 6px;
+        color: #b00020;
+        font-size: 13px;
+    }
+
+    .submit-button {
+        width: 100%;
+        border: none;
+        border-radius: 6px;
+        background: #111;
+        color: #fff;
+        padding: 14px;
+        cursor: pointer;
+        font-size: 15px;
+    }
+
+        .submit-button:hover {
+            background: #333;
+        }
+</style>
+
+
+<div class="reset-page">
+
+    <div class="reset-box">
+
+        <h1 class="reset-title">
+            Đặt lại mật khẩu
+        </h1>
+
+        <p class="reset-description">
+            OTP đã được xác nhận. Hãy nhập mật khẩu mới
+            cho tài khoản của bạn.
+        </p>
+
+
+        <div asp-validation-summary="ModelOnly"
+             class="validation">
+        </div>
+
+
+        <form asp-action="DatLaiMatKhau"
+              method="post">
+
+            @Html.AntiForgeryToken()
+
+
+            <div class="form-group">
+
+                <label asp-for="MatKhauMoi"
+                       class="form-label">
+                </label>
+
+                <input asp-for="MatKhauMoi"
+                       class="form-control"
+                       autocomplete="new-password"
+                       placeholder="Nhập mật khẩu mới" />
+
+                <span asp-validation-for="MatKhauMoi"
+                      class="validation">
+                </span>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label asp-for="XacNhanMatKhau"
+                       class="form-label">
+                </label>
+
+                <input asp-for="XacNhanMatKhau"
+                       class="form-control"
+                       autocomplete="new-password"
+                       placeholder="Nhập lại mật khẩu mới" />
+
+                <span asp-validation-for="XacNhanMatKhau"
+                      class="validation">
+                </span>
+
+            </div>
+
+
+            <button type="submit"
+                    class="submit-button">
+
+                ĐẶT LẠI MẬT KHẨU
+
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+@section Scripts {
+
+    <partial name="_ValidationScriptsPartial" />
+
+}

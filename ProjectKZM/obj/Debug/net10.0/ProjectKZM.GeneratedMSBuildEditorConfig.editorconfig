@@ -35,6 +35,10 @@ build_property.EnableCodeStyleSeverity =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudFxBY2Nlc3NEZW5pZWQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/Asus/Desktop/Big Project/ProjectKZM/ProjectKZM/Views/Account/DatLaiMatKhau.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudFxEYXRMYWlNYXRLaGF1LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/Asus/Desktop/Big Project/ProjectKZM/ProjectKZM/Views/Account/EditProfile.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudFxFZGl0UHJvZmlsZS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
@@ -47,8 +51,16 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudFxQcm9maWxlLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/Asus/Desktop/Big Project/ProjectKZM/ProjectKZM/Views/Account/QuenMatKhau.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudFxRdWVuTWF0S2hhdS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/Asus/Desktop/Big Project/ProjectKZM/ProjectKZM/Views/Account/Register.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudFxSZWdpc3Rlci5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Asus/Desktop/Big Project/ProjectKZM/ProjectKZM/Views/Account/XacNhanOTP.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudFxYYWNOaGFuT1RQLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/Asus/Desktop/Big Project/ProjectKZM/ProjectKZM/Views/Admin/Index.cshtml]

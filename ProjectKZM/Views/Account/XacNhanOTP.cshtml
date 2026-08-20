@@ -1,0 +1,151 @@
+﻿@model ProjectKZM.ViewModels.XacNhanOTPViewModel
+
+@{
+    ViewData["Title"] = "Xác nhận OTP";
+}
+
+<style>
+    .otp-page {
+        max-width: 500px;
+        margin: 0 auto;
+        padding: 70px 20px;
+    }
+
+    .otp-box {
+        background: #fff;
+        border: 1px solid #e5e5e5;
+        padding: 35px;
+        border-radius: 10px;
+        text-align: center;
+    }
+
+    .otp-title {
+        margin: 0 0 10px;
+        font-size: 32px;
+        font-weight: 500;
+    }
+
+    .otp-description {
+        color: #777;
+        line-height: 1.7;
+        margin-bottom: 25px;
+    }
+
+    .otp-input {
+        width: 100%;
+        box-sizing: border-box;
+        padding: 15px;
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        outline: none;
+        text-align: center;
+        font-size: 24px;
+        letter-spacing: 8px;
+    }
+
+        .otp-input:focus {
+            border-color: #222;
+        }
+
+    .validation {
+        display: block;
+        margin: 12px 0;
+        color: #b00020;
+        font-size: 14px;
+    }
+
+    .submit-button {
+        width: 100%;
+        margin-top: 18px;
+        padding: 14px;
+        border: none;
+        border-radius: 6px;
+        background: #111;
+        color: #fff;
+        cursor: pointer;
+    }
+
+    .back-link {
+        display: block;
+        margin-top: 18px;
+        color: #333;
+        text-decoration: none;
+        font-size: 14px;
+    }
+</style>
+
+
+<div class="otp-page">
+
+    <div class="otp-box">
+
+        <h1 class="otp-title">
+            Xác nhận OTP
+        </h1>
+
+        <p class="otp-description">
+
+            Mã OTP đã được gửi đến Email:
+
+            <strong>
+                @ViewBag.Email
+            </strong>
+
+            <br />
+
+            Mã có hiệu lực trong 5 phút.
+
+        </p>
+
+
+        <div asp-validation-summary="ModelOnly"
+             class="validation">
+        </div>
+
+
+        <form asp-action="XacNhanOTP"
+              method="post">
+
+            @Html.AntiForgeryToken()
+
+
+            <input asp-for="OTP"
+                   class="otp-input"
+                   maxlength="6"
+                   inputmode="numeric"
+                   autocomplete="one-time-code"
+                   placeholder="000000" />
+
+
+            <span asp-validation-for="OTP"
+                  class="validation">
+            </span>
+
+
+            <button type="submit"
+                    class="submit-button">
+
+                XÁC NHẬN OTP
+
+            </button>
+
+        </form>
+
+
+        <a asp-action="QuenMatKhau"
+           class="back-link">
+
+            ← Yêu cầu mã mới
+
+        </a>
+
+    </div>
+
+</div>
+
+
+@section Scripts {
+
+    <partial name="_ValidationScriptsPartial" />
+
+}

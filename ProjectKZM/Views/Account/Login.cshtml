@@ -196,6 +196,30 @@
                 text-decoration: underline;
             }
 
+    /* =========================================================
+                   REGISTER
+                   ========================================================= */
+
+    .forgot-password {
+        text-align: center;
+        margin-top: 25px;
+        padding-top: 20px;
+        border-top: 1px solid #eeeeee;
+        font-size: 14px;
+        color: #777;
+    }
+
+    .forgot-password a {
+            margin-left: 5px;
+            color: #212529;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        .forgot-password a:hover {
+                text-decoration: underline;
+            }
+
 
     /* =========================================================
                RESPONSIVE
@@ -351,6 +375,19 @@
 
             </a>
 
+        </div>
+
+        <div class="forgot-password"> 
+            <span>
+                Bạn quên mật khẩu sao? 
+            </span>
+
+            <a asp-controller="Account"
+               asp-action="QuenMatKhau">
+
+                Quên mật khẩu
+
+            </a>
         </div>
 
     </div>

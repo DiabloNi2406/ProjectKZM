@@ -1,20 +1,29 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ProjectKZM.Data;
 using ProjectKZM.Models;
+using ProjectKZM.Services;
+using ProjectKZM.ViewModels;
 using System.Security.Claims;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace ProjectKZM.Controllers
 {
     public class AccountController : Controller
     {
         private readonly MyDbContext _context;
+        private readonly EmailService _emailService;
 
-        public AccountController(MyDbContext context)
+        public AccountController(
+            MyDbContext context,
+            EmailService emailService)
         {
             _context = context;
+            _emailService = emailService;
         }
 
 
@@ -115,6 +124,453 @@ namespace ProjectKZM.Controllers
                 "Index",
                 "Home"
             );
+        }
+
+        // =========================================================
+        // QUÊN MẬT KHẨU
+        // =========================================================
+
+        [AllowAnonymous]
+        [HttpGet]
+        public IActionResult QuenMatKhau()
+        {
+            return View();
+        }
+
+
+        // =========================================================
+        // GỬI OTP
+        // =========================================================
+
+        [AllowAnonymous]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> QuenMatKhau(
+            QuenMatKhauViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+
+            string email =
+                model.Email.Trim();
+
+
+            var user =
+                await _context.NguoiDungs
+                    .FirstOrDefaultAsync(
+                        x =>
+                            x.Email == email);
+
+
+            // Không tiết lộ email có tồn tại hay không.
+            if (user == null)
+            {
+                ModelState.AddModelError(
+                    "",
+                    "Nếu Email tồn tại trong hệ thống, mã OTP sẽ được gửi đến Email đó.");
+
+                return View(model);
+            }
+
+
+            // =====================================================
+            // TẠO OTP 6 SỐ
+            // =====================================================
+
+            string otp =
+                RandomNumberGenerator
+                    .GetInt32(
+                        100000,
+                        1000000)
+                    .ToString();
+
+
+            // =====================================================
+            // HASH OTP TRƯỚC KHI LƯU SESSION
+            // =====================================================
+
+            string otpHash =
+                HashOtp(otp);
+
+
+            // =====================================================
+            // SESSION
+            // =====================================================
+
+            HttpContext.Session.SetString(
+                "ForgotPassword_Email",
+                email);
+
+            HttpContext.Session.SetString(
+                "ForgotPassword_OtpHash",
+                otpHash);
+
+            HttpContext.Session.SetString(
+                "ForgotPassword_Expires",
+                DateTime.UtcNow
+                    .AddMinutes(5)
+                    .ToString("O"));
+
+            HttpContext.Session.SetInt32(
+                "ForgotPassword_Attempts",
+                0);
+
+
+            // =====================================================
+            // GỬI EMAIL
+            // =====================================================
+
+            try
+            {
+                await _emailService.SendOtpAsync(
+                    email,
+                    otp);
+            }
+            catch
+            {
+                HttpContext.Session.Remove(
+                    "ForgotPassword_Email");
+
+                HttpContext.Session.Remove(
+                    "ForgotPassword_OtpHash");
+
+                HttpContext.Session.Remove(
+                    "ForgotPassword_Expires");
+
+                HttpContext.Session.Remove(
+                    "ForgotPassword_Attempts");
+
+
+                ModelState.AddModelError(
+                    "",
+                    "Không thể gửi Email OTP. Vui lòng thử lại sau.");
+
+                return View(model);
+            }
+
+
+            return RedirectToAction(
+                nameof(XacNhanOTP));
+        }
+
+
+        // =========================================================
+        // NHẬP OTP
+        // =========================================================
+
+        [AllowAnonymous]
+        [HttpGet]
+        public IActionResult XacNhanOTP()
+        {
+            string? email =
+                HttpContext.Session.GetString(
+                    "ForgotPassword_Email");
+
+
+            if (string.IsNullOrWhiteSpace(email))
+            {
+                return RedirectToAction(
+                    nameof(QuenMatKhau));
+            }
+
+
+            ViewBag.Email = email;
+
+            return View();
+        }
+
+
+        // =========================================================
+        // KIỂM TRA OTP
+        // =========================================================
+
+        [AllowAnonymous]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult XacNhanOTP(
+            XacNhanOTPViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+
+            string? email =
+                HttpContext.Session.GetString(
+                    "ForgotPassword_Email");
+
+            string? savedOtpHash =
+                HttpContext.Session.GetString(
+                    "ForgotPassword_OtpHash");
+
+            string? expiresString =
+                HttpContext.Session.GetString(
+                    "ForgotPassword_Expires");
+
+            int attempts =
+                HttpContext.Session.GetInt32(
+                    "ForgotPassword_Attempts")
+                ?? 0;
+
+
+            if (string.IsNullOrWhiteSpace(email) ||
+                string.IsNullOrWhiteSpace(savedOtpHash) ||
+                string.IsNullOrWhiteSpace(expiresString))
+            {
+                ModelState.AddModelError(
+                    "",
+                    "Mã OTP đã hết hạn. Vui lòng yêu cầu mã mới.");
+
+                return View(model);
+            }
+
+
+            // =====================================================
+            // GIỚI HẠN 5 LẦN
+            // =====================================================
+
+            if (attempts >= 5)
+            {
+                ClearForgotPasswordSession();
+
+                ModelState.AddModelError(
+                    "",
+                    "Bạn đã nhập sai OTP quá số lần cho phép. Vui lòng yêu cầu mã mới.");
+
+                return View(model);
+            }
+
+
+            // =====================================================
+            // KIỂM TRA THỜI GIAN
+            // =====================================================
+
+            if (!DateTime.TryParse(
+                expiresString,
+                null,
+                System.Globalization.DateTimeStyles.RoundtripKind,
+                out DateTime expiresAt))
+            {
+                ClearForgotPasswordSession();
+
+                ModelState.AddModelError(
+                    "",
+                    "Mã OTP không hợp lệ. Vui lòng yêu cầu mã mới.");
+
+                return View(model);
+            }
+
+
+            if (DateTime.UtcNow > expiresAt)
+            {
+                ClearForgotPasswordSession();
+
+                ModelState.AddModelError(
+                    "",
+                    "Mã OTP đã hết hạn. Vui lòng yêu cầu mã mới.");
+
+                return View(model);
+            }
+
+
+            // =====================================================
+            // TĂNG SỐ LẦN THỬ
+            // =====================================================
+
+            attempts++;
+
+            HttpContext.Session.SetInt32(
+                "ForgotPassword_Attempts",
+                attempts);
+
+
+            // =====================================================
+            // SO SÁNH OTP
+            // =====================================================
+
+            string enteredOtpHash =
+                HashOtp(
+                    model.OTP.Trim());
+
+
+            if (!string.Equals(
+                enteredOtpHash,
+                savedOtpHash,
+                StringComparison.Ordinal))
+            {
+                ModelState.AddModelError(
+                    "",
+                    $"Mã OTP không đúng. Bạn còn {5 - attempts} lần thử.");
+
+                return View(model);
+            }
+
+
+            // =====================================================
+            // OTP ĐÚNG
+            // =====================================================
+
+            HttpContext.Session.SetString(
+                "ForgotPassword_Verified",
+                "true");
+
+
+            return RedirectToAction(
+                nameof(DatLaiMatKhau));
+        }
+
+
+        // =========================================================
+        // ĐẶT LẠI MẬT KHẨU
+        // =========================================================
+
+        [AllowAnonymous]
+        [HttpGet]
+        public IActionResult DatLaiMatKhau()
+        {
+            string? email =
+                HttpContext.Session.GetString(
+                    "ForgotPassword_Email");
+
+            string? verified =
+                HttpContext.Session.GetString(
+                    "ForgotPassword_Verified");
+
+
+            if (string.IsNullOrWhiteSpace(email) ||
+                verified != "true")
+            {
+                return RedirectToAction(
+                    nameof(QuenMatKhau));
+            }
+
+
+            return View();
+        }
+
+
+        // =========================================================
+        // LƯU MẬT KHẨU MỚI
+        // =========================================================
+
+        [AllowAnonymous]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DatLaiMatKhau(
+            DatLaiMatKhauViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+
+            string? email =
+                HttpContext.Session.GetString(
+                    "ForgotPassword_Email");
+
+            string? verified =
+                HttpContext.Session.GetString(
+                    "ForgotPassword_Verified");
+
+
+            if (string.IsNullOrWhiteSpace(email) ||
+                verified != "true")
+            {
+                return RedirectToAction(
+                    nameof(QuenMatKhau));
+            }
+
+
+            var user =
+                await _context.NguoiDungs
+                    .FirstOrDefaultAsync(
+                        x =>
+                            x.Email == email);
+
+
+            if (user == null)
+            {
+                ClearForgotPasswordSession();
+
+                TempData["Error"] =
+                    "Không tìm thấy tài khoản.";
+
+                return RedirectToAction(
+                    nameof(Login));
+            }
+
+
+            // =====================================================
+            // CẬP NHẬT MẬT KHẨU
+            // =====================================================
+
+            user.MatKhau =
+                model.MatKhauMoi;
+
+
+            await _context.SaveChangesAsync();
+
+
+            // =====================================================
+            // XÓA SESSION OTP
+            // =====================================================
+
+            ClearForgotPasswordSession();
+
+
+            TempData["Success"] =
+                "Đặt lại mật khẩu thành công. Vui lòng đăng nhập lại.";
+
+
+            return RedirectToAction(
+                nameof(Login));
+        }
+
+
+        // =========================================================
+        // HASH OTP
+        // =========================================================
+
+        private static string HashOtp(
+            string otp)
+        {
+            byte[] bytes =
+                Encoding.UTF8.GetBytes(otp);
+
+            byte[] hash =
+                SHA256.HashData(bytes);
+
+            return Convert
+                .ToHexString(hash)
+                .ToLowerInvariant();
+        }
+
+
+        // =========================================================
+        // XÓA SESSION QUÊN MẬT KHẨU
+        // =========================================================
+
+        private void ClearForgotPasswordSession()
+        {
+            HttpContext.Session.Remove(
+                "ForgotPassword_Email");
+
+            HttpContext.Session.Remove(
+                "ForgotPassword_OtpHash");
+
+            HttpContext.Session.Remove(
+                "ForgotPassword_Expires");
+
+            HttpContext.Session.Remove(
+                "ForgotPassword_Attempts");
+
+            HttpContext.Session.Remove(
+                "ForgotPassword_Verified");
         }
 
 

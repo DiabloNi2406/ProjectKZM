@@ -1,0 +1,158 @@
+﻿@model ProjectKZM.ViewModels.QuenMatKhauViewModel
+
+@{
+    ViewData["Title"] = "Quên mật khẩu";
+}
+
+<style>
+    .forgot-page {
+        max-width: 500px;
+        margin: 0 auto;
+        padding: 70px 20px;
+    }
+
+    .forgot-box {
+        background: #fff;
+        border: 1px solid #e5e5e5;
+        padding: 35px;
+        border-radius: 10px;
+    }
+
+    .forgot-title {
+        margin: 0 0 10px;
+        font-size: 32px;
+        font-weight: 500;
+    }
+
+    .forgot-description {
+        color: #777;
+        line-height: 1.7;
+        margin-bottom: 25px;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    .form-label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 500;
+        font-size: 14px;
+    }
+
+    .form-control {
+        width: 100%;
+        box-sizing: border-box;
+        padding: 13px 14px;
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        font-size: 15px;
+        outline: none;
+    }
+
+        .form-control:focus {
+            border-color: #222;
+        }
+
+    .validation {
+        margin-bottom: 18px;
+        color: #b00020;
+        font-size: 14px;
+    }
+
+    .submit-button {
+        width: 100%;
+        border: none;
+        border-radius: 6px;
+        background: #111;
+        color: #fff;
+        padding: 14px;
+        font-size: 15px;
+        cursor: pointer;
+    }
+
+        .submit-button:hover {
+            background: #333;
+        }
+
+    .back-link {
+        display: block;
+        margin-top: 18px;
+        text-align: center;
+        color: #333;
+        text-decoration: none;
+        font-size: 14px;
+    }
+</style>
+
+
+<div class="forgot-page">
+
+    <div class="forgot-box">
+
+        <h1 class="forgot-title">
+            Quên mật khẩu
+        </h1>
+
+        <p class="forgot-description">
+            Nhập Email đã đăng ký. Hệ thống sẽ gửi mã OTP
+            để xác nhận và đặt lại mật khẩu.
+        </p>
+
+
+        <div asp-validation-summary="ModelOnly"
+             class="validation">
+        </div>
+
+
+        <form asp-action="QuenMatKhau"
+              method="post">
+
+            @Html.AntiForgeryToken()
+
+
+            <div class="form-group">
+
+                <label asp-for="Email"
+                       class="form-label">
+                </label>
+
+                <input asp-for="Email"
+                       class="form-control"
+                       placeholder="Nhập Email của bạn" />
+
+                <span asp-validation-for="Email"
+                      class="validation">
+                </span>
+
+            </div>
+
+
+            <button type="submit"
+                    class="submit-button">
+
+                GỬI MÃ OTP
+
+            </button>
+
+        </form>
+
+
+        <a asp-action="Login"
+           class="back-link">
+
+            ← Quay lại đăng nhập
+
+        </a>
+
+    </div>
+
+</div>
+
+
+@section Scripts {
+
+    <partial name="_ValidationScriptsPartial" />
+
+}
