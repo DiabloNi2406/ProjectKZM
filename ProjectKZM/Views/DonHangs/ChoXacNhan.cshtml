@@ -1,0 +1,182 @@
+﻿@model IEnumerable<ProjectKZM.ViewModels.DonHangViewModel>
+
+@{
+    ViewData["Title"] = "Đơn chờ xác nhận";
+}
+
+<style>
+    .page {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 40px 20px 80px;
+    }
+
+    .title {
+        font-size: 36px;
+        font-weight: 400;
+        margin-bottom: 30px;
+    }
+
+    .table-box {
+        overflow-x: auto;
+        border: 1px solid #e5e5e5;
+        background: #fff;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    th,
+    td {
+        padding: 14px;
+        border-bottom: 1px solid #eee;
+        text-align: left;
+        white-space: nowrap;
+    }
+
+    th {
+        font-weight: 500;
+        background: #fafafa;
+    }
+
+    .button {
+        border: none;
+        padding: 9px 14px;
+        cursor: pointer;
+        font-size: 13px;
+    }
+
+    .confirm {
+        background: #111;
+        color: #fff;
+    }
+
+    .cancel {
+        background: #eee;
+        color: #111;
+    }
+
+    .actions {
+        display: flex;
+        gap: 7px;
+    }
+</style>
+
+
+<div class="page">
+
+    <h1 class="title">
+        Đơn chờ Admin xác nhận
+    </h1>
+
+
+    <div class="table-box">
+
+        <table>
+
+            <thead>
+
+                <tr>
+                    <th>Mã đơn</th>
+                    <th>Ngày đặt</th>
+                    <th>Khách hàng</th>
+                    <th>Phương thức</th>
+                    <th>Tổng tiền</th>
+                    <th></th>
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+                @foreach (var item in Model)
+                {
+                    <tr>
+
+                        <td>
+                            #@item.MaDonHang
+                        </td>
+
+                        <td>
+                            @item.NgayDat.ToString("dd/MM/yyyy HH:mm")
+                        </td>
+
+                        <td>
+                            @item.TenKhachHang
+                        </td>
+
+                        <td>
+                            @item.PhuongThucThanhToan
+                        </td>
+
+                        <td>
+                            @item.TongTien.ToString("N0") VNĐ
+                        </td>
+
+                        <td>
+
+                            <div class="actions">
+
+                                <a asp-action="ChiTiet"
+                                   asp-route-id="@item.MaDonHang">
+
+                                    Chi tiết
+
+                                </a>
+
+
+                                <form asp-action="XacNhan"
+                                      method="post">
+
+                                    @Html.AntiForgeryToken()
+
+                                    <input type="hidden"
+                                           name="id"
+                                           value="@item.MaDonHang" />
+
+                                    <button type="submit"
+                                            class="button confirm">
+
+                                        Xác nhận
+
+                                    </button>
+
+                                </form>
+
+
+                                <form asp-action="Huy"
+                                      method="post">
+
+                                    @Html.AntiForgeryToken()
+
+                                    <input type="hidden"
+                                           name="id"
+                                           value="@item.MaDonHang" />
+
+                                    <button type="submit"
+                                            class="button cancel"
+                                            onclick="return confirm('Bạn có chắc muốn hủy đơn này?');">
+
+                                        Hủy
+
+                                    </button>
+
+                                </form>
+
+                            </div>
+
+                        </td>
+
+                    </tr>
+                }
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>

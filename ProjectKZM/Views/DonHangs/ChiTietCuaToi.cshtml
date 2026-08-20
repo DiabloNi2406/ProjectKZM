@@ -1,0 +1,153 @@
+﻿@model ProjectKZM.ViewModels.DonHangChiTietViewModel
+
+@{
+    ViewData["Title"] = "Chi tiết đơn hàng";
+}
+
+<style>
+    .page {
+        max-width: 1000px;
+        margin: 0 auto;
+        padding: 45px 20px 80px;
+    }
+
+    .title {
+        font-size: 35px;
+        font-weight: 400;
+        margin-bottom: 25px;
+    }
+
+    .box {
+        background: #fff;
+        border: 1px solid #e5e5e5;
+        padding: 25px;
+        margin-bottom: 20px;
+    }
+
+    .row {
+        display: flex;
+        justify-content: space-between;
+        padding: 8px 0;
+        gap: 20px;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    th,
+    td {
+        padding: 13px;
+        border-bottom: 1px solid #eee;
+        text-align: left;
+    }
+
+    .total {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 20px;
+        font-size: 20px;
+        font-weight: 600;
+    }
+</style>
+
+
+<div class="page">
+
+    <h1 class="title">
+        Đơn hàng #@Model.MaDonHang
+    </h1>
+
+
+    <div class="box">
+
+        <div class="row">
+            <strong>Ngày đặt</strong>
+            <span>
+                @Model.NgayDat.ToString("dd/MM/yyyy HH:mm")
+            </span>
+        </div>
+
+        <div class="row">
+            <strong>Phương thức</strong>
+            <span>
+                @Model.PhuongThucThanhToan
+            </span>
+        </div>
+
+        <div class="row">
+            <strong>Trạng thái</strong>
+            <span>
+                @Model.TrangThai
+            </span>
+        </div>
+
+        <div class="row">
+            <strong>Địa chỉ</strong>
+            <span>
+                @Model.DiaChiGiaoHang
+            </span>
+        </div>
+
+    </div>
+
+
+    <div class="box">
+
+        <table>
+
+            <thead>
+                <tr>
+                    <th>Sách</th>
+                    <th>Số lượng</th>
+                    <th>Đơn giá</th>
+                    <th>Thành tiền</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                @foreach (var item in Model.SanPhams)
+                {
+                    <tr>
+
+                        <td>
+                            @item.TenSach
+                        </td>
+
+                        <td>
+                            @item.SoLuong
+                        </td>
+
+                        <td>
+                            @item.DonGia.ToString("N0") VNĐ
+                        </td>
+
+                        <td>
+                            @item.ThanhTien.ToString("N0") VNĐ
+                        </td>
+
+                    </tr>
+                }
+
+            </tbody>
+
+        </table>
+
+
+        <div class="total">
+
+            <span>
+                Tổng cộng
+            </span>
+
+            <span>
+                @Model.TongTien.ToString("N0") VNĐ
+            </span>
+
+        </div>
+
+    </div>
+
+</div>

@@ -13,23 +13,19 @@ namespace ProjectKZM.ViewModels
         [Display(Name = "Họ tên người nhận")]
         public string HoTen { get; set; } = string.Empty;
 
-
         [Required(ErrorMessage = "Vui lòng nhập số điện thoại")]
         [StringLength(15)]
         [Display(Name = "Số điện thoại")]
         public string SoDienThoai { get; set; } = string.Empty;
-
 
         [Required(ErrorMessage = "Vui lòng nhập địa chỉ giao hàng")]
         [StringLength(255)]
         [Display(Name = "Địa chỉ giao hàng")]
         public string DiaChiGiaoHang { get; set; } = string.Empty;
 
-
         [StringLength(500)]
         [Display(Name = "Ghi chú")]
         public string? GhiChu { get; set; }
-
 
         // =========================================================
         // PHƯƠNG THỨC THANH TOÁN
@@ -39,6 +35,11 @@ namespace ProjectKZM.ViewModels
         [Display(Name = "Phương thức thanh toán")]
         public string PhuongThucThanhToan { get; set; } = "VNPAY";
 
+        // =========================================================
+        // MÃ ĐƠN HÀNG
+        // =========================================================
+
+        public int? MaDonHang { get; set; }
 
         // =========================================================
         // DANH SÁCH SẢN PHẨM
@@ -46,7 +47,6 @@ namespace ProjectKZM.ViewModels
 
         public List<SanPhamThanhToanViewModel> SanPhams { get; set; }
             = new List<SanPhamThanhToanViewModel>();
-
 
         // =========================================================
         // TỔNG
@@ -56,11 +56,6 @@ namespace ProjectKZM.ViewModels
 
         public decimal TongTien { get; set; }
     }
-
-
-    // =============================================================
-    // SẢN PHẨM TRONG TRANG THANH TOÁN
-    // =============================================================
 
     public class SanPhamThanhToanViewModel
     {

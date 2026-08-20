@@ -1,0 +1,150 @@
+﻿@model ProjectKZM.ViewModels.ThongKeDonHangViewModel
+
+@{
+    ViewData["Title"] = "Thống kê đơn hàng";
+}
+
+<style>
+    .page {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 45px 20px 80px;
+    }
+
+    .title {
+        font-size: 36px;
+        font-weight: 400;
+        margin-bottom: 30px;
+    }
+
+    .grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 15px;
+        margin-bottom: 20px;
+    }
+
+    .card {
+        border: 1px solid #e5e5e5;
+        background: #fff;
+        padding: 25px;
+    }
+
+    .label {
+        font-size: 13px;
+        color: #777;
+        margin-bottom: 10px;
+    }
+
+    .value {
+        font-size: 27px;
+        font-weight: 600;
+    }
+
+    .revenue {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 15px;
+    }
+
+    @@media (max-width: 800px) {
+        .grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .revenue {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+
+
+<div class="page">
+
+    <h1 class="title">
+        Thống kê đơn hàng
+    </h1>
+
+
+    <div class="grid">
+
+        <div class="card">
+            <div class="label">Tổng số đơn</div>
+            <div class="value">@Model.TongSoDon</div>
+        </div>
+
+        <div class="card">
+            <div class="label">Đã xác nhận</div>
+            <div class="value">@Model.SoDonDaXacNhan</div>
+        </div>
+
+        <div class="card">
+            <div class="label">Chờ xác nhận</div>
+            <div class="value">@Model.SoDonChoXacNhan</div>
+        </div>
+
+        <div class="card">
+            <div class="label">Đã hủy</div>
+            <div class="value">@Model.SoDonDaHuy</div>
+        </div>
+
+    </div>
+
+
+    <div class="card">
+
+        <div class="label">
+            Tổng doanh thu
+        </div>
+
+        <div class="value">
+            @Model.TongDoanhThu.ToString("N0") VNĐ
+        </div>
+
+    </div>
+
+
+    <div class="revenue"
+         style="margin-top:15px;">
+
+        <div class="card">
+
+            <div class="label">
+                Doanh thu VNPAY
+            </div>
+
+            <div class="value">
+                @Model.DoanhThuVNPAY.ToString("N0") VNĐ
+            </div>
+
+        </div>
+
+
+        <div class="card">
+
+            <div class="label">
+                Doanh thu COD
+            </div>
+
+            <div class="value">
+                @Model.DoanhThuCOD.ToString("N0") VNĐ
+            </div>
+
+        </div>
+
+
+        <div class="card">
+
+            <div class="label">
+                Doanh thu chuyển khoản
+            </div>
+
+            <div class="value">
+                @Model.DoanhThuChuyenKhoan.ToString("N0") VNĐ
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

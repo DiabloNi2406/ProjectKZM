@@ -57,9 +57,9 @@
         box-sizing: border-box;
     }
 
-    .form-control:focus {
-        border-color: #111;
-    }
+        .form-control:focus {
+            border-color: #111;
+        }
 
     textarea.form-control {
         min-height: 100px;
@@ -68,15 +68,20 @@
 
     .payment-option {
         display: block;
-        border: 1px solid #111;
+        border: 1px solid #ddd;
         padding: 18px;
         margin-bottom: 12px;
-        cursor: default;
+        cursor: pointer;
+        transition: border-color .15s ease;
     }
 
-    .payment-option input {
-        margin-right: 10px;
-    }
+        .payment-option:hover {
+            border-color: #111;
+        }
+
+        .payment-option input {
+            margin-right: 10px;
+        }
 
     .payment-name {
         font-size: 16px;
@@ -154,9 +159,9 @@
         cursor: pointer;
     }
 
-    .submit-button:hover {
-        background: #333;
-    }
+        .submit-button:hover {
+            background: #333;
+        }
 
     .back-cart {
         display: inline-block;
@@ -166,9 +171,9 @@
         font-size: 14px;
     }
 
-    .back-cart:hover {
-        text-decoration: underline;
-    }
+        .back-cart:hover {
+            text-decoration: underline;
+        }
 
     .validation-summary {
         margin-bottom: 20px;
@@ -181,6 +186,10 @@
         margin-top: 5px;
         color: #b00020;
         font-size: 13px;
+    }
+
+    .payment-selected {
+        border-color: #111;
     }
 
     @@media (max-width: 850px) {
@@ -202,8 +211,9 @@
     </h1>
 
 
-    <form asp-controller="ThanhToan"
-          asp-action="DatHang"
+    <form id="checkoutForm"
+          asp-controller="ThanhToan"
+          asp-action="DatHangVNPAY"
           method="post">
 
         @Html.AntiForgeryToken()
@@ -295,10 +305,6 @@
                                   class="form-control"
                                   placeholder="Ví dụ: Giao giờ hành chính..."></textarea>
 
-                        <span asp-validation-for="GhiChu"
-                              class="field-validation-error">
-                        </span>
-
                     </div>
 
                 </div>
@@ -316,7 +322,9 @@
                     </div>
 
 
-                    <label class="payment-option">
+                    <!-- VNPAY -->
+
+                    <label class="payment-option payment-selected">
 
                         <input type="radio"
                                asp-for="PhuongThucThanhToan"
@@ -328,8 +336,48 @@
                         </span>
 
                         <div class="payment-description">
-                            Bạn sẽ được chuyển đến cổng thanh toán
-                            VNPAY để thực hiện thanh toán online.
+                            Bạn sẽ được chuyển đến cổng VNPAY
+                            để thanh toán online.
+                        </div>
+
+                    </label>
+
+
+                    <!-- COD -->
+
+                    <label class="payment-option">
+
+                        <input type="radio"
+                               asp-for="PhuongThucThanhToan"
+                               value="COD" />
+
+                        <span class="payment-name">
+                            Thanh toán khi nhận hàng (COD)
+                        </span>
+
+                        <div class="payment-description">
+                            Đơn hàng sẽ được giữ hàng và chờ Admin
+                            xác nhận trước khi chốt đơn.
+                        </div>
+
+                    </label>
+
+
+                    <!-- BANK -->
+
+                    <label class="payment-option">
+
+                        <input type="radio"
+                               asp-for="PhuongThucThanhToan"
+                               value="BANK" />
+
+                        <span class="payment-name">
+                            Chuyển khoản ngân hàng
+                        </span>
+
+                        <div class="payment-description">
+                            Đơn hàng sẽ được giữ hàng và chờ Admin
+                            kiểm tra giao dịch chuyển khoản.
                         </div>
 
                     </label>
@@ -352,9 +400,6 @@
                     </div>
 
 
-                    <!-- ========================================= -->
-                    <!-- DANH SÁCH SẢN PHẨM -->
-                    <!-- ========================================= -->
                     @for (int i = 0; i < Model.SanPhams.Count; i++)
                     {
                         <div class="product-item">
@@ -401,8 +446,6 @@
                         </div>
 
 
-                        <!-- Hidden fields -->
-
                         <input type="hidden"
                                asp-for="SanPhams[i].MaSach" />
 
@@ -410,10 +453,6 @@
                                asp-for="SanPhams[i].SoLuong" />
                     }
 
-
-                    <!-- ========================================= -->
-                    <!-- TỔNG SỐ LƯỢNG -->
-                    <!-- ========================================= -->
 
                     <div class="summary-row"
                          style="margin-top:15px;">
@@ -429,10 +468,6 @@
                     </div>
 
 
-                    <!-- ========================================= -->
-                    <!-- TỔNG TIỀN -->
-                    <!-- ========================================= -->
-
                     <div class="summary-total">
 
                         <span>
@@ -447,14 +482,10 @@
                     </div>
 
 
-                    <!-- ========================================= -->
-                    <!-- ĐẶT HÀNG -->
-                    <!-- ========================================= -->
-
                     <button type="submit"
                             class="submit-button">
 
-                        ĐẶT HÀNG
+                        TIẾP TỤC
 
                     </button>
 
@@ -481,5 +512,101 @@
 @section Scripts {
 
     <partial name="_ValidationScriptsPartial" />
+
+    <script>
+
+        document.addEventListener(
+            "DOMContentLoaded",
+            function() {
+
+                const form =
+                    document.getElementById(
+                        "checkoutForm"
+                    );
+
+                const radios =
+                    document.querySelectorAll(
+                        'input[name="PhuongThucThanhToan"]'
+                    );
+
+                const options =
+                    document.querySelectorAll(
+                        ".payment-option"
+                    );
+
+
+                function updatePaymentMethod() {
+
+                    const selected =
+                        document.querySelector(
+                            'input[name="PhuongThucThanhToan"]:checked'
+                        );
+
+                    options.forEach(
+                        function(option) {
+                            option.classList.remove(
+                                "payment-selected"
+                            );
+                        }
+                    );
+
+
+                    if (!selected) {
+                        return;
+                    }
+
+
+                    const currentOption =
+                        selected.closest(
+                            ".payment-option"
+                        );
+
+
+                    if (currentOption) {
+                        currentOption.classList.add(
+                            "payment-selected"
+                        );
+                    }
+
+
+                    if (selected.value === "VNPAY") {
+
+                        form.action =
+                            "/ThanhToan/DatHangVNPAY";
+
+                    }
+                    else if (selected.value === "COD") {
+
+                        form.action =
+                            "/ThanhToan/DatHangCOD";
+
+                    }
+                    else if (selected.value === "BANK") {
+
+                        form.action =
+                            "/ThanhToan/DatHangChuyenKhoan";
+
+                    }
+                }
+
+
+                radios.forEach(
+                    function(radio) {
+
+                        radio.addEventListener(
+                            "change",
+                            updatePaymentMethod
+                        );
+
+                    }
+                );
+
+
+                updatePaymentMethod();
+
+            }
+        );
+
+    </script>
 
 }

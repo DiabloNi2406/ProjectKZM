@@ -1,4 +1,263 @@
-﻿@page
-@model ProjectKZM.Views.CashOnDelivery.IndexModel
+﻿@model ProjectKZM.ViewModels.ThanhToanViewModel
+
 @{
+    ViewData["Title"] = "Xác nhận đơn hàng COD";
 }
+
+<style>
+    .page {
+        max-width: 1000px;
+        margin: 0 auto;
+        padding: 55px 20px 80px;
+    }
+
+    .box {
+        background: #fff;
+        border: 1px solid #e5e5e5;
+        padding: 35px;
+    }
+
+    .title {
+        font-size: 35px;
+        margin-bottom: 15px;
+        font-weight: 400;
+    }
+
+    .message {
+        color: #666;
+        line-height: 1.7;
+        margin-bottom: 30px;
+    }
+
+    .product-item {
+        display: flex;
+        gap: 15px;
+        padding: 18px 0;
+        border-bottom: 1px solid #eee;
+    }
+
+    .product-image {
+        width: 75px;
+        height: 100px;
+        object-fit: cover;
+        background: #f2f2f2;
+        flex-shrink: 0;
+    }
+
+    .product-info {
+        flex: 1;
+    }
+
+    .product-name {
+        font-size: 16px;
+        font-weight: 500;
+        margin-bottom: 8px;
+    }
+
+    .product-quantity,
+    .product-price {
+        font-size: 14px;
+        color: #777;
+        margin-bottom: 5px;
+    }
+
+    .product-total {
+        font-weight: 600;
+        white-space: nowrap;
+    }
+
+    .summary {
+        border-top: 1px solid #ddd;
+        margin-top: 20px;
+        padding-top: 20px;
+    }
+
+    .summary-row {
+        display: flex;
+        justify-content: space-between;
+        padding: 9px 0;
+    }
+
+    .summary-total {
+        display: flex;
+        justify-content: space-between;
+        border-top: 1px solid #ddd;
+        margin-top: 10px;
+        padding-top: 20px;
+        font-size: 22px;
+        font-weight: 600;
+    }
+
+    .submit {
+        width: 100%;
+        border: none;
+        background: #111;
+        color: #fff;
+        padding: 16px;
+        margin-top: 25px;
+        cursor: pointer;
+        font-size: 15px;
+    }
+
+        .submit:hover {
+            background: #333;
+        }
+
+    .back {
+        display: inline-block;
+        margin-top: 18px;
+        color: #111;
+        text-decoration: none;
+    }
+</style>
+
+
+<div class="page">
+
+    <div class="box">
+
+        <h1 class="title">
+            Xác nhận đơn hàng COD
+        </h1>
+
+        <div class="message">
+            Đơn hàng của bạn sẽ được <strong>giữ hàng</strong>
+            và chuyển đến Admin để xác nhận.
+            Nếu Admin hủy, số lượng hàng đã giữ sẽ được
+            trả lại kho.
+        </div>
+
+
+        <h3>
+            Sản phẩm trong đơn hàng
+        </h3>
+
+
+        @for (int i = 0; i < Model.SanPhams.Count; i++)
+        {
+            <div class="product-item">
+
+                @if (!string.IsNullOrWhiteSpace(
+                    Model.SanPhams[i].Hinh))
+                {
+                    <img src="@Model.SanPhams[i].Hinh"
+                         class="product-image"
+                         alt="@Model.SanPhams[i].TenSach" />
+                }
+                else
+                {
+                    <div class="product-image"></div>
+                }
+
+
+                <div class="product-info">
+
+                    <div class="product-name">
+                        @Model.SanPhams[i].TenSach
+                    </div>
+
+                    <div class="product-quantity">
+                        Số lượng:
+                        @Model.SanPhams[i].SoLuong
+                    </div>
+
+                    <div class="product-price">
+                        Đơn giá:
+                        @Model.SanPhams[i].DonGia.ToString("N0")
+                        VNĐ
+                    </div>
+
+                </div>
+
+
+                <div class="product-total">
+                    @Model.SanPhams[i].ThanhTien.ToString("N0")
+                    VNĐ
+                </div>
+
+            </div>
+
+
+            <input type="hidden"
+                   asp-for="SanPhams[i].MaSach" />
+
+            <input type="hidden"
+                   asp-for="SanPhams[i].SoLuong" />
+        }
+
+
+        <div class="summary">
+
+            <div class="summary-row">
+                <span>Số lượng</span>
+                <strong>@Model.TongSoLuong</strong>
+            </div>
+
+
+            <div class="summary-total">
+                <span>Tổng tiền</span>
+
+                <span>
+                    @Model.TongTien.ToString("N0")
+                    VNĐ
+                </span>
+            </div>
+
+        </div>
+
+
+        <form asp-controller="ThanhToan"
+              asp-action="XacNhanCOD"
+              method="post">
+
+            @Html.AntiForgeryToken()
+
+
+            @for (int i = 0; i < Model.SanPhams.Count; i++)
+            {
+                <input type="hidden"
+                       asp-for="SanPhams[i].MaSach" />
+
+                <input type="hidden"
+                       asp-for="SanPhams[i].SoLuong" />
+            }
+
+
+            <input type="hidden"
+                   asp-for="HoTen" />
+
+            <input type="hidden"
+                   asp-for="SoDienThoai" />
+
+            <input type="hidden"
+                   asp-for="DiaChiGiaoHang" />
+
+            <input type="hidden"
+                   asp-for="GhiChu" />
+
+            <input type="hidden"
+                   name="PhuongThucThanhToan"
+                   value="COD" />
+
+
+            <button type="submit"
+                    class="submit">
+
+                XÁC NHẬN ĐẶT HÀNG COD
+
+            </button>
+
+        </form>
+
+
+        <a asp-controller="ThanhToan"
+           asp-action="Index"
+           class="back">
+
+            ← Quay lại phương thức thanh toán
+
+        </a>
+
+    </div>
+
+</div>

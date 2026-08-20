@@ -9,7 +9,7 @@
            ========================================================= */
 
     .admin-page {
-        max-width: 1100px;
+        max-width: 1400px;
         margin: 0 auto;
         padding: 60px 25px 70px;
     }
@@ -59,10 +59,10 @@
            ========================================================= */
 
     .management-container {
-        max-width: 950px;
+        max-width: 1250px;
         margin: 0 auto;
         display: grid;
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(3, 1fr);
         gap: 25px;
         align-items: stretch;
     }
@@ -175,7 +175,9 @@
         }
 
 
-    /* ICON */
+    /* =========================================================
+           ICON
+           ========================================================= */
 
     .management-button-icon {
         width: 36px;
@@ -191,7 +193,9 @@
     }
 
 
-    /* ARROW */
+    /* =========================================================
+           ARROW
+           ========================================================= */
 
     .management-button-arrow {
         margin-left: auto;
@@ -201,7 +205,9 @@
     }
 
 
-    /* HOVER */
+    /* =========================================================
+           HOVER
+           ========================================================= */
 
     .management-button:hover {
         background: #fafafa;
@@ -259,6 +265,15 @@
     /* =========================================================
            RESPONSIVE
            ========================================================= */
+
+    @@media (max-width: 1100px) {
+
+        .management-container {
+            grid-template-columns: repeat(2, 1fr);
+            max-width: 900px;
+        }
+    }
+
 
     @@media (max-width: 800px) {
 
@@ -487,6 +502,122 @@
         </div>
 
 
+        <!-- =================================================
+             QUẢN LÝ ĐƠN HÀNG
+             ================================================= -->
+
+        <div class="management-card">
+
+            <div class="management-card-header">
+
+                <div class="management-card-icon">
+                    🛒
+                </div>
+
+                <div>
+
+                    <h2>
+                        Quản lý đơn hàng
+                    </h2>
+
+                    <p class="management-card-description">
+                        Quản lý thông tin dữ liệu đơn hàng
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- CHỜ XÁC NHẬN -->
+
+            <a asp-controller="DonHangs"
+               asp-action="ChoXacNhan"
+               class="management-button">
+
+                <span class="management-button-icon">
+                    ⏳
+                </span>
+
+                <span>
+                    Chờ xác nhận
+                </span>
+
+                <span class="management-button-arrow">
+                    →
+                </span>
+
+            </a>
+
+
+            <!-- ĐƠN HÀNG -->
+
+            <a asp-controller="DonHangs"
+               asp-action="Index"
+               class="management-button">
+
+                <span class="management-button-icon">
+                    📦
+                </span>
+
+                <span>
+                    Đơn hàng
+                </span>
+
+                <span class="management-button-arrow">
+                    →
+                </span>
+
+            </a>
+
+
+            
+
+
+            <!-- LỊCH SỬ GIAO DỊCH -->
+
+            <a asp-controller="DonHangs"
+               asp-action="Index"
+               class="management-button">
+
+                <span class="management-button-icon">
+                    🔄
+                </span>
+
+                <span>
+                    Lịch sử giao dịch
+                </span>
+
+                <span class="management-button-arrow">
+                    →
+                </span>
+
+            </a>
+
+
+            <!-- THỐNG KÊ GIAO DỊCH -->
+
+            <a asp-controller="DonHangs"
+               asp-action="ThongKe"
+               class="management-button">
+
+                <span class="management-button-icon">
+                    📊
+                </span>
+
+                <span>
+                    Thống kê giao dịch
+                </span>
+
+                <span class="management-button-arrow">
+                    →
+                </span>
+
+            </a>
+
+        </div>
+
+
     </div>
 
 
@@ -501,6 +632,7 @@
            class="back-button">
 
             ←
+
             <span>
                 Quay lại trang chủ
             </span>

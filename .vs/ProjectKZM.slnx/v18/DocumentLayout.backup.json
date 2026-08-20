@@ -3,20 +3,76 @@
   "WorkspaceRootPath": "C:\\Users\\Asus\\Desktop\\Big Project\\ProjectKZM\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{E41800D2-0F51-8312-DF13-9E7309DBBDD7}|ProjectKZM\\ProjectKZM.csproj|c:\\users\\asus\\desktop\\big project\\projectkzm\\projectkzm\\controllers\\nguoidungscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{E41800D2-0F51-8312-DF13-9E7309DBBDD7}|ProjectKZM\\ProjectKZM.csproj|solutionrelative:projectkzm\\controllers\\nguoidungscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{E41800D2-0F51-8312-DF13-9E7309DBBDD7}|ProjectKZM\\ProjectKZM.csproj|c:\\users\\asus\\desktop\\big project\\projectkzm\\projectkzm\\views\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{E41800D2-0F51-8312-DF13-9E7309DBBDD7}|ProjectKZM\\ProjectKZM.csproj|solutionrelative:projectkzm\\views\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E41800D2-0F51-8312-DF13-9E7309DBBDD7}|ProjectKZM\\ProjectKZM.csproj|c:\\users\\asus\\desktop\\big project\\projectkzm\\projectkzm\\controllers\\thanhtoancontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E41800D2-0F51-8312-DF13-9E7309DBBDD7}|ProjectKZM\\ProjectKZM.csproj|solutionrelative:projectkzm\\controllers\\thanhtoancontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E41800D2-0F51-8312-DF13-9E7309DBBDD7}|ProjectKZM\\ProjectKZM.csproj|c:\\users\\asus\\desktop\\big project\\projectkzm\\projectkzm\\viewmodels\\thanhtoanviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E41800D2-0F51-8312-DF13-9E7309DBBDD7}|ProjectKZM\\ProjectKZM.csproj|solutionrelative:projectkzm\\viewmodels\\thanhtoanviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E41800D2-0F51-8312-DF13-9E7309DBBDD7}|ProjectKZM\\ProjectKZM.csproj|c:\\users\\asus\\desktop\\big project\\projectkzm\\projectkzm\\views\\chuyenkhoan\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{E41800D2-0F51-8312-DF13-9E7309DBBDD7}|ProjectKZM\\ProjectKZM.csproj|solutionrelative:projectkzm\\views\\chuyenkhoan\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E41800D2-0F51-8312-DF13-9E7309DBBDD7}|ProjectKZM\\ProjectKZM.csproj|c:\\users\\asus\\desktop\\big project\\projectkzm\\projectkzm\\views\\admin\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{E41800D2-0F51-8312-DF13-9E7309DBBDD7}|ProjectKZM\\ProjectKZM.csproj|solutionrelative:projectkzm\\views\\admin\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E41800D2-0F51-8312-DF13-9E7309DBBDD7}|ProjectKZM\\ProjectKZM.csproj|c:\\users\\asus\\desktop\\big project\\projectkzm\\projectkzm\\views\\cashondelivery\\ketqua.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{E41800D2-0F51-8312-DF13-9E7309DBBDD7}|ProjectKZM\\ProjectKZM.csproj|solutionrelative:projectkzm\\views\\cashondelivery\\ketqua.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E41800D2-0F51-8312-DF13-9E7309DBBDD7}|ProjectKZM\\ProjectKZM.csproj|c:\\users\\asus\\desktop\\big project\\projectkzm\\projectkzm\\views\\cashondelivery\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{E41800D2-0F51-8312-DF13-9E7309DBBDD7}|ProjectKZM\\ProjectKZM.csproj|solutionrelative:projectkzm\\views\\cashondelivery\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E41800D2-0F51-8312-DF13-9E7309DBBDD7}|ProjectKZM\\ProjectKZM.csproj|c:\\users\\asus\\desktop\\big project\\projectkzm\\projectkzm\\views\\donhangs\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{E41800D2-0F51-8312-DF13-9E7309DBBDD7}|ProjectKZM\\ProjectKZM.csproj|solutionrelative:projectkzm\\views\\donhangs\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E41800D2-0F51-8312-DF13-9E7309DBBDD7}|ProjectKZM\\ProjectKZM.csproj|c:\\users\\asus\\desktop\\big project\\projectkzm\\projectkzm\\viewmodels\\donhangchitietviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E41800D2-0F51-8312-DF13-9E7309DBBDD7}|ProjectKZM\\ProjectKZM.csproj|solutionrelative:projectkzm\\viewmodels\\donhangchitietviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E41800D2-0F51-8312-DF13-9E7309DBBDD7}|ProjectKZM\\ProjectKZM.csproj|c:\\users\\asus\\desktop\\big project\\projectkzm\\projectkzm\\views\\donhangs\\choxacnhan.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{E41800D2-0F51-8312-DF13-9E7309DBBDD7}|ProjectKZM\\ProjectKZM.csproj|solutionrelative:projectkzm\\views\\donhangs\\choxacnhan.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E41800D2-0F51-8312-DF13-9E7309DBBDD7}|ProjectKZM\\ProjectKZM.csproj|c:\\users\\asus\\desktop\\big project\\projectkzm\\projectkzm\\controllers\\donhangscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E41800D2-0F51-8312-DF13-9E7309DBBDD7}|ProjectKZM\\ProjectKZM.csproj|solutionrelative:projectkzm\\controllers\\donhangscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E41800D2-0F51-8312-DF13-9E7309DBBDD7}|ProjectKZM\\ProjectKZM.csproj|c:\\users\\asus\\desktop\\big project\\projectkzm\\projectkzm\\viewmodels\\thongkedonhangviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E41800D2-0F51-8312-DF13-9E7309DBBDD7}|ProjectKZM\\ProjectKZM.csproj|solutionrelative:projectkzm\\viewmodels\\thongkedonhangviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E41800D2-0F51-8312-DF13-9E7309DBBDD7}|ProjectKZM\\ProjectKZM.csproj|c:\\users\\asus\\desktop\\big project\\projectkzm\\projectkzm\\viewmodels\\donhangviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E41800D2-0F51-8312-DF13-9E7309DBBDD7}|ProjectKZM\\ProjectKZM.csproj|solutionrelative:projectkzm\\viewmodels\\donhangviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{E41800D2-0F51-8312-DF13-9E7309DBBDD7}|ProjectKZM\\ProjectKZM.csproj|c:\\users\\asus\\desktop\\big project\\projectkzm\\projectkzm\\views\\chuyenkhoan\\ketqua.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
       "RelativeMoniker": "D:0:0:{E41800D2-0F51-8312-DF13-9E7309DBBDD7}|ProjectKZM\\ProjectKZM.csproj|solutionrelative:projectkzm\\views\\chuyenkhoan\\ketqua.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{E41800D2-0F51-8312-DF13-9E7309DBBDD7}|ProjectKZM\\ProjectKZM.csproj|c:\\users\\asus\\desktop\\big project\\projectkzm\\projectkzm\\views\\thanhtoan\\ketqua.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{E41800D2-0F51-8312-DF13-9E7309DBBDD7}|ProjectKZM\\ProjectKZM.csproj|solutionrelative:projectkzm\\views\\thanhtoan\\ketqua.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+      "AbsoluteMoniker": "D:0:0:{E41800D2-0F51-8312-DF13-9E7309DBBDD7}|ProjectKZM\\ProjectKZM.csproj|c:\\users\\asus\\desktop\\big project\\projectkzm\\projectkzm\\views\\sachs\\delete.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{E41800D2-0F51-8312-DF13-9E7309DBBDD7}|ProjectKZM\\ProjectKZM.csproj|solutionrelative:projectkzm\\views\\sachs\\delete.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{E41800D2-0F51-8312-DF13-9E7309DBBDD7}|ProjectKZM\\ProjectKZM.csproj|c:\\users\\asus\\desktop\\big project\\projectkzm\\projectkzm\\controllers\\thanhtoancontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{E41800D2-0F51-8312-DF13-9E7309DBBDD7}|ProjectKZM\\ProjectKZM.csproj|solutionrelative:projectkzm\\controllers\\thanhtoancontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{E41800D2-0F51-8312-DF13-9E7309DBBDD7}|ProjectKZM\\ProjectKZM.csproj|c:\\users\\asus\\desktop\\big project\\projectkzm\\projectkzm\\views\\nguoidungs\\delete.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{E41800D2-0F51-8312-DF13-9E7309DBBDD7}|ProjectKZM\\ProjectKZM.csproj|solutionrelative:projectkzm\\views\\nguoidungs\\delete.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E41800D2-0F51-8312-DF13-9E7309DBBDD7}|ProjectKZM\\ProjectKZM.csproj|c:\\users\\asus\\desktop\\big project\\projectkzm\\projectkzm\\controllers\\nguoidungscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E41800D2-0F51-8312-DF13-9E7309DBBDD7}|ProjectKZM\\ProjectKZM.csproj|solutionrelative:projectkzm\\controllers\\nguoidungscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E41800D2-0F51-8312-DF13-9E7309DBBDD7}|ProjectKZM\\ProjectKZM.csproj|c:\\users\\asus\\desktop\\big project\\projectkzm\\projectkzm\\views\\thanhtoan\\ketqua.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{E41800D2-0F51-8312-DF13-9E7309DBBDD7}|ProjectKZM\\ProjectKZM.csproj|solutionrelative:projectkzm\\views\\thanhtoan\\ketqua.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{E41800D2-0F51-8312-DF13-9E7309DBBDD7}|ProjectKZM\\ProjectKZM.csproj|c:\\users\\asus\\desktop\\big project\\projectkzm\\projectkzm\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
@@ -49,37 +105,213 @@
               "Name": "ST:0:0:{3ae79031-e1bc-11d0-8f78-00a0c9110057}"
             },
             {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "Index.cshtml",
+              "DocumentMoniker": "C:\\Users\\Asus\\Desktop\\Big Project\\ProjectKZM\\ProjectKZM\\Views\\Admin\\Index.cshtml",
+              "RelativeDocumentMoniker": "ProjectKZM\\Views\\Admin\\Index.cshtml",
+              "ToolTip": "C:\\Users\\Asus\\Desktop\\Big Project\\ProjectKZM\\ProjectKZM\\Views\\Admin\\Index.cshtml",
+              "RelativeToolTip": "ProjectKZM\\Views\\Admin\\Index.cshtml",
+              "ViewState": "AgIAADcCAAAAAAAAAAAcwD0CAAAMAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-08-16T17:56:46.048Z"
             },
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "NguoiDungsController.cs",
-              "DocumentMoniker": "C:\\Users\\Asus\\Desktop\\Big Project\\ProjectKZM\\ProjectKZM\\Controllers\\NguoiDungsController.cs",
-              "RelativeDocumentMoniker": "ProjectKZM\\Controllers\\NguoiDungsController.cs",
-              "ToolTip": "C:\\Users\\Asus\\Desktop\\Big Project\\ProjectKZM\\ProjectKZM\\Controllers\\NguoiDungsController.cs",
-              "RelativeToolTip": "ProjectKZM\\Controllers\\NguoiDungsController.cs",
-              "ViewState": "AgIAAFsBAAAAAAAAAAA0wGEBAAABAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-08-13T18:54:24.046Z",
+              "Title": "_Layout.cshtml",
+              "DocumentMoniker": "C:\\Users\\Asus\\Desktop\\Big Project\\ProjectKZM\\ProjectKZM\\Views\\Shared\\_Layout.cshtml",
+              "RelativeDocumentMoniker": "ProjectKZM\\Views\\Shared\\_Layout.cshtml",
+              "ToolTip": "C:\\Users\\Asus\\Desktop\\Big Project\\ProjectKZM\\ProjectKZM\\Views\\Shared\\_Layout.cshtml",
+              "RelativeToolTip": "ProjectKZM\\Views\\Shared\\_Layout.cshtml",
+              "ViewState": "AgIAAK8BAAAAAAAAAAAcwLYBAAAlAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-08-16T17:53:37.612Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 1,
+              "Title": "ThanhToanController.cs",
+              "DocumentMoniker": "C:\\Users\\Asus\\Desktop\\Big Project\\ProjectKZM\\ProjectKZM\\Controllers\\ThanhToanController.cs",
+              "RelativeDocumentMoniker": "ProjectKZM\\Controllers\\ThanhToanController.cs",
+              "ToolTip": "C:\\Users\\Asus\\Desktop\\Big Project\\ProjectKZM\\ProjectKZM\\Controllers\\ThanhToanController.cs",
+              "RelativeToolTip": "ProjectKZM\\Controllers\\ThanhToanController.cs",
+              "ViewState": "AgIAAPoBAAAAAAAAAAAMwAkCAAAPAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-08-16T17:36:30.746Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "ChoXacNhan.cshtml",
+              "DocumentMoniker": "C:\\Users\\Asus\\Desktop\\Big Project\\ProjectKZM\\ProjectKZM\\Views\\DonHangs\\ChoXacNhan.cshtml",
+              "RelativeDocumentMoniker": "ProjectKZM\\Views\\DonHangs\\ChoXacNhan.cshtml",
+              "ToolTip": "C:\\Users\\Asus\\Desktop\\Big Project\\ProjectKZM\\ProjectKZM\\Views\\DonHangs\\ChoXacNhan.cshtml",
+              "RelativeToolTip": "ProjectKZM\\Views\\DonHangs\\ChoXacNhan.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAALUAAAAGAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-08-16T17:30:06.725Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "Index.cshtml",
+              "DocumentMoniker": "C:\\Users\\Asus\\Desktop\\Big Project\\ProjectKZM\\ProjectKZM\\Views\\DonHangs\\Index.cshtml",
+              "RelativeDocumentMoniker": "ProjectKZM\\Views\\DonHangs\\Index.cshtml",
+              "ToolTip": "C:\\Users\\Asus\\Desktop\\Big Project\\ProjectKZM\\ProjectKZM\\Views\\DonHangs\\Index.cshtml",
+              "RelativeToolTip": "ProjectKZM\\Views\\DonHangs\\Index.cshtml",
+              "ViewState": "AgIAAJEAAAAAAAAAAAAYwLQAAAAGAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-08-16T17:29:46.099Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "DonHangsController.cs",
+              "DocumentMoniker": "C:\\Users\\Asus\\Desktop\\Big Project\\ProjectKZM\\ProjectKZM\\Controllers\\DonHangsController.cs",
+              "RelativeDocumentMoniker": "ProjectKZM\\Controllers\\DonHangsController.cs",
+              "ToolTip": "C:\\Users\\Asus\\Desktop\\Big Project\\ProjectKZM\\ProjectKZM\\Controllers\\DonHangsController.cs",
+              "RelativeToolTip": "ProjectKZM\\Controllers\\DonHangsController.cs",
+              "ViewState": "AgIAALUCAAAAAAAAAAAYwMYCAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-08-16T17:28:48.966Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "ThongKeDonHangViewModel.cs",
+              "DocumentMoniker": "C:\\Users\\Asus\\Desktop\\Big Project\\ProjectKZM\\ProjectKZM\\ViewModels\\ThongKeDonHangViewModel.cs",
+              "RelativeDocumentMoniker": "ProjectKZM\\ViewModels\\ThongKeDonHangViewModel.cs",
+              "ToolTip": "C:\\Users\\Asus\\Desktop\\Big Project\\ProjectKZM\\ProjectKZM\\ViewModels\\ThongKeDonHangViewModel.cs",
+              "RelativeToolTip": "ProjectKZM\\ViewModels\\ThongKeDonHangViewModel.cs",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAYwBQAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-08-16T17:28:32.119Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "DonHangChiTietViewModel.cs",
+              "DocumentMoniker": "C:\\Users\\Asus\\Desktop\\Big Project\\ProjectKZM\\ProjectKZM\\ViewModels\\DonHangChiTietViewModel.cs",
+              "RelativeDocumentMoniker": "ProjectKZM\\ViewModels\\DonHangChiTietViewModel.cs",
+              "ToolTip": "C:\\Users\\Asus\\Desktop\\Big Project\\ProjectKZM\\ProjectKZM\\ViewModels\\DonHangChiTietViewModel.cs",
+              "RelativeToolTip": "ProjectKZM\\ViewModels\\DonHangChiTietViewModel.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAACwAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-08-16T17:28:18.034Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "DonHangViewModel.cs",
+              "DocumentMoniker": "C:\\Users\\Asus\\Desktop\\Big Project\\ProjectKZM\\ProjectKZM\\ViewModels\\DonHangViewModel.cs",
+              "RelativeDocumentMoniker": "ProjectKZM\\ViewModels\\DonHangViewModel.cs",
+              "ToolTip": "C:\\Users\\Asus\\Desktop\\Big Project\\ProjectKZM\\ProjectKZM\\ViewModels\\DonHangViewModel.cs",
+              "RelativeToolTip": "ProjectKZM\\ViewModels\\DonHangViewModel.cs",
+              "ViewState": "AgIAAA4AAAAAAAAAAAA/wBwAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-08-16T17:27:40.566Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "Index.cshtml",
+              "DocumentMoniker": "C:\\Users\\Asus\\Desktop\\Big Project\\ProjectKZM\\ProjectKZM\\Views\\ChuyenKhoan\\Index.cshtml",
+              "RelativeDocumentMoniker": "ProjectKZM\\Views\\ChuyenKhoan\\Index.cshtml",
+              "ToolTip": "C:\\Users\\Asus\\Desktop\\Big Project\\ProjectKZM\\ProjectKZM\\Views\\ChuyenKhoan\\Index.cshtml",
+              "RelativeToolTip": "ProjectKZM\\Views\\ChuyenKhoan\\Index.cshtml",
+              "ViewState": "AgIAABoCAAAAAAAAAAAcwDICAAAWAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-08-16T17:16:23.354Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "KetQua.cshtml",
+              "DocumentMoniker": "C:\\Users\\Asus\\Desktop\\Big Project\\ProjectKZM\\ProjectKZM\\Views\\CashOnDelivery\\KetQua.cshtml",
+              "RelativeDocumentMoniker": "ProjectKZM\\Views\\CashOnDelivery\\KetQua.cshtml",
+              "ToolTip": "C:\\Users\\Asus\\Desktop\\Big Project\\ProjectKZM\\ProjectKZM\\Views\\CashOnDelivery\\KetQua.cshtml",
+              "RelativeToolTip": "ProjectKZM\\Views\\CashOnDelivery\\KetQua.cshtml",
+              "ViewState": "AgIAADYAAAAAAAAAAAAowF4AAAAGAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-08-16T17:16:17.155Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "Index.cshtml",
+              "DocumentMoniker": "C:\\Users\\Asus\\Desktop\\Big Project\\ProjectKZM\\ProjectKZM\\Views\\CashOnDelivery\\Index.cshtml",
+              "RelativeDocumentMoniker": "ProjectKZM\\Views\\CashOnDelivery\\Index.cshtml",
+              "ToolTip": "C:\\Users\\Asus\\Desktop\\Big Project\\ProjectKZM\\ProjectKZM\\Views\\CashOnDelivery\\Index.cshtml",
+              "RelativeToolTip": "ProjectKZM\\Views\\CashOnDelivery\\Index.cshtml",
+              "ViewState": "AgIAAHgAAAAAAAAAAAAAAO0AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-08-16T17:16:07.236Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "ThanhToanViewModel.cs",
+              "DocumentMoniker": "C:\\Users\\Asus\\Desktop\\Big Project\\ProjectKZM\\ProjectKZM\\ViewModels\\ThanhToanViewModel.cs",
+              "RelativeDocumentMoniker": "ProjectKZM\\ViewModels\\ThanhToanViewModel.cs",
+              "ToolTip": "C:\\Users\\Asus\\Desktop\\Big Project\\ProjectKZM\\ProjectKZM\\ViewModels\\ThanhToanViewModel.cs",
+              "RelativeToolTip": "ProjectKZM\\ViewModels\\ThanhToanViewModel.cs",
+              "ViewState": "AgIAAAsAAAAAAAAAAAAAwE8AAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-08-16T17:13:39.511Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "Delete.cshtml",
+              "DocumentMoniker": "C:\\Users\\Asus\\Desktop\\Big Project\\ProjectKZM\\ProjectKZM\\Views\\Sachs\\Delete.cshtml",
+              "RelativeDocumentMoniker": "ProjectKZM\\Views\\Sachs\\Delete.cshtml",
+              "ToolTip": "C:\\Users\\Asus\\Desktop\\Big Project\\ProjectKZM\\ProjectKZM\\Views\\Sachs\\Delete.cshtml",
+              "RelativeToolTip": "ProjectKZM\\Views\\Sachs\\Delete.cshtml",
+              "ViewState": "AgIAAOEAAAAAAAAAAAAAAPIAAAAKAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-08-14T14:58:30.052Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 15,
+              "Title": "Delete.cshtml",
+              "DocumentMoniker": "C:\\Users\\Asus\\Desktop\\Big Project\\ProjectKZM\\ProjectKZM\\Views\\NguoiDungs\\Delete.cshtml",
+              "RelativeDocumentMoniker": "ProjectKZM\\Views\\NguoiDungs\\Delete.cshtml",
+              "ToolTip": "C:\\Users\\Asus\\Desktop\\Big Project\\ProjectKZM\\ProjectKZM\\Views\\NguoiDungs\\Delete.cshtml",
+              "RelativeToolTip": "ProjectKZM\\Views\\NguoiDungs\\Delete.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-08-14T14:58:15.942Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 16,
+              "Title": "NguoiDungsController.cs",
+              "DocumentMoniker": "C:\\Users\\Asus\\Desktop\\Big Project\\ProjectKZM\\ProjectKZM\\Controllers\\NguoiDungsController.cs",
+              "RelativeDocumentMoniker": "ProjectKZM\\Controllers\\NguoiDungsController.cs",
+              "ToolTip": "C:\\Users\\Asus\\Desktop\\Big Project\\ProjectKZM\\ProjectKZM\\Controllers\\NguoiDungsController.cs",
+              "RelativeToolTip": "ProjectKZM\\Controllers\\NguoiDungsController.cs",
+              "ViewState": "AgIAAFEBAAAAAAAAAADwv2EBAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-08-13T18:54:24.046Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
               "Title": "KetQua.cshtml",
               "DocumentMoniker": "C:\\Users\\Asus\\Desktop\\Big Project\\ProjectKZM\\ProjectKZM\\Views\\ChuyenKhoan\\KetQua.cshtml",
               "RelativeDocumentMoniker": "ProjectKZM\\Views\\ChuyenKhoan\\KetQua.cshtml",
               "ToolTip": "C:\\Users\\Asus\\Desktop\\Big Project\\ProjectKZM\\ProjectKZM\\Views\\ChuyenKhoan\\KetQua.cshtml",
               "RelativeToolTip": "ProjectKZM\\Views\\ChuyenKhoan\\KetQua.cshtml",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAEsAAAAAAAAAAAAowF4AAAAGAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
               "WhenOpened": "2026-08-13T18:25:29.821Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 18,
               "Title": "appsettings.json",
               "DocumentMoniker": "C:\\Users\\Asus\\Desktop\\Big Project\\ProjectKZM\\ProjectKZM\\appsettings.json",
               "RelativeDocumentMoniker": "ProjectKZM\\appsettings.json",
@@ -91,19 +323,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "ThanhToanController.cs",
-              "DocumentMoniker": "C:\\Users\\Asus\\Desktop\\Big Project\\ProjectKZM\\ProjectKZM\\Controllers\\ThanhToanController.cs",
-              "RelativeDocumentMoniker": "ProjectKZM\\Controllers\\ThanhToanController.cs",
-              "ToolTip": "C:\\Users\\Asus\\Desktop\\Big Project\\ProjectKZM\\ProjectKZM\\Controllers\\ThanhToanController.cs",
-              "RelativeToolTip": "ProjectKZM\\Controllers\\ThanhToanController.cs",
-              "ViewState": "AgIAABwCAAAAAAAAAAAmwC0CAABEAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-08-13T10:36:01.256Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 17,
               "Title": "KetQua.cshtml",
               "DocumentMoniker": "C:\\Users\\Asus\\Desktop\\Big Project\\ProjectKZM\\ProjectKZM\\Views\\ThanhToan\\KetQua.cshtml",
               "RelativeDocumentMoniker": "ProjectKZM\\Views\\ThanhToan\\KetQua.cshtml",

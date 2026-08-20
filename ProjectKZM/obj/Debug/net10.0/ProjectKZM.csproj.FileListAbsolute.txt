@@ -223,4 +223,3 @@ C:\Users\Asus\Desktop\Big Project\ProjectKZM\ProjectKZM\obj\Debug\net10.0\refint
 C:\Users\Asus\Desktop\Big Project\ProjectKZM\ProjectKZM\obj\Debug\net10.0\ProjectKZM.pdb
 C:\Users\Asus\Desktop\Big Project\ProjectKZM\ProjectKZM\obj\Debug\net10.0\ProjectKZM.genruntimeconfig.cache
 C:\Users\Asus\Desktop\Big Project\ProjectKZM\ProjectKZM\obj\Debug\net10.0\ref\ProjectKZM.dll
-C:\Users\Asus\Desktop\Big Project\ProjectKZM\ProjectKZM\obj\Debug\net10.0\staticwebassets.upToDateCheck.txt

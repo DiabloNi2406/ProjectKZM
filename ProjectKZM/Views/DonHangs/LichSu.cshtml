@@ -1,0 +1,109 @@
+﻿@model IEnumerable<ProjectKZM.ViewModels.DonHangViewModel>
+
+@{
+    ViewData["Title"] = "Lịch sử mua hàng";
+}
+
+<style>
+    .page {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 45px 20px 80px;
+    }
+
+    .title {
+        font-size: 36px;
+        font-weight: 400;
+        margin-bottom: 30px;
+    }
+
+    .card {
+        border: 1px solid #e5e5e5;
+        padding: 20px;
+        margin-bottom: 15px;
+        background: #fff;
+    }
+
+    .top {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 12px;
+    }
+
+    .money {
+        font-weight: 600;
+    }
+
+    .meta {
+        color: #777;
+        font-size: 14px;
+        margin-bottom: 8px;
+    }
+
+    .detail {
+        color: #111;
+        text-decoration: none;
+        font-size: 14px;
+    }
+</style>
+
+
+<div class="page">
+
+    <h1 class="title">
+        Lịch sử mua hàng
+    </h1>
+
+
+    @if (!Model.Any())
+    {
+        <p>
+            Bạn chưa có đơn hàng nào.
+        </p>
+    }
+    else
+    {
+        @foreach (var item in Model)
+        {
+            <div class="card">
+
+                <div class="top">
+
+                    <strong>
+                        Đơn hàng #@item.MaDonHang
+                    </strong>
+
+                    <strong class="money">
+                        @item.TongTien.ToString("N0") VNĐ
+                    </strong>
+
+                </div>
+
+                <div class="meta">
+                    Ngày đặt:
+                    @item.NgayDat.ToString("dd/MM/yyyy HH:mm")
+                </div>
+
+                <div class="meta">
+                    Phương thức:
+                    @item.PhuongThucThanhToan
+                </div>
+
+                <div class="meta">
+                    Trạng thái:
+                    @item.TrangThai
+                </div>
+
+                <a asp-action="ChiTietCuaToi"
+                   asp-route-id="@item.MaDonHang"
+                   class="detail">
+
+                    Xem chi tiết →
+
+                </a>
+
+            </div>
+        }
+    }
+
+</div>

@@ -1,0 +1,181 @@
+﻿@model IEnumerable<ProjectKZM.ViewModels.DonHangViewModel>
+
+@{
+    ViewData["Title"] = "Quản lý đơn hàng";
+}
+
+<style>
+    .page {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 40px 20px 80px;
+    }
+
+    .title {
+        font-size: 36px;
+        font-weight: 400;
+        margin-bottom: 30px;
+    }
+
+    .top-actions {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 25px;
+    }
+
+    .action {
+        display: inline-block;
+        padding: 11px 16px;
+        background: #111;
+        color: #fff;
+        text-decoration: none;
+        font-size: 14px;
+    }
+
+        .action.light {
+            background: #eee;
+            color: #111;
+        }
+
+    .table-box {
+        overflow-x: auto;
+        border: 1px solid #e5e5e5;
+        background: #fff;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    th,
+    td {
+        padding: 14px;
+        border-bottom: 1px solid #eee;
+        text-align: left;
+        white-space: nowrap;
+    }
+
+    th {
+        font-weight: 500;
+        background: #fafafa;
+    }
+
+    .status {
+        padding: 5px 9px;
+        background: #f1f1f1;
+        font-size: 12px;
+    }
+
+    .money {
+        font-weight: 500;
+    }
+</style>
+
+
+<div class="page">
+
+    <h1 class="title">
+        Quản lý đơn hàng
+    </h1>
+
+
+    <div class="top-actions">
+
+        <a asp-action="ChoXacNhan"
+           class="action">
+
+            Đơn chờ xác nhận
+
+        </a>
+
+
+        <a asp-action="ThongKe"
+           class="action light">
+
+            Thống kê
+
+        </a>
+
+    </div>
+
+
+    <div class="table-box">
+
+        <table>
+
+            <thead>
+
+                <tr>
+                    <th>Mã đơn</th>
+                    <th>Ngày đặt</th>
+                    <th>Khách hàng</th>
+                    <th>Phương thức</th>
+                    <th>Số lượng</th>
+                    <th>Tổng tiền</th>
+                    <th>Trạng thái</th>
+                    <th></th>
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+                @foreach (var item in Model)
+                {
+                    <tr>
+
+                        <td>
+                            #@item.MaDonHang
+                        </td>
+
+                        <td>
+                            @item.NgayDat.ToString("dd/MM/yyyy HH:mm")
+                        </td>
+
+                        <td>
+                            @item.TenKhachHang
+                        </td>
+
+                        <td>
+                            @item.PhuongThucThanhToan
+                        </td>
+
+                        <td>
+                            @item.TongSoLuong
+                        </td>
+
+                        <td class="money">
+                            @item.TongTien.ToString("N0") VNĐ
+                        </td>
+
+                        <td>
+
+                            <span class="status">
+                                @item.TrangThai
+                            </span>
+
+                        </td>
+
+                        <td>
+
+                            <a asp-action="ChiTiet"
+                               asp-route-id="@item.MaDonHang">
+
+                                Chi tiết
+
+                            </a>
+
+                        </td>
+
+                    </tr>
+                }
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>

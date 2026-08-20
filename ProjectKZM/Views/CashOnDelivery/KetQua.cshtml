@@ -1,4 +1,95 @@
-﻿@page
-@model ProjectKZM.Views.CashOnDelivery.KetQuaModel
-@{
+﻿@{
+    ViewData["Title"] = "Kết quả COD";
+
+    bool success =
+        ViewData["Success"] is bool b && b;
+
+    string message =
+        ViewData["Message"]?.ToString()
+        ?? "Không có thông tin.";
 }
+
+<style>
+    .page {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 80px 20px;
+    }
+
+    .box {
+        border: 1px solid #e5e5e5;
+        padding: 45px;
+        text-align: center;
+    }
+
+    .icon {
+        font-size: 50px;
+        margin-bottom: 20px;
+    }
+
+    .title {
+        font-size: 32px;
+        margin-bottom: 15px;
+    }
+
+    .message {
+        color: #666;
+        line-height: 1.7;
+        margin-bottom: 30px;
+    }
+
+    .button {
+        display: inline-block;
+        background: #111;
+        color: #fff;
+        text-decoration: none;
+        padding: 14px 25px;
+    }
+</style>
+
+
+<div class="page">
+
+    <div class="box">
+
+        @if (success)
+        {
+            <div class="icon">
+                ✓
+            </div>
+
+            <div class="title">
+                Đặt hàng thành công
+            </div>
+
+            <div class="message">
+                @message
+            </div>
+        }
+        else
+        {
+            <div class="icon">
+                ✕
+            </div>
+
+            <div class="title">
+                Không thể đặt hàng
+            </div>
+
+            <div class="message">
+                @message
+            </div>
+        }
+
+
+        <a asp-controller="Home"
+           asp-action="Index"
+           class="button">
+
+            Về trang chủ
+
+        </a>
+
+    </div>
+
+</div>
