@@ -120,6 +120,15 @@ namespace ProjectKZM.Controllers
             }
 
             // ---------------------------------------------
+            // Ảnh mặc định nếu chưa chọn ảnh
+            // ---------------------------------------------
+
+            if (string.IsNullOrWhiteSpace(nguoiDung.AnhDaiDien))
+            {
+                nguoiDung.AnhDaiDien = "/images/Icon/user.jpg";
+            }
+
+            // ---------------------------------------------
             // Thêm người dùng
             // ---------------------------------------------
 
@@ -146,7 +155,8 @@ namespace ProjectKZM.Controllers
             }
 
             var nguoiDung = await _context.NguoiDungs
-                .FindAsync(manguoidung);
+                .FirstOrDefaultAsync(x =>
+                    x.MaNguoiDung == manguoidung);
 
             if (nguoiDung == null)
             {
@@ -158,6 +168,7 @@ namespace ProjectKZM.Controllers
             return View(nguoiDung);
         }
 
+
         // =====================================================
         // EDIT - POST
         // =====================================================
@@ -165,76 +176,144 @@ namespace ProjectKZM.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(
-            int manguoidung,
-            [Bind("MaNguoiDung,HoTen,Email,MatKhau,SoDienThoai,DiaChi,AnhDaiDien,MaVaiTro")]
-            NguoiDung nguoiDung)
+            NguoiDung nguoiDung,
+            IFormFile? anhDaiDienFile)
         {
-            if (manguoidung != nguoiDung.MaNguoiDung)
+            // -----------------------------------------------------
+            // Lấy đúng người dùng từ MaNguoiDung gửi từ form
+            // -----------------------------------------------------
+
+            var user = await _context.NguoiDungs
+                .FirstOrDefaultAsync(x =>
+                    x.MaNguoiDung == nguoiDung.MaNguoiDung);
+
+            if (user == null)
             {
                 return NotFound();
             }
 
-            // ---------------------------------------------
-            // Kiểm tra Email trùng
-            // ---------------------------------------------
 
-            bool emailExists = await _context.NguoiDungs
-                .AnyAsync(x =>
-                    x.Email == nguoiDung.Email &&
-                    x.MaNguoiDung != nguoiDung.MaNguoiDung);
-
-            if (emailExists)
-            {
-                ModelState.AddModelError(
-                    "Email",
-                    "Email này đã được sử dụng.");
-            }
-
-            // ---------------------------------------------
-            // Kiểm tra Role
-            // ---------------------------------------------
-
-            bool roleExists = await _context.VaiTros
-                .AnyAsync(x =>
-                    x.MaVaiTro == nguoiDung.MaVaiTro);
-
-            if (!roleExists)
-            {
-                ModelState.AddModelError(
-                    "MaVaiTro",
-                    "Vai trò không tồn tại.");
-            }
-
-            // ---------------------------------------------
-            // Nếu lỗi
-            // ---------------------------------------------
+            // -----------------------------------------------------
+            // Kiểm tra Model
+            // -----------------------------------------------------
 
             if (!ModelState.IsValid)
             {
-                await LoadRolesAsync(nguoiDung.MaVaiTro);
+                await LoadRolesAsync(user.MaVaiTro);
 
                 return View(nguoiDung);
             }
 
-            // ---------------------------------------------
-            // Cập nhật
-            // ---------------------------------------------
 
-            try
-            {
-                _context.Update(nguoiDung);
+            // -----------------------------------------------------
+            // CẬP NHẬT THÔNG TIN
+            // -----------------------------------------------------
 
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
+            user.HoTen = nguoiDung.HoTen;
+            user.Email = nguoiDung.Email;
+            user.MatKhau = nguoiDung.MatKhau;
+            user.SoDienThoai = nguoiDung.SoDienThoai;
+            user.DiaChi = nguoiDung.DiaChi;
+
+
+            // -----------------------------------------------------
+            // GIỮ NGUYÊN VAI TRÒ HIỆN TẠI
+            // -----------------------------------------------------
+
+            user.MaVaiTro = user.MaVaiTro;
+
+
+            // -----------------------------------------------------
+            // CẬP NHẬT AVATAR
+            // -----------------------------------------------------
+
+            if (anhDaiDienFile != null &&
+                anhDaiDienFile.Length > 0)
             {
-                if (!NguoiDungExists(nguoiDung.MaNguoiDung))
+                string uploadsFolder =
+                    Path.Combine(
+                        Directory.GetCurrentDirectory(),
+                        "wwwroot",
+                        "uploads",
+                        "avatars");
+
+
+                if (!Directory.Exists(uploadsFolder))
                 {
-                    return NotFound();
+                    Directory.CreateDirectory(uploadsFolder);
                 }
 
-                throw;
+
+                string extension =
+                    Path.GetExtension(
+                        anhDaiDienFile.FileName);
+
+
+                string newFileName =
+                    Guid.NewGuid().ToString()
+                    + extension;
+
+
+                string filePath =
+                    Path.Combine(
+                        uploadsFolder,
+                        newFileName);
+
+
+                // -------------------------------------------------
+                // LƯU ẢNH MỚI
+                // -------------------------------------------------
+
+                using (var stream =
+                       new FileStream(
+                           filePath,
+                           FileMode.Create))
+                {
+                    await anhDaiDienFile.CopyToAsync(stream);
+                }
+
+
+                // -------------------------------------------------
+                // XÓA ẢNH CŨ
+                // -------------------------------------------------
+
+                if (!string.IsNullOrEmpty(user.AnhDaiDien))
+                {
+                    string oldFileName =
+                        Path.GetFileName(user.AnhDaiDien);
+
+                    string oldFilePath =
+                        Path.Combine(
+                            uploadsFolder,
+                            oldFileName);
+
+
+                    if (System.IO.File.Exists(oldFilePath))
+                    {
+                        System.IO.File.Delete(oldFilePath);
+                    }
+                }
+
+
+                // -------------------------------------------------
+                // LƯU TÊN ẢNH MỚI VÀO DATABASE
+                // -------------------------------------------------
+
+                user.AnhDaiDien =
+                    newFileName;
             }
+
+
+            // -----------------------------------------------------
+            // LƯU DATABASE
+            // -----------------------------------------------------
+
+            await _context.SaveChangesAsync();
+
+
+            // -----------------------------------------------------
+            // QUAY VỀ DANH SÁCH NGƯỜI DÙNG
+            // -----------------------------------------------------
 
             TempData["Success"] =
                 "Cập nhật người dùng thành công!";

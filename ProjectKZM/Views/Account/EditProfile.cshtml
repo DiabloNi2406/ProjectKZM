@@ -2,159 +2,250 @@
 
 @{
     ViewData["Title"] = "Chỉnh sửa thông tin cá nhân";
+
+    string avatarUrl = null;
+
+    if (!string.IsNullOrWhiteSpace(Model.AnhDaiDien))
+    {
+        string avatar = Model.AnhDaiDien.Trim();
+
+        if (avatar.StartsWith("/"))
+        {
+            avatarUrl = Url.Content("~" + avatar);
+        }
+        else if (avatar.StartsWith("uploads/avatars/", StringComparison.OrdinalIgnoreCase))
+        {
+            avatarUrl = Url.Content("~/" + avatar);
+        }
+        else
+        {
+            avatarUrl = Url.Content("~/uploads/avatars/" + avatar);
+        }
+    }
 }
 
 <style>
-    .profile-page {
-        max-width: 800px;
+    .edit-page {
+        max-width: 700px;
         margin: 40px auto;
-        padding: 0 20px 60px;
+        padding: 0 20px;
     }
 
-    .profile-card {
-        background: white;
-        border: 1px solid #ddd;
-        border-radius: 12px;
-        padding: 30px;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    .edit-title {
+        font-size: 40px;
+        font-weight: 400;
+        color: #222;
+        margin-bottom: 8px;
     }
 
-    .profile-title {
-        text-align: center;
+    .edit-subtitle {
+        color: #777;
         margin-bottom: 30px;
     }
 
-        .profile-title h1 {
-            font-size: 30px;
-            margin-bottom: 8px;
-            color: #222;
-        }
-
-        .profile-title p {
-            color: #777;
-            margin: 0;
-        }
-
-    .form-group {
-        margin-bottom: 20px;
+    .edit-card {
+        border: 1px solid #ddd;
+        border-radius: 14px;
+        padding: 35px;
+        background: white;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
     }
 
     .form-label {
-        display: block;
-        margin-bottom: 7px;
-        font-weight: 600;
+        font-weight: 500;
         color: #333;
     }
 
-    .form-control {
-        width: 100%;
-        height: 42px;
-        padding: 8px 12px;
-        border: 1px solid #ccc;
-        border-radius: 6px;
-        font-size: 15px;
-        box-sizing: border-box;
+    .button-area {
+        margin-top: 25px;
+        display: flex;
+        gap: 10px;
     }
 
-        .form-control:focus {
-            outline: none;
-            border-color: #198754;
-            box-shadow: 0 0 0 2px rgba(25, 135, 84, 0.15);
-        }
-
-    textarea.form-control {
-        height: 100px;
-        resize: vertical;
+    .validation-summary {
+        margin-bottom: 20px;
     }
 
     .text-danger {
         display: block;
         margin-top: 5px;
-        color: #dc3545;
+    }
+
+    /* =========================================================
+           AVATAR
+           ========================================================= */
+
+    .avatar-section {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-bottom: 35px;
+        padding-bottom: 30px;
+        border-bottom: 1px solid #eeeeee;
+    }
+
+    .avatar-wrapper {
+        width: 140px;
+        height: 140px;
+        border-radius: 50%;
+        padding: 4px;
+        background: #212529;
+        box-shadow: 0 8px 22px rgba(0, 0, 0, 0.14);
+        margin-bottom: 15px;
+    }
+
+    .avatar-image {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        object-fit: cover;
+        display: block;
+        background: #f1f1f1;
+    }
+
+    .avatar-placeholder {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        background: #f1f1f1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 52px;
+    }
+
+    .avatar-name {
+        margin: 0;
+        color: #222;
+        font-size: 20px;
+        font-weight: 600;
+    }
+
+    .avatar-text {
+        margin: 5px 0 0;
+        color: #888;
         font-size: 13px;
     }
 
-    .button-area {
+    /* =========================================================
+           CURRENT AVATAR
+           ========================================================= */
+
+    .current-avatar-box {
         display: flex;
-        justify-content: space-between;
-        gap: 10px;
-        margin-top: 30px;
-    }
-
-    .btn-back {
-        display: inline-flex;
         align-items: center;
-        justify-content: center;
-        padding: 10px 18px;
-        background: #6c757d;
-        color: white;
-        text-decoration: none;
-        border-radius: 6px;
-        border: none;
+        gap: 18px;
+        padding: 15px;
+        margin-bottom: 12px;
+        background: #f8f9fa;
+        border: 1px solid #eeeeee;
+        border-radius: 12px;
     }
 
-        .btn-back:hover {
-            background: #5c636a;
-            color: white;
-        }
-
-    .btn-save {
-        padding: 10px 20px;
-        background: #198754;
-        color: white;
-        border: none;
-        border-radius: 6px;
-        cursor: pointer;
-        font-size: 15px;
+    .current-avatar-wrapper {
+        width: 80px;
+        height: 80px;
+        flex-shrink: 0;
+        border-radius: 50%;
+        padding: 3px;
+        background: #212529;
     }
 
-        .btn-save:hover {
-            background: #157347;
+        .current-avatar-wrapper .avatar-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+            display: block;
+            background: #f1f1f1;
         }
 
-    .validation-summary {
-        margin-bottom: 20px;
-        padding: 12px;
-        border-radius: 6px;
-        background: #f8d7da;
-        color: #842029;
+        .current-avatar-wrapper .avatar-placeholder {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: #eeeeee;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+        }
+
+    .current-avatar-info {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+    }
+
+        .current-avatar-info strong {
+            font-size: 15px;
+            color: #222;
+        }
+
+        .current-avatar-info span {
+            font-size: 13px;
+            color: #888;
+        }
+
+    .avatar-input-help {
+        display: block;
+        margin-top: 6px;
+        color: #888;
+        font-size: 12px;
     }
 
     @@media (max-width: 600px) {
-        .profile-card {
-            padding: 20px;
+
+        .edit-page {
+            margin: 25px auto;
+            padding: 0 15px;
+        }
+
+        .edit-card {
+            padding: 25px 20px;
+        }
+
+        .edit-title {
+            font-size: 32px;
+        }
+
+        .avatar-wrapper {
+            width: 120px;
+            height: 120px;
         }
 
         .button-area {
             flex-direction: column;
         }
 
-        .btn-back,
-        .btn-save {
-            width: 100%;
+            .button-area .btn {
+                width: 100%;
+            }
+
+        .current-avatar-box {
+            align-items: flex-start;
         }
     }
 </style>
 
 
-<div class="profile-page">
+<div class="edit-page">
 
-    <div class="profile-card">
+    <h1 class="edit-title">
+        Chỉnh sửa thông tin cá nhân
+    </h1>
 
-        <div class="profile-title">
+    <p class="edit-subtitle">
+        Cập nhật thông tin cá nhân của bạn
+    </p>
 
-            <h1>Chỉnh sửa thông tin cá nhân</h1>
 
-            <p>
-                Cập nhật thông tin cá nhân của bạn
-            </p>
-
-        </div>
-
+    <div class="edit-card">
 
         <form asp-controller="Account"
               asp-action="EditProfile"
-              method="post">
+              method="post"
+              enctype="multipart/form-data">
 
             @Html.AntiForgeryToken()
 
@@ -164,13 +255,60 @@
 
 
             <div asp-validation-summary="ModelOnly"
-                 class="validation-summary">
+                 class="text-danger validation-summary">
             </div>
 
 
-            <!-- HỌ TÊN -->
+            <!-- =================================================
+                 AVATAR HIỆN TẠI
+                 ================================================= -->
 
-            <div class="form-group">
+            <div class="avatar-section">
+
+                <div class="avatar-wrapper">
+
+                    @if (!string.IsNullOrEmpty(avatarUrl))
+                    {
+                        <img src="@avatarUrl"
+                             alt="Ảnh đại diện của @Model.HoTen"
+                             class="avatar-image"
+                             onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+
+                        <div class="avatar-placeholder"
+                             style="display:none;">
+                            👤
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="avatar-placeholder">
+                            👤
+                        </div>
+                    }
+
+                </div>
+
+
+                @if (!string.IsNullOrEmpty(Model.HoTen))
+                {
+                    <h3 class="avatar-name">
+                        @Model.HoTen
+                    </h3>
+                }
+
+
+                <p class="avatar-text">
+                    Ảnh đại diện hiện tại
+                </p>
+
+            </div>
+
+
+            <!-- =================================================
+                 HỌ TÊN
+                 ================================================= -->
+
+            <div class="mb-3">
 
                 <label class="form-label">
                     Họ và tên
@@ -180,6 +318,7 @@
                        name="hoTen"
                        value="@Model.HoTen"
                        class="form-control"
+                       placeholder="Nhập họ và tên"
                        required />
 
                 <span asp-validation-for="HoTen"
@@ -189,9 +328,11 @@
             </div>
 
 
-            <!-- EMAIL -->
+            <!-- =================================================
+                 EMAIL
+                 ================================================= -->
 
-            <div class="form-group">
+            <div class="mb-3">
 
                 <label class="form-label">
                     Email
@@ -201,6 +342,7 @@
                        name="email"
                        value="@Model.Email"
                        class="form-control"
+                       placeholder="example@gmail.com"
                        required />
 
                 <span asp-validation-for="Email"
@@ -210,9 +352,11 @@
             </div>
 
 
-            <!-- SỐ ĐIỆN THOẠI -->
+            <!-- =================================================
+                 SỐ ĐIỆN THOẠI
+                 ================================================= -->
 
-            <div class="form-group">
+            <div class="mb-3">
 
                 <label class="form-label">
                     Số điện thoại
@@ -221,7 +365,8 @@
                 <input type="text"
                        name="soDienThoai"
                        value="@Model.SoDienThoai"
-                       class="form-control" />
+                       class="form-control"
+                       placeholder="Nhập số điện thoại" />
 
                 <span asp-validation-for="SoDienThoai"
                       class="text-danger">
@@ -230,16 +375,20 @@
             </div>
 
 
-            <!-- ĐỊA CHỈ -->
+            <!-- =================================================
+                 ĐỊA CHỈ
+                 ================================================= -->
 
-            <div class="form-group">
+            <div class="mb-3">
 
                 <label class="form-label">
                     Địa chỉ
                 </label>
 
                 <textarea name="diaChi"
-                          class="form-control">@Model.DiaChi</textarea>
+                          class="form-control"
+                          rows="4"
+                          placeholder="Nhập địa chỉ">@Model.DiaChi</textarea>
 
                 <span asp-validation-for="DiaChi"
                       class="text-danger">
@@ -248,13 +397,95 @@
             </div>
 
 
-            <!-- KHÔNG CHO SỬA VAI TRÒ -->
+            <!-- =================================================
+                 ẢNH ĐẠI DIỆN
+                 ================================================= -->
+
+            <div class="mb-3">
+
+                <label class="form-label">
+                    Ảnh đại diện
+                </label>
+
+
+                <div class="current-avatar-box">
+
+                    <div class="current-avatar-wrapper">
+
+                        @if (!string.IsNullOrEmpty(Model.AnhDaiDien))
+                        {
+                            <img src="@avatarUrl"
+                                 id="avatarPreview"
+                                 alt="Ảnh đại diện"
+                                 class="avatar-image"
+                                 onerror="this.style.display='none'; document.getElementById('avatarPlaceholder').style.display='flex';" />
+
+                            <div id="avatarPlaceholder"
+                                 class="avatar-placeholder"
+                                 style="display:none;">
+                                👤
+                            </div>
+                        }
+                        else
+                        {
+                            <img id="avatarPreview"
+                                 src=""
+                                 alt="Ảnh đại diện"
+                                 class="avatar-image"
+                                 style="display:none;" />
+
+                            <div id="avatarPlaceholder"
+                                 class="avatar-placeholder">
+                                👤
+                            </div>
+                        }
+
+                    </div>
+
+
+                    <div class="current-avatar-info">
+
+                        <strong>
+                            @Model.HoTen
+                        </strong>
+
+                        <span>
+                            Ảnh đại diện hiện tại
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <input type="file"
+                       name="anhDaiDienFile"
+                       id="anhDaiDienFile"
+                       class="form-control"
+                       accept="image/*" />
+
+
+                <small class="avatar-input-help">
+                    Chọn ảnh mới để thay đổi ảnh đại diện.
+                </small>
+
+
+                <span class="text-danger"
+                      id="avatarError">
+                </span>
+
+            </div>
+
+
+            <!-- =================================================
+                 BUTTON
+                 ================================================= -->
 
             <div class="button-area">
 
                 <a asp-controller="Account"
                    asp-action="Profile"
-                   class="btn-back">
+                   class="btn btn-secondary">
 
                     ← Quay lại
 
@@ -262,9 +493,9 @@
 
 
                 <button type="submit"
-                        class="btn-save">
+                        class="btn btn-success">
 
-                    💾 Lưu thay đổi
+                    Lưu thay đổi
 
                 </button>
 
@@ -281,4 +512,104 @@
 
     <partial name="_ValidationScriptsPartial" />
 
+    <script>
+
+        const avatarFile =
+            document.getElementById("anhDaiDienFile");
+
+        const avatarPreview =
+            document.getElementById("avatarPreview");
+
+        const avatarPlaceholder =
+            document.getElementById("avatarPlaceholder");
+
+        const avatarError =
+            document.getElementById("avatarError");
+
+
+        if (avatarFile) {
+
+            avatarFile.addEventListener(
+                "change",
+                function() {
+
+                    avatarError.textContent = "";
+
+                    if (!this.files ||
+                        !this.files[0]) {
+
+                        return;
+                    }
+
+
+                    const file =
+                        this.files[0];
+
+
+                    /* ==============================
+                       KIỂM TRA FILE ẢNH
+                       ============================== */
+
+                    if (!file.type.startsWith("image/")) {
+
+                        avatarError.textContent =
+                            "Vui lòng chọn một file ảnh.";
+
+                        this.value = "";
+
+                        return;
+                    }
+
+
+                    /* ==============================
+                       GIỚI HẠN 5MB
+                       ============================== */
+
+                    if (file.size > 5 * 1024 * 1024) {
+
+                        avatarError.textContent =
+                            "Ảnh không được vượt quá 5MB.";
+
+                        this.value = "";
+
+                        return;
+                    }
+
+
+                    /* ==============================
+                       PREVIEW ẢNH MỚI
+                       ============================== */
+
+                    const reader =
+                        new FileReader();
+
+
+                    reader.onload =
+                        function(e) {
+
+                            avatarPreview.src =
+                                e.target.result;
+
+                            avatarPreview.style.display =
+                                "block";
+
+
+                            if (avatarPlaceholder) {
+
+                                avatarPlaceholder.style.display =
+                                    "none";
+
+                            }
+
+                        };
+
+
+                    reader.readAsDataURL(file);
+
+                }
+            );
+
+        }
+
+    </script>
 }

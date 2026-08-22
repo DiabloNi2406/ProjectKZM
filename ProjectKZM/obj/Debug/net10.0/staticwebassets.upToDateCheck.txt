@@ -1,5 +1,6 @@
 wwwroot\css\site.css
 wwwroot\favicon.ico
+wwwroot\images\Icon\User.jpg
 wwwroot\images\sach\0ba423c5-6b81-43fc-9137-8c7ca75da001.jpg
 wwwroot\images\sach\2862c52a-1d43-4598-a4ee-931848e28c52.jpg
 wwwroot\images\sach\3c779479-731f-4bde-9206-a483f2b37263.jpg
@@ -75,6 +76,8 @@ wwwroot\lib\jquery\dist\jquery.slim.js
 wwwroot\lib\jquery\dist\jquery.slim.min.js
 wwwroot\lib\jquery\dist\jquery.slim.min.map
 wwwroot\lib\jquery\LICENSE.txt
+wwwroot\uploads\avatars\5b95261c-1463-49ee-82cd-3728950ba53c.jpg
+wwwroot\uploads\avatars\9c050ada-9417-49dd-82b7-4e0a1bde3751.jpg
 C:\Users\Asus\Desktop\Big Project\ProjectKZM\ProjectKZM\wwwroot\css\site.css
 C:\Users\Asus\Desktop\Big Project\ProjectKZM\ProjectKZM\wwwroot\favicon.ico
 C:\Users\Asus\Desktop\Big Project\ProjectKZM\ProjectKZM\wwwroot\js\site.js

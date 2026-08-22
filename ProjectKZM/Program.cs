@@ -3,6 +3,8 @@ using Microsoft.EntityFrameworkCore;
 using ProjectKZM.Data;
 using ProjectKZM.Models;
 using ProjectKZM.Services;
+using ProjectKZM.Middleware;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,6 +13,8 @@ var builder = WebApplication.CreateBuilder(args);
 // ======================================================
 
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddSingleton<OnlineUserService>();
 
 builder.Services.AddScoped<EmailService>();
 
@@ -137,6 +141,12 @@ app.UseAuthentication();
 // ======================================================
 
 app.UseAuthorization();
+
+// ======================================================
+// ONLINE TRACKING SERVICE
+// ======================================================
+
+app.UseMiddleware<OnlineTrackingMiddleware>();
 
 
 // ======================================================

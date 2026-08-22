@@ -300,11 +300,8 @@
 
         <form asp-action="Register"
               method="post"
+              enctype="multipart/form-data"
               id="registerForm">
-
-            <div asp-validation-summary="All"
-                 class="text-danger register-error">
-            </div>
 
 
             <!-- =================================================
@@ -402,14 +399,17 @@
                            name="confirmPassword"
                            class="register-input"
                            placeholder="Nhập lại mật khẩu"
-                           autocomplete="new-password"
-                           required />
+                           autocomplete="new-password" />
 
                     <input type="checkbox"
                            id="showConfirmPassword"
                            class="password-check"
                            title="Hiện mật khẩu" />
 
+                </div>
+
+                <div id="confirmPasswordError"
+                     class="field-validation-error text-danger">
                 </div>
 
                 <div id="passwordMatch"
@@ -430,14 +430,21 @@
                 </label>
 
                 <input asp-for="SoDienThoai"
-                       type="tel"
+                       type="text"
                        class="register-input"
                        placeholder="Nhập số điện thoại"
-                       autocomplete="tel" />
+                       autocomplete="tel"
+                       inputmode="numeric"
+                       minlength="10"
+                       maxlength="10" />
 
                 <span asp-validation-for="SoDienThoai"
                       class="text-danger">
                 </span>
+
+                <div id="phoneError"
+                     class="field-validation-error text-danger">
+                </div>
 
             </div>
 
@@ -461,6 +468,10 @@
                       class="text-danger">
                 </span>
 
+                <div id="addressError"
+                     class="field-validation-error text-danger">
+                </div>
+
             </div>
 
 
@@ -470,13 +481,14 @@
 
             <div class="register-form-group">
 
-                <label asp-for="AnhDaiDien">
-                    Ảnh đại diện (URL)
+                <label>
+                    Ảnh đại diện
                 </label>
 
-                <input asp-for="AnhDaiDien"
+                <input type="file"
+                       name="anhDaiDienFile"
                        class="register-input"
-                       placeholder="Nhập URL ảnh đại diện" />
+                       accept="image/*" />
 
                 <span asp-validation-for="AnhDaiDien"
                       class="text-danger">
@@ -534,7 +546,7 @@
     <script>
 
         /* =====================================================
-           HIỆN / ẨN MẬT KHẨU
+           CÁC PHẦN TỬ
            ===================================================== */
 
         const password =
@@ -549,6 +561,34 @@
         const showConfirmPassword =
             document.getElementById("showConfirmPassword");
 
+        const registerForm =
+            document.getElementById("registerForm");
+
+        const phoneInput =
+            document.querySelector('input[name="SoDienThoai"]');
+
+        const addressInput =
+            document.querySelector('input[name="DiaChi"]');
+
+        const confirmPasswordInput =
+            document.getElementById("confirmPassword");
+
+        const phoneError =
+            document.getElementById("phoneError");
+
+        const addressError =
+            document.getElementById("addressError");
+
+        const confirmPasswordError =
+            document.getElementById("confirmPasswordError");
+
+        const passwordMatch =
+            document.getElementById("passwordMatch");
+
+
+        /* =====================================================
+           HIỆN / ẨN MẬT KHẨU
+           ===================================================== */
 
         if (showPassword) {
 
@@ -588,97 +628,188 @@
            KIỂM TRA MẬT KHẨU TRÙNG NHAU
            ===================================================== */
 
-        const passwordMatch =
-            document.getElementById("passwordMatch");
-
         function checkPasswordMatch() {
 
-            if (!password.value &&
+            if (!password.value ||
                 !confirmPassword.value) {
 
-                passwordMatch.style.display =
-                    "none";
-
-                passwordMatch.innerHTML =
-                    "";
-
-                passwordMatch.className =
-                    "password-match";
-
                 return true;
             }
 
-
-            if (!confirmPassword.value) {
-
-                passwordMatch.style.display =
-                    "none";
-
-                passwordMatch.innerHTML =
-                    "";
-
-                passwordMatch.className =
-                    "password-match";
-
-                return true;
-            }
-
-
-            if (password.value === confirmPassword.value) {
-
-                passwordMatch.innerHTML =
-                    "✓ Mật khẩu trùng khớp";
-
-                passwordMatch.className =
-                    "password-match success";
-
-                return true;
-
-            }
-            else {
-
-                passwordMatch.innerHTML =
-                    "✗ Mật khẩu không trùng khớp";
-
-                passwordMatch.className =
-                    "password-match error";
-
-                return false;
-
-            }
-
+            return password.value === confirmPassword.value;
         }
 
 
+        /* =====================================================
+           XÓA LỖI KHI NGƯỜI DÙNG NHẬP LẠI
+           ===================================================== */
+
         password.addEventListener(
             "input",
-            checkPasswordMatch
+            function() {
+
+                confirmPasswordError.textContent = "";
+
+            }
         );
 
 
-        confirmPassword.addEventListener(
+        confirmPasswordInput.addEventListener(
             "input",
-            checkPasswordMatch
+            function() {
+
+                confirmPasswordError.textContent = "";
+
+            }
+        );
+
+
+        phoneInput.addEventListener(
+            "input",
+            function() {
+
+                if (this.value.trim()) {
+
+                    phoneError.textContent = "";
+
+                }
+
+            }
+        );
+
+
+        addressInput.addEventListener(
+            "input",
+            function() {
+
+                if (this.value.trim()) {
+
+                    addressError.textContent = "";
+
+                }
+
+            }
         );
 
 
         /* =====================================================
-           KHÔNG CHO ĐĂNG KÝ NẾU MẬT KHẨU KHÔNG GIỐNG
+           SỐ ĐIỆN THOẠI
+           CHỈ CHO PHÉP NHẬP SỐ
            ===================================================== */
 
-        const registerForm =
-            document.getElementById("registerForm");
+        const soDienThoai =
+            document.querySelector('input[name="SoDienThoai"]');
 
+        if (soDienThoai) {
+
+            soDienThoai.addEventListener(
+                "input",
+                function() {
+
+                    this.value =
+                        this.value.replace(/\D/g, "");
+
+                }
+            );
+
+        }
+
+
+        /* =====================================================
+           SUBMIT FORM
+           ===================================================== */
 
         registerForm.addEventListener(
             "submit",
             function(event) {
 
-                if (!checkPasswordMatch()) {
+                let isValid = true;
+
+
+                /* =================================================
+                   XÓA LỖI CŨ
+                   ================================================= */
+
+                confirmPasswordError.textContent = "";
+                phoneError.textContent = "";
+                addressError.textContent = "";
+
+
+                /* =================================================
+                   XÁC NHẬN MẬT KHẨU
+                   ================================================= */
+
+                if (!confirmPasswordInput.value.trim()) {
+
+                    confirmPasswordError.textContent =
+                        "Vui lòng nhập lại xác nhận mật khẩu";
+
+                    isValid = false;
+
+                }
+                else if (!checkPasswordMatch()) {
+
+                    confirmPasswordError.textContent =
+                        "Mật khẩu không khớp";
+
+                    isValid = false;
+
+                }
+
+
+                /* =================================================
+                   SỐ ĐIỆN THOẠI
+                   ================================================= */
+
+                if (!phoneInput.value.trim()) {
+
+                    phoneError.textContent =
+                        "Vui lòng nhập số điện thoại";
+
+                    isValid = false;
+
+                }
+
+
+                /* =================================================
+                   ĐỊA CHỈ
+                   ================================================= */
+
+                if (!addressInput.value.trim()) {
+
+                    addressError.textContent =
+                        "Vui lòng nhập địa chỉ";
+
+                    isValid = false;
+
+                }
+
+
+                /* =================================================
+                   KHÔNG CHO SUBMIT NẾU CÓ LỖI
+                   ================================================= */
+
+                if (!isValid) {
 
                     event.preventDefault();
 
-                    confirmPassword.focus();
+
+                    if (!confirmPasswordInput.value.trim() ||
+                        !checkPasswordMatch()) {
+
+                        confirmPasswordInput.focus();
+
+                    }
+                    else if (!phoneInput.value.trim()) {
+
+                        phoneInput.focus();
+
+                    }
+                    else if (!addressInput.value.trim()) {
+
+                        addressInput.focus();
+
+                    }
 
                 }
 

@@ -2,178 +2,323 @@
 
 @{
     ViewData["Title"] = "Thông Tin Cá Nhân";
+
+    // =========================================================
+    // AVATAR
+    // =========================================================
+
+    string avatarUrl = "/images/Icon/user.png";
+
+    if (!string.IsNullOrWhiteSpace(Model?.AnhDaiDien))
+    {
+        string avatar = Model.AnhDaiDien.Trim();
+
+        // Database lưu:
+        // /uploads/avatars/tenfile.jpg
+        if (avatar.StartsWith("/"))
+        {
+            avatarUrl = avatar;
+        }
+        // Database lưu:
+        // uploads/avatars/tenfile.jpg
+        else if (avatar.StartsWith(
+            "uploads/avatars/",
+            StringComparison.OrdinalIgnoreCase))
+        {
+            avatarUrl = "/" + avatar;
+        }
+        // Database chỉ lưu:
+        // tenfile.jpg
+        else
+        {
+            avatarUrl = "/uploads/avatars/" + avatar;
+        }
+    }
 }
 
 <style>
 
+    /* =========================================================
+           PAGE
+           ========================================================= */
+
     .profile-page {
-        max-width: 900px;
+        max-width: 1050px;
         margin: 0 auto;
-        padding: 40px 20px 60px;
+        padding: 50px 20px;
     }
 
-    .profile-title {
-        text-align: center;
-        margin-bottom: 35px;
+
+    /* =========================================================
+           HEADER
+           ========================================================= */
+
+    .profile-header-title {
+        margin-bottom: 30px;
     }
 
-        .profile-title h1 {
-            font-size: 32px;
-            font-weight: 400;
-            color: #222;
-            margin-bottom: 8px;
-        }
-
-        .profile-title p {
-            color: #888;
+        .profile-header-title h1 {
             margin: 0;
-            font-size: 15px;
+            font-size: 36px;
+            font-weight: 600;
+            color: #212529;
         }
+
+        .profile-header-title p {
+            margin: 8px 0 0;
+            color: #888;
+            font-size: 14px;
+        }
+
+
+    /* =========================================================
+           CARD
+           ========================================================= */
 
     .profile-card {
-        background: white;
-        border: 1px solid #ddd;
-        border-radius: 12px;
-        padding: 30px;
-        box-shadow: 0 3px 12px rgba(0, 0, 0, 0.05);
+        background: #ffffff;
+        border: 1px solid #e9ecef;
+        border-radius: 18px;
+        overflow: hidden;
+        box-shadow: 0 10px 35px rgba(0, 0, 0, 0.07);
     }
 
-    .profile-header {
+
+    /* =========================================================
+           PROFILE TOP
+           ========================================================= */
+
+    .profile-top {
         display: flex;
         align-items: center;
-        gap: 20px;
-        padding-bottom: 25px;
-        margin-bottom: 25px;
-        border-bottom: 1px solid #eee;
+        gap: 28px;
+        padding: 35px;
+        background: linear-gradient( 135deg, #f8f9fa, #ffffff );
+        border-bottom: 1px solid #eeeeee;
+    }
+
+
+    /* =========================================================
+           AVATAR
+           ========================================================= */
+
+    .profile-avatar-wrapper {
+        width: 125px;
+        height: 125px;
+        flex-shrink: 0;
+        border-radius: 50%;
+        padding: 4px;
+        background: #212529;
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
     }
 
     .profile-avatar {
-        width: 80px;
-        height: 80px;
+        width: 100%;
+        height: 100%;
         border-radius: 50%;
-        background-color: #212529;
-        color: white;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 32px;
+        object-fit: cover;
+        display: block;
+        background: #f1f1f1;
+    }
+
+
+    /* =========================================================
+           PROFILE INFO
+           ========================================================= */
+
+    .profile-info {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .profile-name {
+        margin: 0 0 8px;
+        font-size: 28px;
         font-weight: 600;
-        flex-shrink: 0;
+        color: #212529;
     }
 
-    .profile-header-info h2 {
-        margin: 0 0 5px;
-        font-size: 22px;
-        color: #222;
+    .profile-email {
+        margin: 0 0 14px;
+        color: #777;
+        font-size: 15px;
+        word-break: break-word;
     }
 
-    .profile-header-info span {
-        color: #888;
-        font-size: 14px;
-    }
-
-    .profile-row {
-        display: grid;
-        grid-template-columns: 200px 1fr;
-        min-height: 55px;
+    .profile-role-badge {
+        display: inline-flex;
         align-items: center;
-        border-bottom: 1px solid #eee;
+        gap: 6px;
+        padding: 7px 13px;
+        border-radius: 999px;
+        background: #212529;
+        color: #ffffff;
+        font-size: 13px;
+        font-weight: 600;
     }
 
-        .profile-row:last-child {
-            border-bottom: none;
+
+    /* =========================================================
+           CONTENT
+           ========================================================= */
+
+    .profile-content {
+        padding: 35px;
+    }
+
+
+    /* =========================================================
+           INFORMATION GRID
+           ========================================================= */
+
+    .profile-info-grid {
+        display: grid;
+        grid-template-columns: repeat( 2, minmax(0, 1fr) );
+        gap: 18px;
+    }
+
+    .profile-info-item {
+        padding: 18px;
+        background: #f8f9fa;
+        border: 1px solid #eeeeee;
+        border-radius: 12px;
+        transition: all 0.2s ease;
+    }
+
+        .profile-info-item:hover {
+            border-color: #d8d8d8;
+            transform: translateY(-1px);
         }
 
-    .profile-label {
-        color: #777;
-        font-size: 14px;
-        font-weight: 600;
+    .profile-info-label {
+        display: block;
+        margin-bottom: 7px;
+        color: #888;
+        font-size: 13px;
+        font-weight: 500;
     }
 
-    .profile-value {
-        color: #222;
-        font-size: 15px;
+    .profile-info-label-icon {
+        margin-right: 5px;
     }
+
+    .profile-info-value {
+        color: #212529;
+        font-size: 15px;
+        font-weight: 500;
+        word-break: break-word;
+    }
+
+
+    /* =========================================================
+           ACTIONS
+           ========================================================= */
 
     .profile-actions {
         display: flex;
-        justify-content: flex-end;
         gap: 10px;
         margin-top: 30px;
-        padding-top: 20px;
-        border-top: 1px solid #eee;
+        padding-top: 25px;
+        border-top: 1px solid #eeeeee;
     }
 
-    .profile-button {
+    .profile-action-button {
+        min-width: 110px;
+        height: 42px;
+        padding: 0 18px;
+        border-radius: 8px;
+        text-decoration: none;
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        min-height: 40px;
-        padding: 0 18px;
-        border-radius: 6px;
-        text-decoration: none;
         font-size: 14px;
-        transition: 0.2s;
+        font-weight: 600;
+        transition: all 0.2s ease;
     }
 
-    .edit-button {
-        background-color: #198754;
-        color: white;
+    .profile-edit-button {
+        background: #198754;
+        color: #ffffff;
         border: 1px solid #198754;
     }
 
-        .edit-button:hover {
-            background-color: #157347;
+        .profile-edit-button:hover {
+            background: #157347;
             border-color: #157347;
-            color: white;
+            color: #ffffff;
+            text-decoration: none;
+            transform: translateY(-1px);
+            box-shadow: 0 5px 12px rgba(0, 0, 0, 0.15);
         }
 
-    .back-button {
-        background-color: #343a40;
-        color: white;
-        border: 1px solid #343a40;
+    .profile-back-button {
+        background: #6c757d;
+        color: #ffffff;
+        border: 1px solid #6c757d;
     }
 
-        .back-button:hover {
-            background-color: #212529;
-            color: white;
+        .profile-back-button:hover {
+            background: #5c636a;
+            border-color: #565e64;
+            color: #ffffff;
+            text-decoration: none;
+            transform: translateY(-1px);
+            box-shadow: 0 5px 12px rgba(0, 0, 0, 0.12);
         }
 
+
+    /* =========================================================
+           EMPTY PROFILE
+           ========================================================= */
+
     .empty-profile {
-        background: white;
-        border: 1px dashed #ccc;
-        border-radius: 10px;
+        background: #ffffff;
+        border: 1px dashed #cccccc;
+        border-radius: 14px;
         padding: 60px 20px;
         text-align: center;
         color: #777;
     }
 
-    @@media (max-width: 650px) {
+
+    /* =========================================================
+           RESPONSIVE
+           ========================================================= */
+
+    @@media (max-width: 700px) {
 
         .profile-page {
-            padding: 25px 15px 40px;
+            padding: 30px 15px;
         }
 
-        .profile-card {
-            padding: 20px;
-        }
-
-        .profile-header {
+        .profile-top {
             flex-direction: column;
             text-align: center;
+            padding: 30px 20px;
         }
 
-        .profile-row {
+        .profile-avatar-wrapper {
+            width: 110px;
+            height: 110px;
+        }
+
+        .profile-name {
+            font-size: 24px;
+        }
+
+        .profile-info-grid {
             grid-template-columns: 1fr;
-            gap: 5px;
-            padding: 12px 0;
+        }
+
+        .profile-content {
+            padding: 25px 20px;
         }
 
         .profile-actions {
             flex-direction: column;
         }
 
-        .profile-button {
+        .profile-action-button {
             width: 100%;
         }
     }
@@ -183,14 +328,18 @@
 
 <div class="profile-page">
 
-    <div class="profile-title">
+    <!-- =====================================================
+         HEADER
+         ===================================================== -->
+
+    <div class="profile-header-title">
 
         <h1>
             Thông Tin Cá Nhân
         </h1>
 
         <p>
-            Xem thông tin tài khoản của bạn
+            Thông tin tài khoản của bạn
         </p>
 
     </div>
@@ -199,30 +348,56 @@
     @if (Model != null)
     {
 
+        <!-- =================================================
+             CARD
+             ================================================= -->
+
         <div class="profile-card">
 
-            <!-- =====================================================
-                 HEADER
-                 ===================================================== -->
 
-            <div class="profile-header">
+            <!-- =================================================
+                 PROFILE TOP
+                 ================================================= -->
 
-                <div class="profile-avatar">
+            <div class="profile-top">
 
-                    @(string.IsNullOrWhiteSpace(Model.HoTen)
-                        ? "U"
-                        : Model.HoTen.Substring(0, 1).ToUpper())
+                <!-- AVATAR -->
+
+                <div class="profile-avatar-wrapper">
+
+                    <img src="@avatarUrl"
+                         alt="Ảnh đại diện của @Model.HoTen"
+                         class="profile-avatar"
+                         onerror="this.onerror=null; this.src='/images/Icon/user.jpg';" />
 
                 </div>
 
-                <div class="profile-header-info">
 
-                    <h2>
+                <!-- USER INFO -->
+
+                <div class="profile-info">
+
+                    <h2 class="profile-name">
                         @(Model.HoTen ?? "Người dùng")
                     </h2>
 
-                    <span>
-                        Tài khoản Yuuji Store
+                    <p class="profile-email">
+                        @(Model.Email ?? "Chưa cập nhật")
+                    </p>
+
+                    <span class="profile-role-badge">
+
+                        👤
+
+                        @if (Model.VaiTro != null)
+                        {
+                            @Model.VaiTro.TenVaiTro
+                        }
+                        else
+                        {
+                            <span>Chưa có vai trò</span>
+                        }
+
                     </span>
 
                 </div>
@@ -230,98 +405,200 @@
             </div>
 
 
-            <!-- =====================================================
-                 THÔNG TIN
-                 ===================================================== -->
+            <!-- =================================================
+                 INFORMATION
+                 ================================================= -->
 
-            <div class="profile-row">
+            <div class="profile-content">
 
-                <div class="profile-label">
-                    Họ và tên
+                <div class="profile-info-grid">
+
+
+                    <!-- MÃ NGƯỜI DÙNG -->
+
+                    <div class="profile-info-item">
+
+                        <span class="profile-info-label">
+
+                            <span class="profile-info-label-icon">
+                                🆔
+                            </span>
+
+                            Mã người dùng
+
+                        </span>
+
+                        <div class="profile-info-value">
+
+                            @Model.MaNguoiDung
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- HỌ VÀ TÊN -->
+
+                    <div class="profile-info-item">
+
+                        <span class="profile-info-label">
+
+                            <span class="profile-info-label-icon">
+                                👤
+                            </span>
+
+                            Họ và tên
+
+                        </span>
+
+                        <div class="profile-info-value">
+
+                            @(Model.HoTen ?? "Chưa cập nhật")
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- EMAIL -->
+
+                    <div class="profile-info-item">
+
+                        <span class="profile-info-label">
+
+                            <span class="profile-info-label-icon">
+                                ✉️
+                            </span>
+
+                            Email
+
+                        </span>
+
+                        <div class="profile-info-value">
+
+                            @(Model.Email ?? "Chưa cập nhật")
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- SỐ ĐIỆN THOẠI -->
+
+                    <div class="profile-info-item">
+
+                        <span class="profile-info-label">
+
+                            <span class="profile-info-label-icon">
+                                📱
+                            </span>
+
+                            Số điện thoại
+
+                        </span>
+
+                        <div class="profile-info-value">
+
+                            @if (!string.IsNullOrEmpty(Model.SoDienThoai))
+                            {
+                                @Model.SoDienThoai
+                            }
+                            else
+                            {
+                                <span>Chưa cập nhật</span>
+                            }
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- ĐỊA CHỈ -->
+
+                    <div class="profile-info-item">
+
+                        <span class="profile-info-label">
+
+                            <span class="profile-info-label-icon">
+                                📍
+                            </span>
+
+                            Địa chỉ
+
+                        </span>
+
+                        <div class="profile-info-value">
+
+                            @if (!string.IsNullOrEmpty(Model.DiaChi))
+                            {
+                                @Model.DiaChi
+                            }
+                            else
+                            {
+                                <span>Chưa cập nhật</span>
+                            }
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- VAI TRÒ -->
+
+                    <div class="profile-info-item">
+
+                        <span class="profile-info-label">
+
+                            <span class="profile-info-label-icon">
+                                🛡️
+                            </span>
+
+                            Vai trò
+
+                        </span>
+
+                        <div class="profile-info-value">
+
+                            @if (Model.VaiTro != null)
+                            {
+                                @Model.VaiTro.TenVaiTro
+                            }
+                            else
+                            {
+                                <span>Chưa có vai trò</span>
+                            }
+
+                        </div>
+
+                    </div>
+
                 </div>
 
-                <div class="profile-value">
-                    @(Model.HoTen ?? "Chưa cập nhật")
-                </div>
 
-            </div>
+                <!-- =================================================
+                     ACTIONS
+                     ================================================= -->
 
+                <div class="profile-actions">
 
-            <div class="profile-row">
+                    <a asp-controller="Home"
+                       asp-action="Index"
+                       class="profile-action-button profile-back-button">
 
-                <div class="profile-label">
-                    Email
-                </div>
+                        ← Quay lại
 
-                <div class="profile-value">
-                    @(Model.Email ?? "Chưa cập nhật")
-                </div>
-
-            </div>
+                    </a>
 
 
-            <div class="profile-row">
+                    <a asp-controller="Account"
+                       asp-action="EditProfile"
+                       class="profile-action-button profile-edit-button">
 
-                <div class="profile-label">
-                    Số điện thoại
-                </div>
+                        ✏️ Chỉnh sửa thông tin
 
-                <div class="profile-value">
-                    @(Model.SoDienThoai ?? "Chưa cập nhật")
-                </div>
-
-            </div>
-
-
-            <div class="profile-row">
-
-                <div class="profile-label">
-                    Địa chỉ
-                </div>
-
-                <div class="profile-value">
-                    @(Model.DiaChi ?? "Chưa cập nhật")
-                </div>
-
-            </div>
-
-
-            <div class="profile-row">
-
-                <div class="profile-label">
-                    Vai trò
-                </div>
-
-                <div class="profile-value">
-
-                    @(Model.VaiTro?.TenVaiTro ?? "Khách hàng")
+                    </a>
 
                 </div>
-
-            </div>
-
-
-            <!-- =====================================================
-                 BUTTON
-                 ===================================================== -->
-
-            <div class="profile-actions">
-
-                <a asp-controller="Home"
-                   asp-action="Index"
-                   class="profile-button back-button">
-
-                    ← Trang chủ
-
-                </a>
-
-                <a asp-controller="Account"
-                   asp-action="EditProfile"
-                   class="profile-button edit-button">
-
-                    ✎ Chỉnh sửa thông tin
-
-                </a>
 
             </div>
 
@@ -330,6 +607,10 @@
     }
     else
     {
+
+        <!-- =================================================
+             EMPTY
+             ================================================= -->
 
         <div class="empty-profile">
 

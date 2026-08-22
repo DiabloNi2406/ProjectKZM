@@ -5,145 +5,633 @@
 }
 
 <style>
-    .page {
+
+    /* =========================================================
+           PAGE
+           ========================================================= */
+
+    .statistics-page {
         max-width: 1200px;
         margin: 0 auto;
-        padding: 45px 20px 80px;
+        padding: 50px 20px 80px;
     }
 
-    .title {
-        font-size: 36px;
-        font-weight: 400;
-        margin-bottom: 30px;
+
+    /* =========================================================
+           HEADER
+           ========================================================= */
+
+    .statistics-header {
+        margin-bottom: 32px;
     }
 
-    .grid {
+    .statistics-title {
+        margin: 0;
+        font-size: 38px;
+        font-weight: 600;
+        letter-spacing: -0.7px;
+        color: #222;
+    }
+
+    .statistics-subtitle {
+        margin: 9px 0 0;
+        color: #888;
+        font-size: 14px;
+        line-height: 1.6;
+    }
+
+
+    /* =========================================================
+           GENERAL GRID
+           ========================================================= */
+
+    .statistics-grid {
         display: grid;
         grid-template-columns: repeat(4, 1fr);
-        gap: 15px;
-        margin-bottom: 20px;
+        gap: 18px;
+        margin-bottom: 18px;
     }
 
-    .card {
-        border: 1px solid #e5e5e5;
+
+    /* =========================================================
+           STAT CARD
+           ========================================================= */
+
+    .stat-card {
+        position: relative;
         background: #fff;
-        padding: 25px;
+        border: 1px solid #e7e7e7;
+        border-radius: 14px;
+        padding: 23px;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.045);
+        overflow: hidden;
+        transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
     }
 
-    .label {
+        .stat-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 28px rgba(0, 0, 0, .08);
+            border-color: #d8d8d8;
+        }
+
+
+        /* =========================================================
+           TOP ACCENT
+           ========================================================= */
+
+        .stat-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: #212529;
+            opacity: .9;
+        }
+
+
+    /* =========================================================
+           ICON
+           ========================================================= */
+
+    .stat-icon {
+        width: 42px;
+        height: 42px;
+        margin-bottom: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 10px;
+        background: #f3f3f3;
+        font-size: 19px;
+    }
+
+
+    /* =========================================================
+           LABEL
+           ========================================================= */
+
+    .stat-label {
+        margin-bottom: 9px;
+        color: #888;
         font-size: 13px;
-        color: #777;
+        font-weight: 500;
+    }
+
+
+    /* =========================================================
+           VALUE
+           ========================================================= */
+
+    .stat-value {
+        font-size: 30px;
+        font-weight: 700;
+        color: #222;
+        line-height: 1.15;
+    }
+
+
+    /* =========================================================
+           DESCRIPTION
+           ========================================================= */
+
+    .stat-description {
+        margin-top: 8px;
+        color: #aaa;
+        font-size: 12px;
+    }
+
+
+    /* =========================================================
+           COLOR VARIANTS
+           ========================================================= */
+
+    .stat-total::before {
+        background: #212529;
+    }
+
+    .stat-total .stat-icon {
+        background: #f0f0f0;
+        color: #212529;
+    }
+
+
+    .stat-success::before {
+        background: #198754;
+    }
+
+    .stat-success .stat-icon {
+        background: #edf8f0;
+        color: #198754;
+    }
+
+
+    .stat-waiting::before {
+        background: #f0ad00;
+    }
+
+    .stat-waiting .stat-icon {
+        background: #fff6df;
+        color: #b47a00;
+    }
+
+
+    .stat-danger::before {
+        background: #dc3545;
+    }
+
+    .stat-danger .stat-icon {
+        background: #fff0f1;
+        color: #dc3545;
+    }
+
+
+    /* =========================================================
+           TOTAL REVENUE
+           ========================================================= */
+
+    .revenue-card {
+        position: relative;
+        margin-bottom: 18px;
+        padding: 28px;
+        background: #fff;
+        border: 1px solid #e7e7e7;
+        border-radius: 14px;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, .045);
+        overflow: hidden;
+        transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+    }
+
+        .revenue-card:hover {
+            transform: translateY(-3px);
+            border-color: #d8d8d8;
+            box-shadow: 0 12px 28px rgba(0, 0, 0, .08);
+        }
+
+
+        .revenue-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: #198754;
+        }
+
+
+    .revenue-label {
         margin-bottom: 10px;
+        color: #777;
+        font-size: 14px;
+        font-weight: 500;
     }
 
-    .value {
-        font-size: 27px;
-        font-weight: 600;
+
+    .revenue-value {
+        font-size: 38px;
+        font-weight: 700;
+        color: #198754;
+        letter-spacing: -0.8px;
     }
 
-    .revenue {
+
+    .revenue-description {
+        margin-top: 7px;
+        color: #aaa;
+        font-size: 12px;
+    }
+
+
+    /* =========================================================
+           PAYMENT REVENUE
+           ========================================================= */
+
+    .payment-grid {
         display: grid;
         grid-template-columns: repeat(3, 1fr);
-        gap: 15px;
+        gap: 18px;
     }
 
-    @@media (max-width: 800px) {
-        .grid {
+
+    .payment-card {
+        position: relative;
+        padding: 23px;
+        background: #fff;
+        border: 1px solid #e7e7e7;
+        border-radius: 14px;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, .045);
+        transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+    }
+
+        .payment-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 28px rgba(0, 0, 0, .08);
+            border-color: #d8d8d8;
+        }
+
+
+    .payment-header {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 15px;
+    }
+
+
+    .payment-icon {
+        width: 42px;
+        height: 42px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 10px;
+        font-size: 18px;
+    }
+
+
+    .payment-name {
+        font-size: 14px;
+        font-weight: 600;
+        color: #333;
+    }
+
+
+    .payment-value {
+        font-size: 25px;
+        font-weight: 700;
+        color: #222;
+    }
+
+
+    .payment-vnpay .payment-icon {
+        background: #eef6ff;
+        color: #1769aa;
+    }
+
+    .payment-cod .payment-icon {
+        background: #edf8f0;
+        color: #198754;
+    }
+
+    .payment-bank .payment-icon {
+        background: #f4efff;
+        color: #6842a6;
+    }
+
+
+    /* =========================================================
+           BACK BUTTON
+           ========================================================= */
+
+    .back-wrapper {
+        display: flex;
+        justify-content: flex-end;
+        margin-top: 25px;
+    }
+
+
+    .back-button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        height: 40px;
+        padding: 0 17px;
+        border: 1px solid #d8d8d8;
+        border-radius: 8px;
+        background: #fff;
+        color: #555;
+        text-decoration: none;
+        font-size: 14px;
+        font-weight: 500;
+        transition: background-color .2s ease, border-color .2s ease, color .2s ease, transform .15s ease, box-shadow .2s ease;
+    }
+
+
+        .back-button:hover {
+            background: #212529;
+            border-color: #212529;
+            color: #fff;
+            transform: translateY(-1px);
+            box-shadow: 0 5px 13px rgba(0, 0, 0, .12);
+        }
+
+
+    /* =========================================================
+           RESPONSIVE
+           ========================================================= */
+
+    @@media (max-width: 950px) {
+
+        .statistics-grid {
             grid-template-columns: repeat(2, 1fr);
         }
 
-        .revenue {
+        .payment-grid {
             grid-template-columns: 1fr;
         }
     }
+
+
+    @@media (max-width: 600px) {
+
+        .statistics-page {
+            padding: 35px 15px 60px;
+        }
+
+        .statistics-title {
+            font-size: 30px;
+        }
+
+        .statistics-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .stat-value {
+            font-size: 27px;
+        }
+
+        .revenue-value {
+            font-size: 32px;
+        }
+    }
+
 </style>
 
 
-<div class="page">
+<div class="statistics-page">
 
-    <h1 class="title">
-        Thống kê đơn hàng
-    </h1>
+    <!-- =====================================================
+         HEADER
+         ===================================================== -->
+
+    <div class="statistics-header">
+
+        <h1 class="statistics-title">
+            Thống kê đơn hàng
+        </h1>
+
+        <p class="statistics-subtitle">
+            Tổng quan tình hình đơn hàng và doanh thu của hệ thống
+        </p>
+
+    </div>
 
 
-    <div class="grid">
+    <!-- =====================================================
+         ORDER STATISTICS
+         ===================================================== -->
 
-        <div class="card">
-            <div class="label">Tổng số đơn</div>
-            <div class="value">@Model.TongSoDon</div>
+    <div class="statistics-grid">
+
+
+        <!-- TỔNG ĐƠN -->
+
+        <div class="stat-card stat-total">
+
+            <div class="stat-icon">
+                📦
+            </div>
+
+            <div class="stat-label">
+                Tổng số đơn
+            </div>
+
+            <div class="stat-value">
+                @Model.TongSoDon
+            </div>
+
+            <div class="stat-description">
+                Tổng số đơn hàng trong hệ thống
+            </div>
+
         </div>
 
-        <div class="card">
-            <div class="label">Đã xác nhận</div>
-            <div class="value">@Model.SoDonDaXacNhan</div>
+
+        <!-- ĐÃ XÁC NHẬN -->
+
+        <div class="stat-card stat-success">
+
+            <div class="stat-icon">
+                ✓
+            </div>
+
+            <div class="stat-label">
+                Đã xác nhận
+            </div>
+
+            <div class="stat-value">
+                @Model.SoDonDaXacNhan
+            </div>
+
+            <div class="stat-description">
+                Đơn hàng đã được xử lý
+            </div>
+
         </div>
 
-        <div class="card">
-            <div class="label">Chờ xác nhận</div>
-            <div class="value">@Model.SoDonChoXacNhan</div>
+
+        <!-- CHỜ XÁC NHẬN -->
+
+        <div class="stat-card stat-waiting">
+
+            <div class="stat-icon">
+                ⏳
+            </div>
+
+            <div class="stat-label">
+                Chờ xác nhận
+            </div>
+
+            <div class="stat-value">
+                @Model.SoDonChoXacNhan
+            </div>
+
+            <div class="stat-description">
+                Đơn hàng cần Admin kiểm tra
+            </div>
+
         </div>
 
-        <div class="card">
-            <div class="label">Đã hủy</div>
-            <div class="value">@Model.SoDonDaHuy</div>
+
+        <!-- ĐÃ HỦY -->
+
+        <div class="stat-card stat-danger">
+
+            <div class="stat-icon">
+                ×
+            </div>
+
+            <div class="stat-label">
+                Đã hủy
+            </div>
+
+            <div class="stat-value">
+                @Model.SoDonDaHuy
+            </div>
+
+            <div class="stat-description">
+                Đơn hàng đã bị hủy
+            </div>
+
         </div>
 
     </div>
 
 
-    <div class="card">
+    <!-- =====================================================
+         TOTAL REVENUE
+         ===================================================== -->
 
-        <div class="label">
+    <div class="revenue-card">
+
+        <div class="revenue-label">
             Tổng doanh thu
         </div>
 
-        <div class="value">
+        <div class="revenue-value">
             @Model.TongDoanhThu.ToString("N0") VNĐ
+        </div>
+
+        <div class="revenue-description">
+            Tổng giá trị doanh thu từ các đơn hàng
         </div>
 
     </div>
 
 
-    <div class="revenue"
-         style="margin-top:15px;">
+    <!-- =====================================================
+         REVENUE BY PAYMENT METHOD
+         ===================================================== -->
 
-        <div class="card">
+    <div class="payment-grid">
 
-            <div class="label">
-                Doanh thu VNPAY
+
+        <!-- VNPAY -->
+
+        <div class="payment-card payment-vnpay">
+
+            <div class="payment-header">
+
+                <div class="payment-icon">
+                    💳
+                </div>
+
+                <div class="payment-name">
+                    Doanh thu VNPAY
+                </div>
+
             </div>
 
-            <div class="value">
+            <div class="payment-value">
                 @Model.DoanhThuVNPAY.ToString("N0") VNĐ
             </div>
 
         </div>
 
 
-        <div class="card">
+        <!-- COD -->
 
-            <div class="label">
-                Doanh thu COD
+        <div class="payment-card payment-cod">
+
+            <div class="payment-header">
+
+                <div class="payment-icon">
+                    💵
+                </div>
+
+                <div class="payment-name">
+                    Doanh thu COD
+                </div>
+
             </div>
 
-            <div class="value">
+            <div class="payment-value">
                 @Model.DoanhThuCOD.ToString("N0") VNĐ
             </div>
 
         </div>
 
 
-        <div class="card">
+        <!-- BANK -->
 
-            <div class="label">
-                Doanh thu chuyển khoản
+        <div class="payment-card payment-bank">
+
+            <div class="payment-header">
+
+                <div class="payment-icon">
+                    🏦
+                </div>
+
+                <div class="payment-name">
+                    Doanh thu chuyển khoản
+                </div>
+
             </div>
 
-            <div class="value">
+            <div class="payment-value">
                 @Model.DoanhThuChuyenKhoan.ToString("N0") VNĐ
             </div>
 
         </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         BACK
+         ===================================================== -->
+
+    <div class="back-wrapper">
+
+        <a asp-controller="DonHangs"
+           asp-action="Index"
+           class="back-button">
+
+            ← Quay lại quản lý đơn hàng
+
+        </a>
 
     </div>
 

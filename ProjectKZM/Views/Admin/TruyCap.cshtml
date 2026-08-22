@@ -1,0 +1,392 @@
+﻿@model ProjectKZM.ViewModels.TruyCapViewModel
+
+@{
+    ViewData["Title"] = "Thống kê truy cập";
+}
+
+<style>
+
+    .traffic-page {
+        max-width: 1150px;
+        margin: 0 auto;
+        padding: 55px 20px 80px;
+    }
+
+    /* =========================================================
+           HEADER
+           ========================================================= */
+
+    .traffic-header {
+        text-align: center;
+        margin-bottom: 40px;
+    }
+
+    .traffic-icon {
+        width: 70px;
+        height: 70px;
+        margin: 0 auto 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 17px;
+        background: #212529;
+        color: white;
+        font-size: 30px;
+        box-shadow: 0 8px 20px rgba(0,0,0,.12);
+    }
+
+    .traffic-title {
+        margin: 0;
+        font-size: 38px;
+        font-weight: 600;
+        color: #222;
+    }
+
+    .traffic-subtitle {
+        margin-top: 9px;
+        color: #888;
+        font-size: 15px;
+    }
+
+
+    /* =========================================================
+           STATISTICS
+           ========================================================= */
+
+    .traffic-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 18px;
+        margin-bottom: 25px;
+    }
+
+
+    .traffic-card {
+        background: white;
+        border: 1px solid #e5e5e5;
+        border-radius: 14px;
+        padding: 24px;
+        box-shadow: 0 5px 18px rgba(0,0,0,.045);
+        transition: transform .2s ease, box-shadow .2s ease;
+    }
+
+        .traffic-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0,0,0,.08);
+        }
+
+
+    .traffic-card-label {
+        color: #888;
+        font-size: 13px;
+        margin-bottom: 11px;
+    }
+
+
+    .traffic-card-value {
+        font-size: 32px;
+        font-weight: 650;
+        color: #222;
+    }
+
+
+    .traffic-card-description {
+        margin-top: 7px;
+        color: #aaa;
+        font-size: 12px;
+    }
+
+
+    /* =========================================================
+           ONLINE STATUS
+           ========================================================= */
+
+    .online-dot {
+        display: inline-block;
+        width: 9px;
+        height: 9px;
+        margin-right: 7px;
+        border-radius: 50%;
+        background: #198754;
+    }
+
+
+    /* =========================================================
+           INFO BOX
+           ========================================================= */
+
+    .info-box {
+        background: white;
+        border: 1px solid #e5e5e5;
+        border-radius: 14px;
+        padding: 25px;
+        box-shadow: 0 5px 18px rgba(0,0,0,.045);
+    }
+
+    .info-title {
+        margin: 0 0 8px;
+        font-size: 21px;
+        font-weight: 600;
+        color: #222;
+    }
+
+    .info-description {
+        color: #888;
+        font-size: 14px;
+        line-height: 1.6;
+        margin-bottom: 20px;
+    }
+
+
+    .status-row {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 13px 0;
+        border-bottom: 1px solid #eee;
+        font-size: 14px;
+        color: #555;
+    }
+
+        .status-row:last-child {
+            border-bottom: none;
+        }
+
+
+    .back-button {
+        display: inline-flex;
+        margin-top: 25px;
+        padding: 11px 18px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        background: white;
+        color: #444;
+        text-decoration: none;
+        font-size: 14px;
+        transition: .2s;
+    }
+
+        .back-button:hover {
+            background: #212529;
+            border-color: #212529;
+            color: white;
+        }
+
+
+    /* =========================================================
+           RESPONSIVE
+           ========================================================= */
+
+    @@media (max-width: 900px) {
+
+        .traffic-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+
+
+    @@media (max-width: 600px) {
+
+        .traffic-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .traffic-title {
+            font-size: 32px;
+        }
+
+        .traffic-page {
+            padding: 40px 15px 60px;
+        }
+    }
+
+</style>
+
+
+<div class="traffic-page">
+
+    <!-- =====================================================
+         HEADER
+         ===================================================== -->
+
+    <div class="traffic-header">
+
+        <div class="traffic-icon">
+            📊
+        </div>
+
+        <h1 class="traffic-title">
+            Thống kê truy cập
+        </h1>
+
+        <p class="traffic-subtitle">
+            Theo dõi khách vãng lai và tài khoản đang hoạt động
+            trên website
+        </p>
+
+    </div>
+
+
+    <!-- =====================================================
+         STATISTICS
+         ===================================================== -->
+
+    <div class="traffic-grid">
+
+        <!-- =================================================
+             KHÁCH VÃNG LAI ONLINE
+             ================================================= -->
+
+        <div class="traffic-card">
+
+            <div class="traffic-card-label">
+
+                <span class="online-dot"></span>
+
+                Khách vãng lai đang online
+
+            </div>
+
+            <div class="traffic-card-value">
+
+                @Model.KhachVangLaiOnline
+
+            </div>
+
+            <div class="traffic-card-description">
+                Người chưa đăng nhập
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             TÀI KHOẢN ONLINE
+             ================================================= -->
+
+        <div class="traffic-card">
+
+            <div class="traffic-card-label">
+
+                <span class="online-dot"></span>
+
+                Tài khoản đang hoạt động
+
+            </div>
+
+            <div class="traffic-card-value">
+
+                @Model.TaiKhoanOnline
+
+            </div>
+
+            <div class="traffic-card-description">
+                Tài khoản đã đăng nhập
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             GUEST TODAY
+             ================================================= -->
+
+        <div class="traffic-card">
+
+            <div class="traffic-card-label">
+                👥 Lượt khách vãng lai hôm nay
+            </div>
+
+            <div class="traffic-card-value">
+
+                @Model.LuotKhachVangLaiHomNay
+
+            </div>
+
+            <div class="traffic-card-description">
+                Số request được ghi nhận
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             TOTAL TODAY
+             ================================================= -->
+
+        <div class="traffic-card">
+
+            <div class="traffic-card-label">
+                📈 Tổng lượt truy cập hôm nay
+            </div>
+
+            <div class="traffic-card-value">
+
+                @Model.TongLuotTruyCapHomNay
+
+            </div>
+
+            <div class="traffic-card-description">
+                User + khách vãng lai
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         NOTE
+         ===================================================== -->
+
+    <div class="info-box">
+
+        <h2 class="info-title">
+            Trạng thái hoạt động
+        </h2>
+
+        <p class="info-description">
+            Hệ thống xem người dùng là đang hoạt động khi
+            có request trong vòng 5 phút gần nhất.
+        </p>
+
+
+        <div class="status-row">
+
+            <span class="online-dot"></span>
+
+            Khách vãng lai:
+            <strong>
+                @Model.KhachVangLaiOnline
+            </strong>
+
+            người đang hoạt động
+
+        </div>
+
+
+        <div class="status-row">
+
+            <span class="online-dot"></span>
+
+            Tài khoản:
+            <strong>
+                @Model.TaiKhoanOnline
+            </strong>
+
+            tài khoản đang hoạt động
+
+        </div>
+
+    </div>
+
+
+    <a asp-controller="Admin"
+       asp-action="Index"
+       class="back-button">
+
+        ← Quay lại quản lý
+
+    </a>
+
+</div>

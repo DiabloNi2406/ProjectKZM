@@ -1,73 +1,500 @@
 @model ProjectKZM.Models.NguoiDung
 
 @{
-    ViewData["Title"] = "Chi tiết người dùng";
+    string avatarUrl = "/images/Icon/user.png";
+
+    if (!string.IsNullOrWhiteSpace(Model.AnhDaiDien))
+    {
+        string avatar = Model.AnhDaiDien.Trim();
+
+        if (avatar.StartsWith("/"))
+        {
+            avatarUrl = avatar;
+        }
+        else if (avatar.StartsWith(
+            "uploads/avatars/",
+            StringComparison.OrdinalIgnoreCase))
+        {
+            avatarUrl = "/" + avatar;
+        }
+        else
+        {
+            avatarUrl = "/uploads/avatars/" + avatar;
+        }
+    }
 }
 
-<h1>Chi tiết người dùng</h1>
+<style>
 
-<hr />
+    /* =========================================================
+           PAGE
+           ========================================================= */
 
-<div class="card shadow-sm">
+    .user-detail-page {
+        max-width: 1050px;
+        margin: 0 auto;
+        padding: 50px 20px;
+    }
 
-    <div class="card-body">
 
-        <div class="row">
+    /* =========================================================
+           HEADER
+           ========================================================= */
 
-            <div class="col-md-8">
+    .user-detail-header {
+        margin-bottom: 30px;
+    }
 
-                <dl class="row">
+        .user-detail-header h1 {
+            margin: 0;
+            font-size: 36px;
+            font-weight: 600;
+            color: #212529;
+        }
 
-                    <dt class="col-sm-4">
+        .user-detail-header p {
+            margin: 8px 0 0;
+            color: #888;
+            font-size: 14px;
+        }
+
+
+    /* =========================================================
+           CARD
+           ========================================================= */
+
+    .user-detail-card {
+        background: #ffffff;
+        border: 1px solid #e9ecef;
+        border-radius: 18px;
+        overflow: hidden;
+        box-shadow: 0 10px 35px rgba(0, 0, 0, 0.07);
+    }
+
+
+    /* =========================================================
+           PROFILE TOP
+           ========================================================= */
+
+    .user-profile-top {
+        display: flex;
+        align-items: center;
+        gap: 28px;
+        padding: 35px;
+        background: linear-gradient( 135deg, #f8f9fa, #ffffff );
+        border-bottom: 1px solid #eeeeee;
+    }
+
+
+    /* =========================================================
+           AVATAR
+           ========================================================= */
+
+    .user-avatar-wrapper {
+        width: 125px;
+        height: 125px;
+        flex-shrink: 0;
+        border-radius: 50%;
+        padding: 4px;
+        background: #212529;
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+    }
+
+    .user-avatar {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        object-fit: cover;
+        display: block;
+        background: #f1f1f1;
+    }
+
+
+    /* =========================================================
+           PROFILE INFO
+           ========================================================= */
+
+    .user-profile-info {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .user-profile-name {
+        margin: 0 0 8px;
+        font-size: 28px;
+        font-weight: 600;
+        color: #212529;
+    }
+
+    .user-profile-email {
+        margin: 0 0 14px;
+        color: #777;
+        font-size: 15px;
+        word-break: break-word;
+    }
+
+    .user-role-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 7px 13px;
+        border-radius: 999px;
+        background: #212529;
+        color: #ffffff;
+        font-size: 13px;
+        font-weight: 600;
+    }
+
+
+    /* =========================================================
+           CONTENT
+           ========================================================= */
+
+    .user-detail-content {
+        padding: 35px;
+    }
+
+
+    /* =========================================================
+           INFORMATION GRID
+           ========================================================= */
+
+    .user-info-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 18px;
+    }
+
+    .user-info-item {
+        padding: 18px;
+        background: #f8f9fa;
+        border: 1px solid #eeeeee;
+        border-radius: 12px;
+        transition: all 0.2s ease;
+    }
+
+        .user-info-item:hover {
+            border-color: #d8d8d8;
+            transform: translateY(-1px);
+        }
+
+    .user-info-label {
+        display: block;
+        margin-bottom: 7px;
+        color: #888;
+        font-size: 13px;
+        font-weight: 500;
+    }
+
+    .user-info-value {
+        color: #212529;
+        font-size: 15px;
+        font-weight: 500;
+        word-break: break-word;
+    }
+
+
+    /* =========================================================
+           ICON
+           ========================================================= */
+
+    .user-info-label-icon {
+        margin-right: 5px;
+    }
+
+
+    /* =========================================================
+           ACTIONS
+           ========================================================= */
+
+    .user-detail-actions {
+        display: flex;
+        gap: 10px;
+        margin-top: 30px;
+        padding-top: 25px;
+        border-top: 1px solid #eeeeee;
+    }
+
+    .user-action-button {
+        min-width: 110px;
+        height: 42px;
+        padding: 0 18px;
+        border-radius: 8px;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 14px;
+        font-weight: 600;
+        transition: all 0.2s ease;
+    }
+
+    .user-edit-button {
+        background: #198754;
+        color: #ffffff;
+        border: 1px solid #198754;
+    }
+
+        .user-edit-button:hover {
+            background: #157347;
+            border-color: #157347;
+            color: #ffffff;
+            text-decoration: none;
+            transform: translateY(-1px);
+            box-shadow: 0 5px 12px rgba(0, 0, 0, 0.15);
+        }
+
+    .user-back-button {
+        background: #6c757d;
+        color: #ffffff;
+        border: 1px solid #6c757d;
+    }
+
+        .user-back-button:hover {
+            background: #5c636a;
+            border-color: #565e64;
+            color: #ffffff;
+            text-decoration: none;
+            transform: translateY(-1px);
+            box-shadow: 0 5px 12px rgba(0, 0, 0, 0.12);
+        }
+
+
+    /* =========================================================
+           RESPONSIVE
+           ========================================================= */
+
+    @@media (max-width: 700px) {
+
+        .user-detail-page {
+            padding: 30px 15px;
+        }
+
+        .user-profile-top {
+            flex-direction: column;
+            text-align: center;
+            padding: 30px 20px;
+        }
+
+        .user-avatar-wrapper {
+            width: 110px;
+            height: 110px;
+        }
+
+        .user-profile-name {
+            font-size: 24px;
+        }
+
+        .user-info-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .user-detail-content {
+            padding: 25px 20px;
+        }
+
+        .user-detail-actions {
+            flex-direction: column;
+        }
+
+        .user-action-button {
+            width: 100%;
+        }
+    }
+
+</style>
+
+
+<div class="user-detail-page">
+
+    <!-- =====================================================
+         HEADER
+         ===================================================== -->
+
+    <div class="user-detail-header">
+
+        <h1>
+            Chi tiết người dùng
+        </h1>
+
+        <p>
+            Thông tin chi tiết tài khoản người dùng
+        </p>
+
+    </div>
+
+
+    <!-- =====================================================
+         CARD
+         ===================================================== -->
+
+    <div class="user-detail-card">
+
+        <!-- =================================================
+             PROFILE HEADER
+             ================================================= -->
+
+        <div class="user-profile-top">
+
+            <!-- AVATAR -->
+
+            <div class="user-avatar-wrapper">
+
+                <img src="@avatarUrl"
+                     alt="Ảnh đại diện của @Model.HoTen"
+                     class="user-avatar"
+                     onerror="this.onerror=null; this.src='/images/Icon/user.jpg';" />
+
+            </div>
+
+
+            <!-- USER BASIC INFO -->
+
+            <div class="user-profile-info">
+
+                <h2 class="user-profile-name">
+                    @Model.HoTen
+                </h2>
+
+                <p class="user-profile-email">
+                    @Model.Email
+                </p>
+
+                <span class="user-role-badge">
+                    👤
+
+                    @if (Model.VaiTro != null)
+                    {
+                        @Model.VaiTro.TenVaiTro
+                    }
+                    else
+                    {
+                        <span>Chưa có vai trò</span>
+                    }
+
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             INFORMATION
+             ================================================= -->
+
+        <div class="user-detail-content">
+
+            <div class="user-info-grid">
+
+                <!-- MÃ NGƯỜI DÙNG -->
+
+                <div class="user-info-item">
+
+                    <span class="user-info-label">
+                        <span class="user-info-label-icon">🆔</span>
                         Mã người dùng
-                    </dt>
+                    </span>
 
-                    <dd class="col-sm-8">
+                    <div class="user-info-value">
                         @Model.MaNguoiDung
-                    </dd>
+                    </div>
+
+                </div>
 
 
-                    <dt class="col-sm-4">
+                <!-- HỌ VÀ TÊN -->
+
+                <div class="user-info-item">
+
+                    <span class="user-info-label">
+                        <span class="user-info-label-icon">👤</span>
                         Họ và tên
-                    </dt>
+                    </span>
 
-                    <dd class="col-sm-8">
+                    <div class="user-info-value">
                         @Model.HoTen
-                    </dd>
+                    </div>
+
+                </div>
 
 
-                    <dt class="col-sm-4">
+                <!-- EMAIL -->
+
+                <div class="user-info-item">
+
+                    <span class="user-info-label">
+                        <span class="user-info-label-icon">✉️</span>
                         Email
-                    </dt>
+                    </span>
 
-                    <dd class="col-sm-8">
+                    <div class="user-info-value">
                         @Model.Email
-                    </dd>
+                    </div>
+
+                </div>
 
 
-                    <dt class="col-sm-4">
+                <!-- SỐ ĐIỆN THOẠI -->
+
+                <div class="user-info-item">
+
+                    <span class="user-info-label">
+                        <span class="user-info-label-icon">📱</span>
                         Số điện thoại
-                    </dt>
+                    </span>
 
-                    <dd class="col-sm-8">
-                        @Model.SoDienThoai
-                    </dd>
+                    <div class="user-info-value">
+
+                        @if (!string.IsNullOrEmpty(Model.SoDienThoai))
+                        {
+                            @Model.SoDienThoai
+                        }
+                        else
+                        {
+                            <span>Chưa cập nhật</span>
+                        }
+
+                    </div>
+
+                </div>
 
 
-                    <dt class="col-sm-4">
+                <!-- ĐỊA CHỈ -->
+
+                <div class="user-info-item">
+
+                    <span class="user-info-label">
+                        <span class="user-info-label-icon">📍</span>
                         Địa chỉ
-                    </dt>
+                    </span>
 
-                    <dd class="col-sm-8">
-                        @Model.DiaChi
-                    </dd>
+                    <div class="user-info-value">
+
+                        @if (!string.IsNullOrEmpty(Model.DiaChi))
+                        {
+                            @Model.DiaChi
+                        }
+                        else
+                        {
+                            <span>Chưa cập nhật</span>
+                        }
+
+                    </div>
+
+                </div>
 
 
-                    <dt class="col-sm-4">
+                <!-- VAI TRÒ -->
+
+                <div class="user-info-item">
+
+                    <span class="user-info-label">
+                        <span class="user-info-label-icon">🛡️</span>
                         Vai trò
-                    </dt>
+                    </span>
 
-                    <dd class="col-sm-8">
+                    <div class="user-info-value">
 
                         @if (Model.VaiTro != null)
                         {
@@ -78,26 +505,33 @@
                             <span>Chưa có vai trò</span>
                         }
 
-                    </dd>
+                    </div>
 
-                </dl>
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 ACTIONS
+                 ================================================= -->
+
+            <div class="user-detail-actions">
+
+                <a asp-action="Edit"
+                   asp-route-manguoidung="@Model.MaNguoiDung"
+                   class="user-action-button user-edit-button">
+                    ✏️ Sửa thông tin
+                </a>
+
+                <a asp-action="Index"
+                   class="user-action-button user-back-button">
+                    ← Quay lại
+                </a>
 
             </div>
 
         </div>
-
-        <hr />
-
-        <a asp-action="Edit"
-           asp-route-manguoidung="@Model.MaNguoiDung"
-           class="btn btn-warning">
-            Sửa
-        </a>
-
-        <a asp-action="Index"
-           class="btn btn-secondary">
-            Quay lại
-        </a>
 
     </div>
 

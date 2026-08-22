@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ProjectKZM")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+e586de2c0ec374443606e5fa08a1afd983d37bbc")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+9bd192efd5a031c76fdced69833c91af332e3998")]
 [assembly: System.Reflection.AssemblyProductAttribute("ProjectKZM")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ProjectKZM")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

@@ -2,8 +2,58 @@
 
 @{
     ViewData["Title"] = "Quản lý sách";
-}
 
+
+    // =====================================================
+    // PHÂN TRANG
+    // =====================================================
+
+    const int pageSize = 10;
+
+    int currentPage = 1;
+
+
+    if (int.TryParse(
+        Context.Request.Query["page"],
+        out int requestedPage) &&
+        requestedPage > 0)
+    {
+        currentPage = requestedPage;
+    }
+
+
+    var allBooks =
+        (Model ?? Enumerable.Empty<ProjectKZM.Models.Sach>())
+        .ToList();
+
+
+    int totalBooks =
+        allBooks.Count;
+
+
+    int totalPages =
+        (int)Math.Ceiling(
+            totalBooks / (double)pageSize);
+
+
+    if (totalPages == 0)
+    {
+        totalPages = 1;
+    }
+
+
+    if (currentPage > totalPages)
+    {
+        currentPage = totalPages;
+    }
+
+
+    var pagedBooks =
+        allBooks
+            .Skip((currentPage - 1) * pageSize)
+            .Take(pageSize)
+            .ToList();
+}
 <style>
     .book-page {
         max-width: 1400px;
@@ -185,6 +235,64 @@
         text-align: center;
         color: #777;
     }
+
+    /* =========================
+       PHÂN TRANG
+       ========================= */
+
+    .pagination-wrapper {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 7px;
+        margin-top: 25px;
+    }
+
+    .pagination-button {
+        min-width: 40px;
+        height: 40px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0 12px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        background: #fff;
+        color: #444;
+        text-decoration: none;
+        font-size: 13px;
+        font-weight: 600;
+        transition: background-color .2s ease, border-color .2s ease, color .2s ease, transform .15s ease, box-shadow .2s ease;
+    }
+
+        .pagination-button:hover {
+            background: #f3f3f3;
+            border-color: #ccc;
+            color: #111;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, .07);
+        }
+
+        .pagination-button.active {
+            background: #212529;
+            border-color: #212529;
+            color: #fff;
+        }
+
+        .pagination-button.disabled {
+            pointer-events: none;
+            background: #f5f5f5;
+            border-color: #e5e5e5;
+            color: #aaa;
+        }
+
+    .pagination-info {
+        margin-top: 10px;
+        text-align: center;
+        color: #777;
+        font-size: 13px;
+    }
 </style>
 
 
@@ -309,7 +417,7 @@
 
                 <tbody>
 
-                    @foreach (var item in Model)
+                    @foreach (var item in pagedBooks)
                     {
                         <tr>
 
@@ -526,6 +634,8 @@
 
             </table>
 
+            
+
         }
         else
         {
@@ -543,5 +653,82 @@
         }
 
     </div>
+    @if (totalBooks > 0 && totalPages > 1)
+    {
+        <div class="pagination-wrapper">
+
+            <!-- TRANG TRƯỚC -->
+            @if (currentPage > 1)
+            {
+                <a asp-action="Index"
+                   asp-route-page="@(currentPage - 1)"
+                   class="pagination-button">
+
+                    ←
+
+                </a>
+            }
+            else
+            {
+                <span class="pagination-button disabled">
+                    ←
+                </span>
+            }
+
+
+            <!-- CÁC TRANG -->
+            @for (
+                        int pageNumber = 1;
+                        pageNumber <= totalPages;
+                        pageNumber++)
+            {
+                if (pageNumber == currentPage)
+                {
+                    <span class="pagination-button active">
+                        @pageNumber
+                    </span>
+                }
+                else
+                {
+                    <a asp-action="Index"
+                       asp-route-page="@pageNumber"
+                       class="pagination-button">
+
+                        @pageNumber
+
+                    </a>
+                }
+            }
+
+
+            <!-- TRANG SAU -->
+            @if (currentPage < totalPages)
+            {
+                <a asp-action="Index"
+                   asp-route-page="@(currentPage + 1)"
+                   class="pagination-button">
+
+                    →
+
+                </a>
+            }
+            else
+            {
+                <span class="pagination-button disabled">
+                    →
+                </span>
+            }
+
+        </div>
+
+
+        <div class="pagination-info">
+
+            Trang @currentPage / @totalPages
+            ·
+            Tổng @totalBooks sách
+
+        </div>
+    }
 
 </div>
