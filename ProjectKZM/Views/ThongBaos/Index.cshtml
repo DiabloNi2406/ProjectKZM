@@ -1,0 +1,195 @@
+﻿@model IEnumerable<ProjectKZM.ViewModels.ThongBaoViewModel>
+
+@{
+    ViewData["Title"] = "Thông báo";
+}
+
+<style>
+
+    .notifications-page {
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 45px 20px 80px;
+    }
+
+    .notifications-title {
+        font-size: 36px;
+        font-weight: 600;
+        margin-bottom: 25px;
+    }
+
+    .notifications-box {
+        background: white;
+        border: 1px solid #e7e7e7;
+        border-radius: 14px;
+        overflow: hidden;
+        box-shadow: 0 7px 25px rgba(0,0,0,.05);
+    }
+
+    .notification-page-item {
+        display: flex;
+        gap: 14px;
+        padding: 17px 20px;
+        border-bottom: 1px solid #eee;
+        text-decoration: none;
+        color: #222;
+        transition: background .2s ease;
+    }
+
+        .notification-page-item:hover {
+            background: #f7f7f7;
+            color: #222;
+        }
+
+        .notification-page-item.unread {
+            background: #f0f7ff;
+        }
+
+    .notification-page-icon {
+        width: 45px;
+        height: 45px;
+        min-width: 45px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        background: #edf2f7;
+        font-size: 19px;
+    }
+
+    .notification-page-content {
+        flex: 1;
+    }
+
+    .notification-page-title {
+        font-size: 15px;
+        font-weight: 700;
+        margin-bottom: 4px;
+    }
+
+    .notification-page-text {
+        color: #666;
+        font-size: 14px;
+        line-height: 1.5;
+    }
+
+    .notification-page-time {
+        margin-top: 6px;
+        color: #999;
+        font-size: 12px;
+    }
+
+    .notification-page-empty {
+        padding: 80px 20px;
+        text-align: center;
+        color: #999;
+    }
+
+</style>
+
+
+<div class="notifications-page">
+
+    <h1 class="notifications-title">
+        Thông báo
+    </h1>
+
+
+    <div class="notifications-box">
+
+        @if (!Model.Any())
+        {
+            <div class="notification-page-empty">
+
+                🔕
+                <br />
+
+                Chưa có thông báo
+
+            </div>
+        }
+        else
+        {
+            foreach (var item in Model)
+            {
+                <form asp-controller="ThongBaos"
+                      asp-action="DaDoc"
+                      method="post"
+                      style="margin:0;">
+
+                    @Html.AntiForgeryToken()
+
+                    <input type="hidden"
+                           name="id"
+                           value="@item.MaThongBao" />
+
+                    <button type="submit"
+                            class="notification-page-item
+                        @(item.DaDoc ? "" : "unread")"
+                            style="width:100%;
+                        border:0;
+                        text-align:left;
+                        background:transparent;">
+
+                        <div class="notification-page-icon">
+
+                            @if (item.Loai == "COD")
+                            {
+                                <span>💵</span>
+                            }
+                            else if (item.Loai == "BANK")
+                            {
+                                <span>🏦</span>
+                            }
+                            else if (item.Loai == "VNPAY")
+                            {
+                                <span>💳</span>
+                            }
+                            else if (item.Loai == "XAC_NHAN")
+                            {
+                                <span>✅</span>
+                            }
+                            else if (item.Loai == "HUY")
+                            {
+                                <span>❌</span>
+                            }
+                            else
+                            {
+                                <span>🔔</span>
+                            }
+
+                        </div>
+
+
+                        <div class="notification-page-content">
+
+                            <div class="notification-page-title">
+
+                                @item.TieuDe
+
+                            </div>
+
+                            <div class="notification-page-text">
+
+                                @item.NoiDung
+
+                            </div>
+
+                            <div class="notification-page-time">
+
+                                @item.NgayTao.ToString(
+                                    "dd/MM/yyyy HH:mm")
+
+                            </div>
+
+                        </div>
+
+                    </button>
+
+                </form>
+            }
+        }
+
+    </div>
+
+</div>

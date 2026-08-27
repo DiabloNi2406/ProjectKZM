@@ -3,8 +3,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ProjectKZM.Data;
 using ProjectKZM.Models;
+using ProjectKZM.Services;
 using ProjectKZM.ViewModels;
 using System.Security.Claims;
+
 
 namespace ProjectKZM.Controllers
 {
@@ -12,10 +14,14 @@ namespace ProjectKZM.Controllers
     public class DonHangsController : Controller
     {
         private readonly MyDbContext _context;
+        private readonly ThongBaoService _thongBaoService;
 
-        public DonHangsController(MyDbContext context)
+        public DonHangsController(
+        MyDbContext context,
+        ThongBaoService thongBaoService)
         {
             _context = context;
+            _thongBaoService = thongBaoService;
         }
 
 
@@ -212,6 +218,9 @@ namespace ProjectKZM.Controllers
                     GhiChu =
                         donHang.GhiChu,
 
+                    LyDoHuy =
+                        donHang.LyDoHuy,
+
                     TenKhachHang =
                         donHang.NguoiDung?.HoTen
                         ?? "Không xác định",
@@ -219,6 +228,8 @@ namespace ProjectKZM.Controllers
                     EmailKhachHang =
                         donHang.NguoiDung?.Email
                         ?? string.Empty
+                    
+
                 };
 
 
@@ -310,6 +321,14 @@ namespace ProjectKZM.Controllers
 
                 await _context.SaveChangesAsync();
 
+                await _thongBaoService.CreateAsync(
+                donHang.MaNguoiDung,
+                "Đơn hàng đã được xác nhận",
+                $"Đơn hàng #{donHang.MaDonHang} của bạn đã được Admin xác nhận.",
+                $"/DonHangs/ChiTietCuaToi/{donHang.MaDonHang}",
+                "XAC_NHAN",
+                donHang.MaDonHang);
+
                 await transaction.CommitAsync();
 
 
@@ -318,7 +337,8 @@ namespace ProjectKZM.Controllers
 
 
                 return RedirectToAction(
-                    nameof(ChoXacNhan));
+                    nameof(ChiTiet),
+                    new { id });
             }
             catch
             {
@@ -341,8 +361,24 @@ namespace ProjectKZM.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Huy(
-            int id)
+            int id,
+            string lyDoHuy)
         {
+            // ---------------------------------------------------------
+            // BẮT BUỘC NHẬP LÝ DO HỦY
+            // ---------------------------------------------------------
+
+            if (string.IsNullOrWhiteSpace(lyDoHuy))
+            {
+                TempData["Error"] =
+                    "Vui lòng nhập lý do hủy đơn.";
+
+                return RedirectToAction(
+                    nameof(ChiTiet),
+                    new { id });
+            }
+
+
             using var transaction =
                 await _context.Database
                     .BeginTransactionAsync();
@@ -364,9 +400,9 @@ namespace ProjectKZM.Controllers
                 }
 
 
-                // -------------------------------------------------
+                // -----------------------------------------------------
                 // CHỈ HỦY ĐƠN PENDING
-                // -------------------------------------------------
+                // -----------------------------------------------------
 
                 if (donHang.TrangThai !=
                     "Chờ Admin xác nhận")
@@ -379,9 +415,9 @@ namespace ProjectKZM.Controllers
                 }
 
 
-                // -------------------------------------------------
+                // -----------------------------------------------------
                 // TRẢ LẠI HÀNG ĐÃ GIỮ
-                // -------------------------------------------------
+                // -----------------------------------------------------
 
                 foreach (
                     var chiTiet
@@ -399,15 +435,41 @@ namespace ProjectKZM.Controllers
                 }
 
 
-                // -------------------------------------------------
-                // ĐÁNH DẤU HỦY
-                // -------------------------------------------------
+                // -----------------------------------------------------
+                // LƯU LÝ DO HỦY + ĐÁNH DẤU HỦY
+                // -----------------------------------------------------
+
+                donHang.LyDoHuy =
+                    lyDoHuy.Trim();
 
                 donHang.TrangThai =
                     "Đã hủy";
 
 
+                // -----------------------------------------------------
+                // LƯU DATABASE
+                // -----------------------------------------------------
+
                 await _context.SaveChangesAsync();
+
+
+                // -----------------------------------------------------
+                // THÔNG BÁO CHO USER
+                // -----------------------------------------------------
+
+                await _thongBaoService.CreateAsync(
+                donHang.MaNguoiDung,
+                "Đơn hàng đã bị hủy",
+                $"Đơn hàng #{donHang.MaDonHang} đã bị hủy. Lý do: {donHang.LyDoHuy}",
+                $"/DonHangs/ChiTietCuaToi/{donHang.MaDonHang}",
+                "HUY",
+                donHang.MaDonHang);
+
+
+
+                // -----------------------------------------------------
+                // COMMIT TRANSACTION
+                // -----------------------------------------------------
 
                 await transaction.CommitAsync();
 
@@ -417,7 +479,8 @@ namespace ProjectKZM.Controllers
 
 
                 return RedirectToAction(
-                    nameof(ChoXacNhan));
+                    nameof(ChiTiet),
+                    new { id });
             }
             catch
             {
@@ -430,6 +493,7 @@ namespace ProjectKZM.Controllers
                     nameof(ChoXacNhan));
             }
         }
+
 
 
         // =========================================================
@@ -577,6 +641,9 @@ namespace ProjectKZM.Controllers
                     GhiChu =
                         donHang.GhiChu,
 
+                    LyDoHuy =
+                        donHang.LyDoHuy,
+
                     TenKhachHang =
                         donHang.NguoiDung?.HoTen
                         ?? user.HoTen,
@@ -706,6 +773,354 @@ namespace ProjectKZM.Controllers
 
 
             return View(model);
+        }
+
+        // =====================================================
+        // DỮ LIỆU BIỂU ĐỒ DOANH THU
+        // =====================================================
+
+        [Authorize(Roles = "Admin")]
+        [HttpGet]
+        public async Task<IActionResult> DoanhThuChart(
+            string period = "month")
+        {
+            period =
+                string.IsNullOrWhiteSpace(period)
+                    ? "month"
+                    : period.ToLowerInvariant();
+
+
+            DateTime now =
+                DateTime.Now;
+
+
+            DateTime from;
+            DateTime to;
+
+
+            // =================================================
+            // TUẦN
+            // =================================================
+
+            if (period == "week")
+            {
+                int diff =
+                    (7 +
+                     (now.DayOfWeek -
+                      DayOfWeek.Monday))
+                    % 7;
+
+
+                from =
+                    now.Date.AddDays(-diff);
+
+
+                to =
+                    from.AddDays(7);
+            }
+
+
+            // =================================================
+            // NĂM
+            // =================================================
+
+            else if (period == "year")
+            {
+                from =
+                    new DateTime(
+                        now.Year,
+                        1,
+                        1);
+
+
+                to =
+                    from.AddYears(1);
+            }
+
+
+            // =================================================
+            // THÁNG
+            // =================================================
+
+            else
+            {
+                period = "month";
+
+
+                from =
+                    new DateTime(
+                        now.Year,
+                        now.Month,
+                        1);
+
+
+                to =
+                    from.AddMonths(1);
+            }
+
+
+            // =================================================
+            // LẤY ĐƠN HÀNG
+            //
+            // GIỐNG HOÀN TOÀN LOGIC ThongKe()
+            // =================================================
+
+            var orders =
+                await _context.DonHangs
+                    .AsNoTracking()
+                    .Where(d =>
+                        d.NgayDat >= from &&
+                        d.NgayDat < to &&
+                        (
+                            d.TrangThai ==
+                                "Đã xác nhận"
+
+                            ||
+
+                            d.TrangThai ==
+                                "Đã thanh toán"
+                        ))
+                    .Select(d => new
+                    {
+                        d.NgayDat,
+
+                        d.TongTien,
+
+                        d.PhuongThucThanhToan,
+
+                        d.TrangThai
+                    })
+                    .ToListAsync();
+
+
+            // =================================================
+            // DANH SÁCH TRẢ VỀ
+            // =================================================
+
+            var labels =
+                new List<string>();
+
+
+            var vnpay =
+                new List<decimal>();
+
+
+            var cod =
+                new List<decimal>();
+
+
+            var bank =
+                new List<decimal>();
+
+
+            // =================================================
+            // HÀM XỬ LÝ 1 NGÀY
+            // =================================================
+
+            void AddDay(
+                DateTime date)
+            {
+                labels.Add(
+                    date.ToString(
+                        "dd/MM"));
+
+
+                var dayOrders =
+                    orders.Where(
+                        d =>
+                            d.NgayDat.Date ==
+                            date.Date);
+
+
+                // ---------------------------------------------
+                // VNPAY
+                // ---------------------------------------------
+
+                vnpay.Add(
+                    dayOrders
+                        .Where(
+                            d =>
+                                d.PhuongThucThanhToan
+                                == "VNPAY")
+                        .Sum(
+                            d => d.TongTien));
+
+
+                // ---------------------------------------------
+                // COD
+                // ---------------------------------------------
+
+                cod.Add(
+                    dayOrders
+                        .Where(
+                            d =>
+                                d.PhuongThucThanhToan
+                                == "COD")
+                        .Sum(
+                            d => d.TongTien));
+
+
+                // ---------------------------------------------
+                // BANK
+                // ---------------------------------------------
+
+                bank.Add(
+                    dayOrders
+                        .Where(
+                            d =>
+                                d.PhuongThucThanhToan
+                                == "BANK")
+                        .Sum(
+                            d => d.TongTien));
+            }
+
+
+            // =================================================
+            // TUẦN
+            // =================================================
+
+            if (period == "week")
+            {
+                for (int i = 0;
+                     i < 7;
+                     i++)
+                {
+                    AddDay(
+                        from.AddDays(i));
+                }
+            }
+
+
+            // =================================================
+            // THÁNG
+            // =================================================
+
+            else if (period == "month")
+            {
+                int days =
+                    DateTime.DaysInMonth(
+                        now.Year,
+                        now.Month);
+
+
+                for (int day = 1;
+                     day <= days;
+                     day++)
+                {
+                    AddDay(
+                        new DateTime(
+                            now.Year,
+                            now.Month,
+                            day));
+                }
+            }
+
+
+            // =================================================
+            // NĂM
+            // =================================================
+
+            else
+            {
+                for (int month = 1;
+                     month <= 12;
+                     month++)
+                {
+                    labels.Add(
+                        $"T{month}");
+
+
+                    var monthOrders =
+                        orders.Where(
+                            d =>
+                                d.NgayDat.Year
+                                    == now.Year
+                                &&
+                                d.NgayDat.Month
+                                    == month);
+
+
+                    // -----------------------------------------
+                    // VNPAY
+                    // -----------------------------------------
+
+                    vnpay.Add(
+                        monthOrders
+                            .Where(
+                                d =>
+                                    d.PhuongThucThanhToan
+                                    == "VNPAY")
+                            .Sum(
+                                d => d.TongTien));
+
+
+                    // -----------------------------------------
+                    // COD
+                    // -----------------------------------------
+
+                    cod.Add(
+                        monthOrders
+                            .Where(
+                                d =>
+                                    d.PhuongThucThanhToan
+                                    == "COD")
+                            .Sum(
+                                d => d.TongTien));
+
+
+                    // -----------------------------------------
+                    // BANK
+                    // -----------------------------------------
+
+                    bank.Add(
+                        monthOrders
+                            .Where(
+                                d =>
+                                    d.PhuongThucThanhToan
+                                    == "BANK")
+                            .Sum(
+                                d => d.TongTien));
+                }
+            }
+
+
+            // =================================================
+            // DEBUG
+            // =================================================
+
+            Console.WriteLine(
+                $"[CHART] Period = {period}");
+
+            Console.WriteLine(
+                $"[CHART] Orders = {orders.Count}");
+
+            Console.WriteLine(
+                $"[CHART] VNPAY = {vnpay.Sum()}");
+
+            Console.WriteLine(
+                $"[CHART] COD = {cod.Sum()}");
+
+            Console.WriteLine(
+                $"[CHART] BANK = {bank.Sum()}");
+
+
+            // =================================================
+            // JSON
+            // =================================================
+
+            return Json(
+                new
+                {
+                    period,
+
+                    labels,
+
+                    vnpay,
+
+                    cod,
+
+                    bank
+                });
         }
     }
 }

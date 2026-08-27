@@ -36,6 +36,15 @@ builder.Services.Configure<VNPaySettings>(
 
 
 // ======================================================
+// NOTIFICATION SERVICE
+// ======================================================
+
+builder.Services.AddHttpContextAccessor();
+
+builder.Services.AddScoped<ThongBaoService>();
+
+
+// ======================================================
 // AUTHENTICATION
 // ======================================================
 

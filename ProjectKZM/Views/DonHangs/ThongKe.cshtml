@@ -397,6 +397,137 @@
         }
     }
 
+    /* =========================================================
+       CHART SECTION
+       ========================================================= */
+
+    .chart-section {
+        margin-top: 25px;
+    }
+
+
+    .chart-header {
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        gap: 20px;
+        margin-bottom: 18px;
+    }
+
+
+    .chart-title {
+        margin: 0;
+        font-size: 26px;
+        font-weight: 600;
+        color: #222;
+    }
+
+
+    .chart-subtitle {
+        margin: 7px 0 0;
+        color: #888;
+        font-size: 13px;
+    }
+
+
+    /* =========================================================
+       PERIOD BUTTON
+       ========================================================= */
+
+    .chart-period {
+        display: flex;
+        gap: 6px;
+        padding: 4px;
+        background: #f2f2f2;
+        border: 1px solid #e2e2e2;
+        border-radius: 9px;
+    }
+
+
+    .period-button {
+        height: 34px;
+        padding: 0 14px;
+        border: none;
+        border-radius: 6px;
+        background: transparent;
+        color: #666;
+        font-size: 13px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background-color .2s ease, color .2s ease, box-shadow .2s ease;
+    }
+
+
+        .period-button:hover {
+            background: #fff;
+            color: #222;
+        }
+
+
+        .period-button.active {
+            background: #212529;
+            color: #fff;
+            box-shadow: 0 3px 8px rgba(0,0,0,.12);
+        }
+
+
+    /* =========================================================
+       CHART CARD
+       ========================================================= */
+
+    .chart-card {
+        background: #fff;
+        border: 1px solid #e7e7e7;
+        border-radius: 14px;
+        padding: 22px;
+        margin-bottom: 18px;
+        box-shadow: 0 6px 20px rgba(0,0,0,.045);
+    }
+
+
+    .chart-card-header {
+        margin-bottom: 18px;
+    }
+
+
+    .chart-card-title {
+        font-size: 16px;
+        font-weight: 600;
+        color: #333;
+    }
+
+
+    .chart-container {
+        position: relative;
+        width: 100%;
+        height: 360px;
+    }
+
+
+    /* =========================================================
+       RESPONSIVE
+       ========================================================= */
+
+    @@media (max-width: 700px) {
+
+        .chart-header {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .chart-container {
+            height: 300px;
+        }
+
+        .chart-period {
+            width: 100%;
+        }
+
+        .period-button {
+            flex: 1;
+        }
+    }
+
 </style>
 
 
@@ -540,6 +671,8 @@
 
     </div>
 
+    
+
 
     <!-- =====================================================
          REVENUE BY PAYMENT METHOD
@@ -618,6 +751,113 @@
 
     </div>
 
+    <!-- =====================================================
+     BIỂU ĐỒ DOANH THU
+     ===================================================== -->
+
+    <div class="chart-section">
+
+        <div class="chart-header">
+
+            <div>
+
+                <h2 class="chart-title">
+                    Doanh thu theo thời gian
+                </h2>
+
+                <p class="chart-subtitle">
+                    Theo dõi doanh thu theo từng phương thức thanh toán
+                </p>
+
+            </div>
+
+
+            <!-- =================================================
+             CHỌN THỜI GIAN
+             ================================================= -->
+
+            <div class="chart-period">
+
+                <button type="button"
+                        class="period-button active"
+                        data-period="week">
+
+                    Tuần
+
+                </button>
+
+
+                <button type="button"
+                        class="period-button"
+                        data-period="month">
+
+                    Tháng
+
+                </button>
+
+
+                <button type="button"
+                        class="period-button"
+                        data-period="year">
+
+                    Năm
+
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <!-- =====================================================
+         CHART CỘT
+         ===================================================== -->
+
+        <div class="chart-card">
+
+            <div class="chart-card-header">
+
+                <div class="chart-card-title">
+                    📊 Doanh thu theo kỳ
+                </div>
+
+            </div>
+
+            <div class="chart-container">
+
+                <canvas id="revenueBarChart">
+                </canvas>
+
+            </div>
+
+        </div>
+
+
+        <!-- =====================================================
+         CHART ĐƯỜNG
+         ===================================================== -->
+
+        <div class="chart-card">
+
+            <div class="chart-card-header">
+
+                <div class="chart-card-title">
+                    📈 Xu hướng doanh thu
+                </div>
+
+            </div>
+
+            <div class="chart-container">
+
+                <canvas id="revenueLineChart">
+                </canvas>
+
+            </div>
+
+        </div>
+
+    </div>
+
 
     <!-- =====================================================
          BACK
@@ -636,3 +876,404 @@
     </div>
 
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+@section Scripts {
+
+    <script>
+
+        let revenueBarChart = null;
+        let revenueLineChart = null;
+
+
+        // =====================================================
+        // FORMAT VNĐ
+        // =====================================================
+
+        function formatVnd(value) {
+
+            return new Intl.NumberFormat(
+                "vi-VN"
+            ).format(value) + " VNĐ";
+
+        }
+
+
+        // =====================================================
+        // TẠO DATASET
+        // =====================================================
+
+        function createDatasets(data) {
+
+            return [
+
+                {
+                    label: "VNPAY",
+                    data: data.vnpay,
+                    borderWidth: 2,
+                    tension: 0.35
+                },
+
+                {
+                    label: "Chuyển khoản",
+                    data: data.bank,
+                    borderWidth: 2,
+                    tension: 0.35
+                },
+
+                {
+                    label: "COD",
+                    data: data.cod,
+                    borderWidth: 2,
+                    tension: 0.35
+                }
+
+            ];
+
+        }
+
+
+        // =====================================================
+        // TẢI DỮ LIỆU
+        // =====================================================
+
+        async function loadRevenueChart(period) {
+
+            try {
+
+                const response =
+                    await fetch(
+                        '@Url.Action("DoanhThuChart", "DonHangs")'
+                        + '?period='
+                        + encodeURIComponent(period)
+                    );
+
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        "Không thể lấy dữ liệu thống kê."
+                    );
+
+                }
+
+
+                const data =
+                    await response.json();
+
+
+                updateCharts(data);
+
+            }
+            catch (error) {
+
+                console.error(
+                    error
+                );
+
+            }
+
+        }
+
+
+        // =====================================================
+        // UPDATE CHART
+        // =====================================================
+
+        function updateCharts(data) {
+
+            const barCanvas =
+                document.getElementById(
+                    "revenueBarChart"
+                );
+
+
+            const lineCanvas =
+                document.getElementById(
+                    "revenueLineChart"
+                );
+
+
+            if (!barCanvas ||
+                !lineCanvas) {
+
+                return;
+
+            }
+
+
+            // =================================================
+            // XÓA CHART CŨ
+            // =================================================
+
+            if (revenueBarChart) {
+
+                revenueBarChart.destroy();
+
+            }
+
+
+            if (revenueLineChart) {
+
+                revenueLineChart.destroy();
+
+            }
+
+
+            const datasets =
+                createDatasets(data);
+
+
+            // =================================================
+            // BAR CHART
+            // =================================================
+
+            revenueBarChart =
+                new Chart(
+                    barCanvas,
+                    {
+                        type: "bar",
+
+                        data:
+                        {
+                            labels:
+                                data.labels,
+
+                            datasets:
+                                datasets.map(
+                                    x => ({
+                                        ...x
+                                    })
+                                )
+                        },
+
+                        options:
+                        {
+                            responsive: true,
+
+                            maintainAspectRatio: false,
+
+                            interaction:
+                            {
+                                mode: "index",
+                                intersect: false
+                            },
+
+                            plugins:
+                            {
+                                legend:
+                                {
+                                    position:
+                                        "top"
+                                },
+
+                                tooltip:
+                                {
+                                    callbacks:
+                                    {
+                                        label:
+                                            function(context) {
+
+                                                return (
+                                                    context.dataset.label
+                                                    + ": "
+                                                    + formatVnd(
+                                                        context.raw
+                                                    )
+                                                );
+
+                                            }
+                                    }
+                                }
+                            },
+
+                            scales:
+                            {
+                                y:
+                                {
+                                    beginAtZero:
+                                        true,
+
+                                    ticks:
+                                    {
+                                        callback:
+                                            function(value) {
+
+                                                return new Intl.NumberFormat(
+                                                    "vi-VN",
+                                                    {
+                                                        notation:
+                                                            "compact"
+                                                    }
+                                                ).format(value);
+
+                                            }
+                                    }
+                                }
+                            }
+                        }
+
+                    }
+                );
+
+
+            // =================================================
+            // LINE CHART
+            // =================================================
+
+            revenueLineChart =
+                new Chart(
+                    lineCanvas,
+                    {
+                        type: "line",
+
+                        data:
+                        {
+                            labels:
+                                data.labels,
+
+                            datasets:
+                                datasets.map(
+                                    x => ({
+                                        ...x,
+                                        fill: false
+                                    })
+                                )
+                        },
+
+                        options:
+                        {
+                            responsive: true,
+
+                            maintainAspectRatio: false,
+
+                            interaction:
+                            {
+                                mode: "index",
+                                intersect: false
+                            },
+
+                            plugins:
+                            {
+                                legend:
+                                {
+                                    position:
+                                        "top"
+                                },
+
+                                tooltip:
+                                {
+                                    callbacks:
+                                    {
+                                        label:
+                                            function(context) {
+
+                                                return (
+                                                    context.dataset.label
+                                                    + ": "
+                                                    + formatVnd(
+                                                        context.raw
+                                                    )
+                                                );
+
+                                            }
+                                    }
+                                }
+                            },
+
+                            scales:
+                            {
+                                y:
+                                {
+                                    beginAtZero:
+                                        true,
+
+                                    ticks:
+                                    {
+                                        callback:
+                                            function(value) {
+
+                                                return new Intl.NumberFormat(
+                                                    "vi-VN",
+                                                    {
+                                                        notation:
+                                                            "compact"
+                                                    }
+                                                ).format(value);
+
+                                            }
+                                    }
+                                }
+                            }
+                        }
+
+                    }
+                );
+
+        }
+
+
+        // =====================================================
+        // ĐỔI TUẦN / THÁNG / NĂM
+        // =====================================================
+
+        document
+            .querySelectorAll(
+                ".period-button"
+            )
+            .forEach(
+                function(button) {
+
+                    button.addEventListener(
+                        "click",
+                        function() {
+
+                            document
+                                .querySelectorAll(
+                                    ".period-button"
+                                )
+                                .forEach(
+                                    function(item) {
+
+                                        item.classList.remove(
+                                            "active"
+                                        );
+
+                                    }
+                                );
+
+
+                            button.classList.add(
+                                "active"
+                            );
+
+
+                            const period =
+                                button.getAttribute(
+                                    "data-period"
+                                );
+
+
+                            loadRevenueChart(
+                                period
+                            );
+
+                        }
+                    );
+
+                }
+            );
+
+
+        // =====================================================
+        // MẶC ĐỊNH: TUẦN
+        // =====================================================
+
+        loadRevenueChart(
+            "week"
+        );
+
+    </script>
+
+}

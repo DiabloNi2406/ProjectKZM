@@ -19,6 +19,8 @@ namespace ProjectKZM.ViewModels
 
         public string? GhiChu { get; set; }
 
+        public string? LyDoHuy { get; set; }
+
         public string TenKhachHang { get; set; } = string.Empty;
 
         public string EmailKhachHang { get; set; } = string.Empty;

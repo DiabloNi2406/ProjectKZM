@@ -2,33 +2,131 @@
 
 @{
     ViewData["Title"] = "Chi tiết đơn hàng";
+
+    bool isPending =
+        Model.TrangThai == "Chờ Admin xác nhận";
 }
 
 <style>
-    .page {
+
+    .order-detail-page {
         max-width: 1100px;
         margin: 0 auto;
-        padding: 40px 20px 80px;
+        padding: 45px 20px 80px;
     }
 
-    .title {
-        font-size: 36px;
-        margin-bottom: 25px;
-        font-weight: 400;
+    .order-title {
+        margin: 0 0 8px;
+        font-size: 38px;
+        font-weight: 600;
+        color: #222;
     }
 
-    .box {
+    .order-subtitle {
+        margin-bottom: 30px;
+        color: #888;
+        font-size: 14px;
+    }
+
+    .detail-box {
         background: #fff;
-        border: 1px solid #e5e5e5;
+        border: 1px solid #e7e7e7;
+        border-radius: 14px;
         padding: 25px;
         margin-bottom: 20px;
+        box-shadow: 0 6px 20px rgba(0,0,0,.04);
     }
 
-    .row {
+    .detail-row {
         display: flex;
         justify-content: space-between;
         gap: 20px;
-        padding: 8px 0;
+        padding: 12px 0;
+        border-bottom: 1px solid #f0f0f0;
+    }
+
+        .detail-row:last-child {
+            border-bottom: none;
+        }
+
+    .detail-label {
+        color: #777;
+        font-size: 14px;
+        font-weight: 600;
+    }
+
+    .detail-value {
+        color: #222;
+        font-size: 14px;
+        text-align: right;
+    }
+
+    .status-badge {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 7px 12px;
+        border-radius: 8px;
+        font-size: 12px;
+        font-weight: 700;
+    }
+
+    .status-pending {
+        background: #fff3cd;
+        border: 1px solid #ffda6a;
+        color: #8a5a00;
+    }
+
+    .status-success {
+        background: #edf8f0;
+        border: 1px solid #cfe8d5;
+        color: #28733b;
+    }
+
+    .status-danger {
+        background: #fff0f1;
+        border: 1px solid #f3c4c8;
+        color: #b02a37;
+    }
+
+    .status-processing {
+        background: #eef4ff;
+        border: 1px solid #cfe0ff;
+        color: #2f5fa7;
+    }
+
+
+    /* =========================================================
+           NOTICE
+           ========================================================= */
+
+    .order-notice {
+        padding: 16px 18px;
+        border-radius: 10px;
+        margin-bottom: 20px;
+        line-height: 1.55;
+        font-size: 14px;
+    }
+
+    .notice-success {
+        background: #edf8f0;
+        border: 1px solid #cfe8d5;
+        color: #28733b;
+    }
+
+    .notice-danger {
+        background: #fff0f1;
+        border: 1px solid #f3c4c8;
+        color: #b02a37;
+    }
+
+
+    /* =========================================================
+           TABLE
+           ========================================================= */
+
+    .products-wrapper {
+        overflow-x: auto;
     }
 
     .products {
@@ -36,19 +134,28 @@
         border-collapse: collapse;
     }
 
-        .products th,
-        .products td {
-            padding: 13px;
-            border-bottom: 1px solid #eee;
-            text-align: left;
+        .products th {
+            background: #f8f9fa;
+            color: #666;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: .4px;
+            font-weight: 700;
         }
 
-    .total {
+        .products th,
+        .products td {
+            padding: 14px;
+            border-bottom: 1px solid #eee;
+            text-align: left;
+            vertical-align: middle;
+            white-space: nowrap;
+        }
+
+    .product-cell {
         display: flex;
-        justify-content: space-between;
-        font-size: 20px;
-        font-weight: 600;
-        padding-top: 20px;
+        align-items: center;
+        gap: 12px;
     }
 
     .product-image {
@@ -56,115 +163,492 @@
         height: 75px;
         object-fit: cover;
         background: #eee;
+        border-radius: 5px;
+        flex-shrink: 0;
     }
+
+    .product-name {
+        font-weight: 600;
+        color: #222;
+    }
+
+
+    /* =========================================================
+           TOTAL
+           ========================================================= */
+
+    .total {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-top: 22px;
+        margin-top: 12px;
+        border-top: 1px solid #ddd;
+        font-size: 21px;
+        font-weight: 700;
+    }
+
+    .total-money {
+        color: #198754;
+    }
+
+
+    /* =========================================================
+           ACTIONS
+           ========================================================= */
+
+    .order-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin-top: 25px;
+    }
+
+    .action-button {
+        min-width: 130px;
+        height: 42px;
+        padding: 0 17px;
+        border-radius: 8px;
+        border: 1px solid transparent;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        text-decoration: none;
+        transition: background-color .2s ease, border-color .2s ease, color .2s ease, transform .15s ease, box-shadow .2s ease;
+    }
+
+    .confirm-button {
+        background: #198754;
+        border-color: #198754;
+        color: #fff;
+    }
+
+        .confirm-button:hover {
+            background: #157347;
+            border-color: #157347;
+            color: #fff;
+            transform: translateY(-1px);
+            box-shadow: 0 5px 13px rgba(25,135,84,.18);
+        }
+
+    .cancel-button {
+        background: #fff;
+        border-color: #dc3545;
+        color: #dc3545;
+    }
+
+        .cancel-button:hover {
+            background: #dc3545;
+            border-color: #dc3545;
+            color: #fff;
+            transform: translateY(-1px);
+            box-shadow: 0 5px 13px rgba(220,53,69,.16);
+        }
+
+    .back-button {
+        background: #fff;
+        border-color: #d7d7d7;
+        color: #555;
+    }
+
+        .back-button:hover {
+            background: #212529;
+            border-color: #212529;
+            color: #fff;
+            transform: translateY(-1px);
+            box-shadow: 0 5px 13px rgba(0,0,0,.12);
+        }
+
+
+    /* =========================================================
+           CANCEL BOX
+           ========================================================= */
+
+    .cancel-box {
+        display: none;
+        margin-top: 18px;
+        padding: 18px;
+        background: #fff8f8;
+        border: 1px solid #f3c4c8;
+        border-radius: 10px;
+    }
+
+        .cancel-box.show {
+            display: block;
+        }
+
+    .cancel-title {
+        margin-bottom: 10px;
+        font-size: 14px;
+        font-weight: 700;
+        color: #b02a37;
+    }
+
+    .cancel-textarea {
+        width: 100%;
+        min-height: 100px;
+        padding: 12px;
+        border: 1px solid #ddd;
+        border-radius: 7px;
+        resize: vertical;
+        outline: none;
+        box-sizing: border-box;
+    }
+
+        .cancel-textarea:focus {
+            border-color: #dc3545;
+        }
+
+    .cancel-submit {
+        margin-top: 10px;
+        height: 40px;
+        padding: 0 15px;
+        border: none;
+        border-radius: 7px;
+        background: #dc3545;
+        color: #fff;
+        font-size: 13px;
+        font-weight: 600;
+        cursor: pointer;
+    }
+
+        .cancel-submit:hover {
+            background: #bb2d3b;
+        }
+
+
+    /* =========================================================
+           BACK
+           ========================================================= */
+
+    .bottom-actions {
+        display: flex;
+        justify-content: flex-end;
+        margin-top: 25px;
+    }
+
+
+    @@media (max-width: 650px) {
+
+        .order-title {
+            font-size: 30px;
+        }
+
+        .detail-row {
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .detail-value {
+            text-align: left;
+        }
+
+        .order-actions {
+            justify-content: stretch;
+        }
+
+        .action-button {
+            flex: 1;
+            width: 100%;
+        }
+
+        .bottom-actions {
+            justify-content: stretch;
+        }
+
+            .bottom-actions .action-button {
+                width: 100%;
+            }
+    }
+
 </style>
 
 
-<div class="page">
+<div class="order-detail-page">
 
-    <h1 class="title">
+    <h1 class="order-title">
         Đơn hàng #@Model.MaDonHang
     </h1>
 
+    <div class="order-subtitle">
+        Chi tiết thông tin và trạng thái đơn hàng
+    </div>
 
-    <div class="box">
 
-        <div class="row">
-            <strong>Khách hàng</strong>
-            <span>@Model.TenKhachHang</span>
+    <!-- =====================================================
+         THÔNG BÁO TRẠNG THÁI
+         ===================================================== -->
+    @if (Model.TrangThai == "Đã xác nhận")
+    {
+        <div class="order-notice notice-success">
+
+            ✓
+            <strong>
+                Đơn hàng đã được xác nhận.
+            </strong>
+
+            Đơn hàng này đã được Admin xử lý thành công.
+
+        </div>
+    }
+    else if (Model.TrangThai == "Đã hủy")
+    {
+        <div class="order-notice notice-danger">
+
+            ✕
+
+            <strong>
+                Đơn hàng đã bị hủy.
+            </strong>
+
+            @if (!string.IsNullOrWhiteSpace(Model.LyDoHuy))
+            {
+                <div style="margin-top:6px;">
+                    <strong>Lý do hủy:</strong>
+                    @Model.LyDoHuy
+                </div>
+            }
+
+        </div>
+    }
+
+
+    <!-- =====================================================
+         THÔNG TIN ĐƠN
+         ===================================================== -->
+
+    <div class="detail-box">
+
+        <div class="detail-row">
+
+            <span class="detail-label">
+                Khách hàng
+            </span>
+
+            <span class="detail-value">
+                @Model.TenKhachHang
+            </span>
+
         </div>
 
-        <div class="row">
-            <strong>Email</strong>
-            <span>@Model.EmailKhachHang</span>
+
+        <div class="detail-row">
+
+            <span class="detail-label">
+                Email
+            </span>
+
+            <span class="detail-value">
+                @Model.EmailKhachHang
+            </span>
+
         </div>
 
-        <div class="row">
-            <strong>Ngày đặt</strong>
-            <span>@Model.NgayDat.ToString("dd/MM/yyyy HH:mm")</span>
+
+        <div class="detail-row">
+
+            <span class="detail-label">
+                Ngày đặt
+            </span>
+
+            <span class="detail-value">
+                @Model.NgayDat.ToString("dd/MM/yyyy HH:mm")
+            </span>
+
         </div>
 
-        <div class="row">
-            <strong>Phương thức</strong>
-            <span>@Model.PhuongThucThanhToan</span>
+
+        <div class="detail-row">
+
+            <span class="detail-label">
+                Phương thức
+            </span>
+
+            <span class="detail-value">
+                @Model.PhuongThucThanhToan
+            </span>
+
         </div>
 
-        <div class="row">
-            <strong>Trạng thái</strong>
-            <span>@Model.TrangThai</span>
+
+        <div class="detail-row">
+
+            <span class="detail-label">
+                Trạng thái
+            </span>
+
+            <span class="detail-value">
+
+                @{
+                    string statusClass =
+                        Model.TrangThai switch
+                        {
+                            "Chờ Admin xác nhận"
+                                => "status-pending",
+
+                            "Đã xác nhận"
+                                => "status-success",
+
+                            "Đã hủy"
+                                => "status-danger",
+
+                            "Đã thanh toán"
+                                => "status-success",
+
+                            "Chờ thanh toán"
+                                => "status-pending",
+
+                            "Thanh toán thất bại"
+                                => "status-danger",
+
+                            _ => "status-processing"
+                        };
+                }
+
+                <span class="status-badge @statusClass">
+                    @Model.TrangThai
+                </span>
+
+            </span>
+
         </div>
 
-        <div class="row">
-            <strong>Địa chỉ giao hàng</strong>
-            <span>@Model.DiaChiGiaoHang</span>
+
+        <div class="detail-row">
+
+            <span class="detail-label">
+                Địa chỉ giao hàng
+            </span>
+
+            <span class="detail-value">
+                @Model.DiaChiGiaoHang
+            </span>
+
         </div>
+
 
         @if (!string.IsNullOrWhiteSpace(Model.GhiChu))
         {
-            <div class="row">
-                <strong>Ghi chú</strong>
-                <span>@Model.GhiChu</span>
+            <div class="detail-row">
+
+                <span class="detail-label">
+                    Ghi chú
+                </span>
+
+                <span class="detail-value">
+                    @Model.GhiChu
+                </span>
+
+            </div>
+        }
+
+
+        @if (Model.TrangThai == "Đã hủy" &&
+             !string.IsNullOrWhiteSpace(Model.LyDoHuy))
+        {
+            <div class="detail-row">
+
+                <span class="detail-label">
+                    Lý do hủy
+                </span>
+
+                <span class="detail-value"
+                      style="color:#b02a37;font-weight:600;">
+
+                    @Model.LyDoHuy
+
+                </span>
+
             </div>
         }
 
     </div>
 
 
-    <div class="box">
+    <!-- =====================================================
+         SẢN PHẨM
+         ===================================================== -->
 
-        <table class="products">
+    <div class="detail-box">
 
-            <thead>
+        <div class="products-wrapper">
 
-                <tr>
-                    <th>Sách</th>
-                    <th>Số lượng</th>
-                    <th>Đơn giá</th>
-                    <th>Thành tiền</th>
-                </tr>
+            <table class="products">
 
-            </thead>
+                <thead>
 
-
-            <tbody>
-
-                @foreach (var item in Model.SanPhams)
-                {
                     <tr>
 
-                        <td>
+                        <th>
+                            Sách
+                        </th>
 
-                            @if (!string.IsNullOrWhiteSpace(item.Hinh))
-                            {
-                                <img src="@item.Hinh"
-                                     class="product-image"
-                                     alt="@item.TenSach" />
-                            }
+                        <th>
+                            Số lượng
+                        </th>
 
-                            <span>
-                                @item.TenSach
-                            </span>
+                        <th>
+                            Đơn giá
+                        </th>
 
-                        </td>
-
-                        <td>
-                            @item.SoLuong
-                        </td>
-
-                        <td>
-                            @item.DonGia.ToString("N0") VNĐ
-                        </td>
-
-                        <td>
-                            @item.ThanhTien.ToString("N0") VNĐ
-                        </td>
+                        <th>
+                            Thành tiền
+                        </th>
 
                     </tr>
-                }
 
-            </tbody>
+                </thead>
 
-        </table>
+
+                <tbody>
+
+                    @foreach (var item in Model.SanPhams)
+                    {
+                        <tr>
+
+                            <td>
+
+                                <div class="product-cell">
+
+                                    @if (!string.IsNullOrWhiteSpace(item.Hinh))
+                                    {
+                                        <img src="@item.Hinh"
+                                             class="product-image"
+                                             alt="@item.TenSach" />
+                                    }
+
+                                    <span class="product-name">
+                                        @item.TenSach
+                                    </span>
+
+                                </div>
+
+                            </td>
+
+                            <td>
+                                @item.SoLuong
+                            </td>
+
+                            <td>
+                                @item.DonGia.ToString("N0") VNĐ
+                            </td>
+
+                            <td>
+                                @item.ThanhTien.ToString("N0") VNĐ
+                            </td>
+
+                        </tr>
+                    }
+
+                </tbody>
+
+            </table>
+
+        </div>
 
 
         <div class="total">
@@ -173,7 +657,7 @@
                 Tổng tiền
             </span>
 
-            <span>
+            <span class="total-money">
                 @Model.TongTien.ToString("N0") VNĐ
             </span>
 
@@ -181,4 +665,168 @@
 
     </div>
 
+
+    <!-- =====================================================
+         ADMIN ACTIONS
+         ===================================================== -->
+    @if (isPending)
+    {
+        <div class="detail-box">
+
+            <div style="
+                font-size:15px;
+                font-weight:600;
+                margin-bottom:5px;
+                ">
+                Xử lý đơn hàng
+            </div>
+
+            <div style="
+                color:#888;
+                font-size:13px;
+                margin-bottom:18px;
+                ">
+                Xác nhận nếu đơn hợp lệ hoặc hủy đơn và ghi rõ lý do.
+            </div>
+
+
+            <div class="order-actions">
+
+                <!-- XÁC NHẬN -->
+
+                <form asp-controller="DonHangs"
+                      asp-action="XacNhan"
+                      method="post">
+
+                    @Html.AntiForgeryToken()
+
+                    <input type="hidden"
+                           name="id"
+                           value="@Model.MaDonHang" />
+
+                    <button type="submit"
+                            class="action-button confirm-button">
+
+                        ✓ Xác nhận đơn hàng
+
+                    </button>
+
+                </form>
+
+
+                <!-- HIỆN FORM HỦY -->
+
+                <button type="button"
+                        class="action-button cancel-button"
+                        onclick="showCancelBox()">
+
+                    ✕ Hủy đơn hàng
+
+                </button>
+
+            </div>
+
+
+            <!-- FORM HỦY -->
+
+            <div id="cancelBox"
+                 class="cancel-box">
+
+                <div class="cancel-title">
+
+                    Lý do hủy đơn hàng
+
+                </div>
+
+
+                <form asp-controller="DonHangs"
+                      asp-action="Huy"
+                      method="post">
+
+                    @Html.AntiForgeryToken()
+
+                    <input type="hidden"
+                           name="id"
+                           value="@Model.MaDonHang" />
+
+
+                    <textarea name="lyDoHuy"
+                              class="cancel-textarea"
+                              placeholder="Nhập lý do hủy đơn..."
+                              required></textarea>
+
+
+                    <button type="submit"
+                            class="cancel-submit"
+                            onclick="
+                        return confirm(
+                        'Bạn có chắc muốn hủy đơn hàng này?'
+                        );
+                        ">
+
+                        Xác nhận hủy đơn
+
+                    </button>
+
+                </form>
+
+            </div>
+
+        </div>
+    }
+
+
+    <!-- =====================================================
+         QUAY LẠI
+         ===================================================== -->
+
+    <div class="bottom-actions">
+
+        <a asp-controller="DonHangs"
+           asp-action="ChoXacNhan"
+           class="action-button back-button">
+
+            ← Quay lại đơn chờ xác nhận
+
+        </a>
+
+    </div>
+
 </div>
+
+
+@section Scripts {
+
+    <script>
+
+        function showCancelBox() {
+
+            const box =
+                document.getElementById(
+                    "cancelBox"
+                );
+
+            if (!box) {
+                return;
+            }
+
+            box.classList.add(
+                "show"
+            );
+
+            const textarea =
+                box.querySelector(
+                    "textarea"
+                );
+
+            if (textarea) {
+
+                textarea.focus();
+
+            }
+
+        }
+
+    </script>
+
+}

@@ -26,6 +26,9 @@ namespace ProjectKZM.Models
         [ForeignKey("NguoiDung")]
         public int MaNguoiDung { get; set; }
 
+        [StringLength(500)]
+        public string? LyDoHuy { get; set; }
+
         // Navigation Property
         public NguoiDung? NguoiDung { get; set; }
 
@@ -33,5 +36,7 @@ namespace ProjectKZM.Models
 
         [StringLength(500)]
         public string? GhiChu { get; set; }
+
+        
     }
 }

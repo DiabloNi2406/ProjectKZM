@@ -37,6 +37,8 @@ namespace ProjectKZM.Data
 
         public DbSet<YeuThich> YeuThichs { get; set; }
 
+        public DbSet<ThongBao> ThongBaos { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

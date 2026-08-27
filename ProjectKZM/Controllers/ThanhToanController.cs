@@ -18,13 +18,16 @@ namespace ProjectKZM.Controllers
     {
         private readonly MyDbContext _context;
         private readonly IConfiguration _configuration;
+        private readonly ThongBaoService _thongBaoService;
 
         public ThanhToanController(
             MyDbContext context,
-            IConfiguration configuration)
+            IConfiguration configuration,
+            ThongBaoService thongBaoService)
         {
             _context = context;
             _configuration = configuration;
+            _thongBaoService = thongBaoService;
         }
 
 
@@ -468,6 +471,17 @@ namespace ProjectKZM.Controllers
 
                 await _context.SaveChangesAsync();
 
+                // =====================================================
+                // TẠO THÔNG BÁO
+                // =====================================================
+
+                await _thongBaoService.CreateForAdminsAsync(
+                    "Đơn hàng COD mới",
+                    $"Đơn hàng #{donHang.MaDonHang} đang chờ Admin xác nhận.",
+                    $"/DonHangs/ChiTiet/{donHang.MaDonHang}",
+                    "COD",
+                    donHang.MaDonHang);
+
                 await transaction.CommitAsync();
 
 
@@ -600,6 +614,17 @@ namespace ProjectKZM.Controllers
                 _context.DonHangs.Add(donHang);
 
                 await _context.SaveChangesAsync();
+
+                // =====================================================
+                // TẠO THÔNG BÁO
+                // =====================================================
+
+                await _thongBaoService.CreateForAdminsAsync(
+                    "Đơn chuyển khoản mới",
+                    $"Đơn hàng #{donHang.MaDonHang} đang chờ Admin kiểm tra chuyển khoản.",
+                    $"/DonHangs/ChiTiet/{donHang.MaDonHang}",
+                    "BANK",
+                    donHang.MaDonHang);
 
                 await transaction.CommitAsync();
 
@@ -1013,6 +1038,7 @@ namespace ProjectKZM.Controllers
                 // -------------------------------------------------
 
                 await _context.SaveChangesAsync();
+
 
 
                 // -------------------------------------------------
@@ -1484,11 +1510,43 @@ namespace ProjectKZM.Controllers
                 await _context.SaveChangesAsync();
 
 
+            
+
+                // =================================================
+                // CHỐT ĐƠN
+                // =================================================
+
+                donHang.TrangThai =
+                    "Đã thanh toán";
+
+                donHang.PhuongThucThanhToan =
+                    "VNPAY";
+
+                // =================================================
+                // SAVE
+                // =================================================
+
+                await _context.SaveChangesAsync();
+
                 // =================================================
                 // COMMIT
                 // =================================================
 
                 await transaction.CommitAsync();
+
+
+
+                // =================================================
+                // TẠO THÔNG BÁO CHO ADMIN
+                // CHỈ KHI VNPAY THANH TOÁN THÀNH CÔNG
+                // =================================================
+
+                await _thongBaoService.CreateForAdminsAsync(
+                    "Đơn hàng VNPAY mới",
+                    $"Đơn hàng #{donHang.MaDonHang} đã thanh toán thành công qua VNPAY.",
+                    $"/DonHangs/ChiTiet/{donHang.MaDonHang}",
+                    "VNPAY",
+                    donHang.MaDonHang);
 
 
                 // =================================================

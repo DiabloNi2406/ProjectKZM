@@ -24,19 +24,30 @@ namespace ProjectKZM.Migrations
 
             modelBuilder.Entity("ProjectKZM.Models.ChiTietDonHang", b =>
                 {
+                    b.Property<int>("MaChiTietDonHang")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("MaChiTietDonHang"));
+
+                    b.Property<decimal>("DonGia")
+                        .HasColumnType("decimal(18,2)");
+
                     b.Property<int>("MaDonHang")
                         .HasColumnType("int");
 
                     b.Property<int>("MaSach")
                         .HasColumnType("int");
 
-                    b.Property<decimal>("DonGia")
-                        .HasColumnType("decimal(18,2)");
-
                     b.Property<int>("SoLuong")
                         .HasColumnType("int");
 
-                    b.HasKey("MaDonHang", "MaSach");
+                    b.Property<decimal>("ThanhTien")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("MaChiTietDonHang");
+
+                    b.HasIndex("MaDonHang");
 
                     b.HasIndex("MaSach");
 
@@ -74,6 +85,10 @@ namespace ProjectKZM.Migrations
                         .HasColumnType("nvarchar(255)");
 
                     b.Property<string>("GhiChu")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<string>("LyDoHuy")
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
 
@@ -174,8 +189,8 @@ namespace ProjectKZM.Migrations
                         .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("SoDienThoai")
-                        .HasMaxLength(15)
-                        .HasColumnType("nvarchar(15)");
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
 
                     b.HasKey("MaNguoiDung");
 
@@ -269,6 +284,51 @@ namespace ProjectKZM.Migrations
                     b.ToTable("TheLoais");
                 });
 
+            modelBuilder.Entity("ProjectKZM.Models.ThongBao", b =>
+                {
+                    b.Property<int>("MaThongBao")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("MaThongBao"));
+
+                    b.Property<bool>("DaDoc")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("DuongDan")
+                        .HasMaxLength(300)
+                        .HasColumnType("nvarchar(300)");
+
+                    b.Property<string>("Loai")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<int?>("MaDonHang")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MaNguoiDung")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("NgayTao")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("NoiDung")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<string>("TieuDe")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.HasKey("MaThongBao");
+
+                    b.HasIndex("MaNguoiDung");
+
+                    b.ToTable("ThongBaos");
+                });
+
             modelBuilder.Entity("ProjectKZM.Models.VaiTro", b =>
                 {
                     b.Property<int>("MaVaiTro")
@@ -337,7 +397,7 @@ namespace ProjectKZM.Migrations
                     b.HasOne("ProjectKZM.Models.Sach", "Sach")
                         .WithMany("ChiTietDonHangs")
                         .HasForeignKey("MaSach")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("DonHang");
@@ -424,6 +484,17 @@ namespace ProjectKZM.Migrations
                     b.Navigation("Sach");
 
                     b.Navigation("TheLoai");
+                });
+
+            modelBuilder.Entity("ProjectKZM.Models.ThongBao", b =>
+                {
+                    b.HasOne("ProjectKZM.Models.NguoiDung", "NguoiDung")
+                        .WithMany()
+                        .HasForeignKey("MaNguoiDung")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("NguoiDung");
                 });
 
             modelBuilder.Entity("ProjectKZM.Models.YeuThich", b =>

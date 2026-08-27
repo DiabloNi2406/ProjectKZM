@@ -5,102 +5,588 @@
 }
 
 <style>
-    .page {
-        max-width: 1200px;
+
+    /* =========================================================
+           PAGE
+           ========================================================= */
+
+    .history-page {
+        max-width: 1100px;
         margin: 0 auto;
-        padding: 45px 20px 80px;
+        padding: 50px 20px 85px;
     }
 
-    .title {
-        font-size: 36px;
-        font-weight: 400;
-        margin-bottom: 30px;
+
+    /* =========================================================
+           HEADER
+           ========================================================= */
+
+    .history-header {
+        margin-bottom: 32px;
     }
 
-    .card {
+    .history-title {
+        margin: 0;
+        font-size: 38px;
+        font-weight: 600;
+        letter-spacing: -0.8px;
+        color: #222;
+    }
+
+    .history-subtitle {
+        margin: 8px 0 0;
+        color: #888;
+        font-size: 14px;
+        line-height: 1.6;
+    }
+
+
+    /* =========================================================
+           EMPTY
+           ========================================================= */
+
+    .empty-history {
+        background: #fff;
+        border: 1px solid #e7e7e7;
+        border-radius: 15px;
+        padding: 75px 20px;
+        text-align: center;
+        box-shadow: 0 7px 25px rgba(0,0,0,.045);
+    }
+
+    .empty-icon {
+        width: 70px;
+        height: 70px;
+        margin: 0 auto 18px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        background: #f3f3f3;
+        font-size: 30px;
+    }
+
+    .empty-title {
+        margin: 0;
+        font-size: 21px;
+        font-weight: 600;
+        color: #333;
+    }
+
+    .empty-text {
+        margin: 8px 0 0;
+        color: #999;
+        font-size: 14px;
+    }
+
+
+    /* =========================================================
+           ORDER CARD
+           ========================================================= */
+
+    .order-card {
+        background: #fff;
         border: 1px solid #e5e5e5;
-        padding: 20px;
-        margin-bottom: 15px;
+        border-radius: 15px;
+        margin-bottom: 16px;
+        overflow: hidden;
+        box-shadow: 0 6px 20px rgba(0,0,0,.04);
+        transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+    }
+
+        .order-card:hover {
+            transform: translateY(-3px);
+            border-color: #d8d8d8;
+            box-shadow: 0 12px 30px rgba(0,0,0,.08);
+        }
+
+
+    /* =========================================================
+           TOP
+           ========================================================= */
+
+    .order-top {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 20px;
+        padding: 18px 20px;
+        border-bottom: 1px solid #eeeeee;
+        background: #fafafa;
+    }
+
+    .order-id-wrapper {
+        display: flex;
+        align-items: center;
+        gap: 9px;
+    }
+
+    .order-icon {
+        width: 36px;
+        height: 36px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 9px;
+        background: #eef1f4;
+        font-size: 16px;
+    }
+
+    .order-id {
+        color: #222;
+        font-size: 15px;
+        font-weight: 700;
+    }
+
+    .order-date {
+        margin-top: 3px;
+        color: #999;
+        font-size: 12px;
+    }
+
+
+    /* =========================================================
+           MONEY
+           ========================================================= */
+
+    .order-money {
+        color: #198754;
+        font-size: 21px;
+        font-weight: 700;
+        white-space: nowrap;
+    }
+
+
+    /* =========================================================
+           CONTENT
+           ========================================================= */
+
+    .order-content {
+        padding: 19px 20px;
+    }
+
+    .order-meta-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px 25px;
+    }
+
+    .meta-item {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    .meta-label {
+        color: #999;
+        font-size: 11px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: .4px;
+    }
+
+    .meta-value {
+        color: #333;
+        font-size: 14px;
+        font-weight: 500;
+    }
+
+
+    /* =========================================================
+           PAYMENT
+           ========================================================= */
+
+    .payment-badge {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: fit-content;
+        padding: 6px 10px;
+        border-radius: 7px;
+        background: #f3f3f3;
+        border: 1px solid #e1e1e1;
+        color: #555;
+        font-size: 12px;
+        font-weight: 700;
+    }
+
+    .payment-vnpay {
+        background: #eef6ff;
+        border-color: #cfe2ff;
+        color: #1769aa;
+    }
+
+    .payment-cod {
+        background: #edf8f0;
+        border-color: #cfe8d5;
+        color: #28733b;
+    }
+
+    .payment-bank {
+        background: #f4efff;
+        border-color: #ded2ff;
+        color: #6842a6;
+    }
+
+
+    /* =========================================================
+           STATUS
+           ========================================================= */
+
+    .status-badge {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: fit-content;
+        padding: 6px 10px;
+        border-radius: 7px;
+        font-size: 12px;
+        font-weight: 700;
+    }
+
+    .status-success {
+        background: #edf8f0;
+        border: 1px solid #cfe8d5;
+        color: #28733b;
+    }
+
+    .status-warning {
+        background: #fff3cd;
+        border: 1px solid #ffda6a;
+        color: #8a5a00;
+    }
+
+    .status-danger {
+        background: #fff0f1;
+        border: 1px solid #f3c4c8;
+        color: #b02a37;
+    }
+
+    .status-processing {
+        background: #eef4ff;
+        border: 1px solid #cfe0ff;
+        color: #2f5fa7;
+    }
+
+
+    /* =========================================================
+           FOOTER
+           ========================================================= */
+
+    .order-footer {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        padding: 14px 20px;
+        border-top: 1px solid #eeeeee;
         background: #fff;
     }
 
-    .top {
-        display: flex;
-        justify-content: space-between;
-        margin-bottom: 12px;
-    }
-
-    .money {
-        font-weight: 600;
-    }
-
-    .meta {
-        color: #777;
-        font-size: 14px;
-        margin-bottom: 8px;
-    }
-
-    .detail {
-        color: #111;
+    .detail-button {
+        height: 38px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0 15px;
+        border: 1px solid #d7d7d7;
+        border-radius: 8px;
+        background: #fff;
+        color: #444;
         text-decoration: none;
-        font-size: 14px;
+        font-size: 13px;
+        font-weight: 600;
+        transition: background-color .2s ease, border-color .2s ease, color .2s ease, transform .15s ease, box-shadow .2s ease;
     }
+
+        .detail-button:hover {
+            background: #212529;
+            border-color: #212529;
+            color: #fff;
+            transform: translateY(-1px);
+            box-shadow: 0 5px 13px rgba(0,0,0,.12);
+        }
+
+
+    /* =========================================================
+           RESPONSIVE
+           ========================================================= */
+
+    @@media (max-width: 700px) {
+
+        .history-page {
+            padding: 35px 15px 60px;
+        }
+
+        .history-title {
+            font-size: 31px;
+        }
+
+        .order-top {
+            align-items: flex-start;
+            flex-direction: column;
+        }
+
+        .order-money {
+            font-size: 20px;
+        }
+
+        .order-meta-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .order-footer {
+            justify-content: stretch;
+        }
+
+        .detail-button {
+            width: 100%;
+        }
+    }
+
 </style>
 
 
-<div class="page">
+<div class="history-page">
 
-    <h1 class="title">
-        Lịch sử mua hàng
-    </h1>
+    <!-- =====================================================
+         HEADER
+         ===================================================== -->
+
+    <div class="history-header">
+
+        <h1 class="history-title">
+            Lịch sử mua hàng
+        </h1>
+
+        <p class="history-subtitle">
+            Theo dõi các đơn hàng bạn đã đặt và trạng thái xử lý
+        </p>
+
+    </div>
 
 
     @if (!Model.Any())
     {
-        <p>
-            Bạn chưa có đơn hàng nào.
-        </p>
+        <!-- =================================================
+             EMPTY
+             ================================================= -->
+
+        <div class="empty-history">
+
+            <div class="empty-icon">
+                📦
+            </div>
+
+            <h2 class="empty-title">
+                Bạn chưa có đơn hàng nào
+            </h2>
+
+            <p class="empty-text">
+                Những đơn hàng bạn đặt sẽ xuất hiện tại đây.
+            </p>
+
+        </div>
     }
     else
     {
         @foreach (var item in Model)
         {
-            <div class="card">
+            string paymentClass = "";
 
-                <div class="top">
+            if (item.PhuongThucThanhToan == "VNPAY")
+            {
+                paymentClass = "payment-vnpay";
+            }
+            else if (item.PhuongThucThanhToan == "COD")
+            {
+                paymentClass = "payment-cod";
+            }
+            else if (item.PhuongThucThanhToan == "BANK")
+            {
+                paymentClass = "payment-bank";
+            }
 
-                    <strong>
-                        Đơn hàng #@item.MaDonHang
-                    </strong>
 
-                    <strong class="money">
-                        @item.TongTien.ToString("N0") VNĐ
-                    </strong>
+            string paymentText =
+                item.PhuongThucThanhToan switch
+                {
+                    "VNPAY" => "VNPAY",
+
+                    "COD" => "Thanh toán khi nhận hàng",
+
+                    "BANK" => "Chuyển khoản",
+
+                    _ => item.PhuongThucThanhToan
+                };
+
+
+            string statusClass =
+                item.TrangThai switch
+                {
+                    "Đã xác nhận"
+                        => "status-success",
+
+                    "Đã thanh toán"
+                        => "status-success",
+
+                    "Chờ Admin xác nhận"
+                        => "status-warning",
+
+                    "Chờ thanh toán"
+                        => "status-warning",
+
+                    "Đã hủy"
+                        => "status-danger",
+
+                    "Thanh toán thất bại"
+                        => "status-danger",
+
+                    _ => "status-processing"
+                };
+
+
+            <div class="order-card">
+
+                <!-- =================================================
+                     HEADER
+                     ================================================= -->
+
+                <div class="order-top">
+
+                    <div class="order-id-wrapper">
+
+                        <div class="order-icon">
+                            📦
+                        </div>
+
+                        <div>
+
+                            <div class="order-id">
+                                Đơn hàng #@item.MaDonHang
+                            </div>
+
+                            <div class="order-date">
+
+                                @item.NgayDat.ToString(
+                                    "dd/MM/yyyy HH:mm")
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="order-money">
+
+                        @item.TongTien.ToString("N0")
+                        VNĐ
+
+                    </div>
 
                 </div>
 
-                <div class="meta">
-                    Ngày đặt:
-                    @item.NgayDat.ToString("dd/MM/yyyy HH:mm")
+
+                <!-- =================================================
+                     CONTENT
+                     ================================================= -->
+
+                <div class="order-content">
+
+                    <div class="order-meta-grid">
+
+
+                        <!-- PHƯƠNG THỨC -->
+
+                        <div class="meta-item">
+
+                            <div class="meta-label">
+                                Phương thức thanh toán
+                            </div>
+
+                            <div class="meta-value">
+
+                                <span class="payment-badge @paymentClass">
+
+                                    @paymentText
+
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- TRẠNG THÁI -->
+
+                        <div class="meta-item">
+
+                            <div class="meta-label">
+                                Trạng thái
+                            </div>
+
+                            <div class="meta-value">
+
+                                <span class="status-badge @statusClass">
+
+                                    @item.TrangThai
+
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- SỐ LƯỢNG -->
+
+                        <div class="meta-item">
+
+                            <div class="meta-label">
+                                Số lượng sản phẩm
+                            </div>
+
+                            <div class="meta-value">
+                                @item.TongSoLuong sản phẩm
+                            </div>
+
+                        </div>
+
+
+                        <!-- KHÁCH HÀNG -->
+
+                        <div class="meta-item">
+
+                            <div class="meta-label">
+                                Người nhận
+                            </div>
+
+                            <div class="meta-value">
+                                @item.TenKhachHang
+                            </div>
+
+                        </div>
+
+                    </div>
+
                 </div>
 
-                <div class="meta">
-                    Phương thức:
-                    @item.PhuongThucThanhToan
+
+                <!-- =================================================
+                     FOOTER
+                     ================================================= -->
+
+                <div class="order-footer">
+
+                    <a asp-action="ChiTietCuaToi"
+                       asp-route-id="@item.MaDonHang"
+                       class="detail-button">
+
+                        Xem chi tiết →
+
+                    </a>
+
                 </div>
-
-                <div class="meta">
-                    Trạng thái:
-                    @item.TrangThai
-                </div>
-
-                <a asp-action="ChiTietCuaToi"
-                   asp-route-id="@item.MaDonHang"
-                   class="detail">
-
-                    Xem chi tiết →
-
-                </a>
 
             </div>
         }

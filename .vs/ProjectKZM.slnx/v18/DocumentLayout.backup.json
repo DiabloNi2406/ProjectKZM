@@ -3,48 +3,20 @@
   "WorkspaceRootPath": "C:\\Users\\Asus\\Desktop\\Big Project\\ProjectKZM\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{E41800D2-0F51-8312-DF13-9E7309DBBDD7}|ProjectKZM\\ProjectKZM.csproj|c:\\users\\asus\\desktop\\big project\\projectkzm\\projectkzm\\views\\home\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{E41800D2-0F51-8312-DF13-9E7309DBBDD7}|ProjectKZM\\ProjectKZM.csproj|solutionrelative:projectkzm\\views\\home\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+      "AbsoluteMoniker": "D:0:0:{E41800D2-0F51-8312-DF13-9E7309DBBDD7}|ProjectKZM\\ProjectKZM.csproj|c:\\users\\asus\\desktop\\big project\\projectkzm\\projectkzm\\views\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{E41800D2-0F51-8312-DF13-9E7309DBBDD7}|ProjectKZM\\ProjectKZM.csproj|solutionrelative:projectkzm\\views\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{E41800D2-0F51-8312-DF13-9E7309DBBDD7}|ProjectKZM\\ProjectKZM.csproj|c:\\users\\asus\\desktop\\big project\\projectkzm\\projectkzm\\views\\sachs\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{E41800D2-0F51-8312-DF13-9E7309DBBDD7}|ProjectKZM\\ProjectKZM.csproj|solutionrelative:projectkzm\\views\\sachs\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+      "AbsoluteMoniker": "D:0:0:{E41800D2-0F51-8312-DF13-9E7309DBBDD7}|ProjectKZM\\ProjectKZM.csproj|c:\\users\\asus\\desktop\\big project\\projectkzm\\projectkzm\\controllers\\donhangscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E41800D2-0F51-8312-DF13-9E7309DBBDD7}|ProjectKZM\\ProjectKZM.csproj|solutionrelative:projectkzm\\controllers\\donhangscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{E41800D2-0F51-8312-DF13-9E7309DBBDD7}|ProjectKZM\\ProjectKZM.csproj|c:\\users\\asus\\desktop\\big project\\projectkzm\\projectkzm\\views\\sachs\\details.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{E41800D2-0F51-8312-DF13-9E7309DBBDD7}|ProjectKZM\\ProjectKZM.csproj|solutionrelative:projectkzm\\views\\sachs\\details.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+      "AbsoluteMoniker": "D:0:0:{E41800D2-0F51-8312-DF13-9E7309DBBDD7}|ProjectKZM\\ProjectKZM.csproj|c:\\users\\asus\\desktop\\big project\\projectkzm\\projectkzm\\views\\donhangs\\chitiet.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{E41800D2-0F51-8312-DF13-9E7309DBBDD7}|ProjectKZM\\ProjectKZM.csproj|solutionrelative:projectkzm\\views\\donhangs\\chitiet.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{E41800D2-0F51-8312-DF13-9E7309DBBDD7}|ProjectKZM\\ProjectKZM.csproj|c:\\users\\asus\\desktop\\big project\\projectkzm\\projectkzm\\views\\nguoidungs\\delete.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{E41800D2-0F51-8312-DF13-9E7309DBBDD7}|ProjectKZM\\ProjectKZM.csproj|solutionrelative:projectkzm\\views\\nguoidungs\\delete.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{E41800D2-0F51-8312-DF13-9E7309DBBDD7}|ProjectKZM\\ProjectKZM.csproj|c:\\users\\asus\\desktop\\big project\\projectkzm\\projectkzm\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{E41800D2-0F51-8312-DF13-9E7309DBBDD7}|ProjectKZM\\ProjectKZM.csproj|solutionrelative:projectkzm\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{E41800D2-0F51-8312-DF13-9E7309DBBDD7}|ProjectKZM\\ProjectKZM.csproj|c:\\users\\asus\\desktop\\big project\\projectkzm\\projectkzm\\controllers\\admincontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{E41800D2-0F51-8312-DF13-9E7309DBBDD7}|ProjectKZM\\ProjectKZM.csproj|solutionrelative:projectkzm\\controllers\\admincontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{E41800D2-0F51-8312-DF13-9E7309DBBDD7}|ProjectKZM\\ProjectKZM.csproj|c:\\users\\asus\\desktop\\big project\\projectkzm\\projectkzm\\middleware\\onlinetrackingmiddleware.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{E41800D2-0F51-8312-DF13-9E7309DBBDD7}|ProjectKZM\\ProjectKZM.csproj|solutionrelative:projectkzm\\middleware\\onlinetrackingmiddleware.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{E41800D2-0F51-8312-DF13-9E7309DBBDD7}|ProjectKZM\\ProjectKZM.csproj|c:\\users\\asus\\desktop\\big project\\projectkzm\\projectkzm\\services\\onlineuserservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{E41800D2-0F51-8312-DF13-9E7309DBBDD7}|ProjectKZM\\ProjectKZM.csproj|solutionrelative:projectkzm\\services\\onlineuserservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{E41800D2-0F51-8312-DF13-9E7309DBBDD7}|ProjectKZM\\ProjectKZM.csproj|c:\\users\\asus\\desktop\\big project\\projectkzm\\projectkzm\\projectkzm.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
-      "RelativeMoniker": "D:0:0:{E41800D2-0F51-8312-DF13-9E7309DBBDD7}|ProjectKZM\\ProjectKZM.csproj|solutionrelative:projectkzm\\projectkzm.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{E41800D2-0F51-8312-DF13-9E7309DBBDD7}|ProjectKZM\\ProjectKZM.csproj|c:\\users\\asus\\desktop\\big project\\projectkzm\\projectkzm\\views\\admin\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{E41800D2-0F51-8312-DF13-9E7309DBBDD7}|ProjectKZM\\ProjectKZM.csproj|solutionrelative:projectkzm\\views\\admin\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{E41800D2-0F51-8312-DF13-9E7309DBBDD7}|ProjectKZM\\ProjectKZM.csproj|c:\\users\\asus\\desktop\\big project\\projectkzm\\projectkzm\\controllers\\nguoidungscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{E41800D2-0F51-8312-DF13-9E7309DBBDD7}|ProjectKZM\\ProjectKZM.csproj|solutionrelative:projectkzm\\controllers\\nguoidungscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{E41800D2-0F51-8312-DF13-9E7309DBBDD7}|ProjectKZM\\ProjectKZM.csproj|c:\\users\\asus\\desktop\\big project\\projectkzm\\projectkzm\\models\\donhang.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E41800D2-0F51-8312-DF13-9E7309DBBDD7}|ProjectKZM\\ProjectKZM.csproj|solutionrelative:projectkzm\\models\\donhang.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -54,67 +26,19 @@
       "DocumentGroups": [
         {
           "DockedHeight": 366,
-          "SelectedChildIndex": 2,
+          "SelectedChildIndex": 4,
           "Children": [
             {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "Index.cshtml",
-              "DocumentMoniker": "C:\\Users\\Asus\\Desktop\\Big Project\\ProjectKZM\\ProjectKZM\\Views\\Sachs\\Index.cshtml",
-              "RelativeDocumentMoniker": "ProjectKZM\\Views\\Sachs\\Index.cshtml",
-              "ToolTip": "C:\\Users\\Asus\\Desktop\\Big Project\\ProjectKZM\\ProjectKZM\\Views\\Sachs\\Index.cshtml",
-              "RelativeToolTip": "ProjectKZM\\Views\\Sachs\\Index.cshtml",
-              "ViewState": "AgIAANMAAAAAAAAAAAAYwCUBAAAFAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-08-22T08:19:58.015Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "Details.cshtml",
-              "DocumentMoniker": "C:\\Users\\Asus\\Desktop\\Big Project\\ProjectKZM\\ProjectKZM\\Views\\Sachs\\Details.cshtml",
-              "RelativeDocumentMoniker": "ProjectKZM\\Views\\Sachs\\Details.cshtml",
-              "ToolTip": "C:\\Users\\Asus\\Desktop\\Big Project\\ProjectKZM\\ProjectKZM\\Views\\Sachs\\Details.cshtml",
-              "RelativeToolTip": "ProjectKZM\\Views\\Sachs\\Details.cshtml",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-08-22T08:19:56.272Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "Index.cshtml",
-              "DocumentMoniker": "C:\\Users\\Asus\\Desktop\\Big Project\\ProjectKZM\\ProjectKZM\\Views\\Home\\Index.cshtml",
-              "RelativeDocumentMoniker": "ProjectKZM\\Views\\Home\\Index.cshtml",
-              "ToolTip": "C:\\Users\\Asus\\Desktop\\Big Project\\ProjectKZM\\ProjectKZM\\Views\\Home\\Index.cshtml",
-              "RelativeToolTip": "ProjectKZM\\Views\\Home\\Index.cshtml",
-              "ViewState": "AgIAAHMAAAAAAAAAAAAYwHwAAAAsAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-08-22T05:50:40.409Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "Delete.cshtml",
-              "DocumentMoniker": "C:\\Users\\Asus\\Desktop\\Big Project\\ProjectKZM\\ProjectKZM\\Views\\NguoiDungs\\Delete.cshtml",
-              "RelativeDocumentMoniker": "ProjectKZM\\Views\\NguoiDungs\\Delete.cshtml",
-              "ToolTip": "C:\\Users\\Asus\\Desktop\\Big Project\\ProjectKZM\\ProjectKZM\\Views\\NguoiDungs\\Delete.cshtml",
-              "RelativeToolTip": "ProjectKZM\\Views\\NguoiDungs\\Delete.cshtml",
-              "ViewState": "AgIAAE4AAAAAAAAAAAAgwFkAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-08-22T05:48:42.562Z",
-              "EditorCaption": ""
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{0ad07096-bba9-4900-a651-0598d26f6d24}"
             },
             {
               "$type": "Bookmark",
-              "Name": "ST:128:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+              "Name": "ST:0:0:{d78612c7-9962-4b83-95d9-268046dad23a}"
             },
             {
               "$type": "Bookmark",
-              "Name": "ST:0:0:{1c64b9c2-e352-428e-a56d-0ace190b99a6}"
+              "Name": "ST:0:0:{34e76e81-ee4a-11d0-ae2e-00a0c90fffc3}"
             },
             {
               "$type": "Bookmark",
@@ -122,88 +46,52 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "Program.cs",
-              "DocumentMoniker": "C:\\Users\\Asus\\Desktop\\Big Project\\ProjectKZM\\ProjectKZM\\Program.cs",
-              "RelativeDocumentMoniker": "ProjectKZM\\Program.cs",
-              "ToolTip": "C:\\Users\\Asus\\Desktop\\Big Project\\ProjectKZM\\ProjectKZM\\Program.cs",
-              "RelativeToolTip": "ProjectKZM\\Program.cs",
-              "ViewState": "AgIAAIQAAAAAAAAAAAAAAJAAAAA5AAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-08-21T18:15:06.371Z",
+              "DocumentIndex": 0,
+              "Title": "_Layout.cshtml",
+              "DocumentMoniker": "C:\\Users\\Asus\\Desktop\\Big Project\\ProjectKZM\\ProjectKZM\\Views\\Shared\\_Layout.cshtml",
+              "RelativeDocumentMoniker": "ProjectKZM\\Views\\Shared\\_Layout.cshtml",
+              "ToolTip": "C:\\Users\\Asus\\Desktop\\Big Project\\ProjectKZM\\ProjectKZM\\Views\\Shared\\_Layout.cshtml",
+              "RelativeToolTip": "ProjectKZM\\Views\\Shared\\_Layout.cshtml",
+              "ViewState": "AgIAAPgCAAAAAAAAAAAYwAIDAAAgAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-08-24T07:22:42.017Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "OnlineTrackingMiddleware.cs",
-              "DocumentMoniker": "C:\\Users\\Asus\\Desktop\\Big Project\\ProjectKZM\\ProjectKZM\\Middleware\\OnlineTrackingMiddleware.cs",
-              "RelativeDocumentMoniker": "ProjectKZM\\Middleware\\OnlineTrackingMiddleware.cs",
-              "ToolTip": "C:\\Users\\Asus\\Desktop\\Big Project\\ProjectKZM\\ProjectKZM\\Middleware\\OnlineTrackingMiddleware.cs",
-              "RelativeToolTip": "ProjectKZM\\Middleware\\OnlineTrackingMiddleware.cs",
-              "ViewState": "AgIAACgAAAAAAAAAAADwvzwAAAAuAAAAAAAAAA==",
+              "DocumentIndex": 1,
+              "Title": "DonHangsController.cs",
+              "DocumentMoniker": "C:\\Users\\Asus\\Desktop\\Big Project\\ProjectKZM\\ProjectKZM\\Controllers\\DonHangsController.cs",
+              "RelativeDocumentMoniker": "ProjectKZM\\Controllers\\DonHangsController.cs",
+              "ToolTip": "C:\\Users\\Asus\\Desktop\\Big Project\\ProjectKZM\\ProjectKZM\\Controllers\\DonHangsController.cs",
+              "RelativeToolTip": "ProjectKZM\\Controllers\\DonHangsController.cs",
+              "ViewState": "AgIAAHUCAAAAAAAAAAAgwIQCAAAYAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-08-21T18:13:59.752Z"
+              "WhenOpened": "2026-08-23T19:09:02.118Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
-              "Title": "ProjectKZM.csproj",
-              "DocumentMoniker": "C:\\Users\\Asus\\Desktop\\Big Project\\ProjectKZM\\ProjectKZM\\ProjectKZM.csproj",
-              "RelativeDocumentMoniker": "ProjectKZM\\ProjectKZM.csproj",
-              "ToolTip": "C:\\Users\\Asus\\Desktop\\Big Project\\ProjectKZM\\ProjectKZM\\ProjectKZM.csproj",
-              "RelativeToolTip": "ProjectKZM\\ProjectKZM.csproj",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABIAAAAsAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
-              "WhenOpened": "2026-08-21T18:13:38.703Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 7,
-              "Title": "OnlineUserService.cs",
-              "DocumentMoniker": "C:\\Users\\Asus\\Desktop\\Big Project\\ProjectKZM\\ProjectKZM\\Services\\OnlineUserService.cs",
-              "RelativeDocumentMoniker": "ProjectKZM\\Services\\OnlineUserService.cs",
-              "ToolTip": "C:\\Users\\Asus\\Desktop\\Big Project\\ProjectKZM\\ProjectKZM\\Services\\OnlineUserService.cs",
-              "RelativeToolTip": "ProjectKZM\\Services\\OnlineUserService.cs",
-              "ViewState": "AgIAAGgAAAAAAAAAAAA3wHsAAAAJAAAAAAAAAA==",
+              "DocumentIndex": 3,
+              "Title": "DonHang.cs",
+              "DocumentMoniker": "C:\\Users\\Asus\\Desktop\\Big Project\\ProjectKZM\\ProjectKZM\\Models\\DonHang.cs",
+              "RelativeDocumentMoniker": "ProjectKZM\\Models\\DonHang.cs",
+              "ToolTip": "C:\\Users\\Asus\\Desktop\\Big Project\\ProjectKZM\\ProjectKZM\\Models\\DonHang.cs",
+              "RelativeToolTip": "ProjectKZM\\Models\\DonHang.cs",
+              "ViewState": "AgIAABUAAAAAAAAAAAAowB4AAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-08-21T18:13:17.235Z"
+              "WhenOpened": "2026-08-23T19:06:25.372Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "AdminController.cs",
-              "DocumentMoniker": "C:\\Users\\Asus\\Desktop\\Big Project\\ProjectKZM\\ProjectKZM\\Controllers\\AdminController.cs",
-              "RelativeDocumentMoniker": "ProjectKZM\\Controllers\\AdminController.cs",
-              "ToolTip": "C:\\Users\\Asus\\Desktop\\Big Project\\ProjectKZM\\ProjectKZM\\Controllers\\AdminController.cs",
-              "RelativeToolTip": "ProjectKZM\\Controllers\\AdminController.cs",
-              "ViewState": "AgIAAC0AAAAAAAAAAAAAwEIAAAABAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-08-21T18:10:25.9Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 10,
-              "Title": "NguoiDungsController.cs",
-              "DocumentMoniker": "C:\\Users\\Asus\\Desktop\\Big Project\\ProjectKZM\\ProjectKZM\\Controllers\\NguoiDungsController.cs",
-              "RelativeDocumentMoniker": "ProjectKZM\\Controllers\\NguoiDungsController.cs",
-              "ToolTip": "C:\\Users\\Asus\\Desktop\\Big Project\\ProjectKZM\\ProjectKZM\\Controllers\\NguoiDungsController.cs",
-              "RelativeToolTip": "ProjectKZM\\Controllers\\NguoiDungsController.cs",
-              "ViewState": "AgIAAGkAAAAAAAAAAADgv38AAAA9AAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-08-21T16:40:33.644Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 9,
-              "Title": "Index.cshtml",
-              "DocumentMoniker": "C:\\Users\\Asus\\Desktop\\Big Project\\ProjectKZM\\ProjectKZM\\Views\\Admin\\Index.cshtml",
-              "RelativeDocumentMoniker": "ProjectKZM\\Views\\Admin\\Index.cshtml",
-              "ToolTip": "C:\\Users\\Asus\\Desktop\\Big Project\\ProjectKZM\\ProjectKZM\\Views\\Admin\\Index.cshtml",
-              "RelativeToolTip": "ProjectKZM\\Views\\Admin\\Index.cshtml",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAIsCAAAfAAAAAAAAAA==",
+              "DocumentIndex": 2,
+              "Title": "ChiTiet.cshtml",
+              "DocumentMoniker": "C:\\Users\\Asus\\Desktop\\Big Project\\ProjectKZM\\ProjectKZM\\Views\\DonHangs\\ChiTiet.cshtml",
+              "RelativeDocumentMoniker": "ProjectKZM\\Views\\DonHangs\\ChiTiet.cshtml",
+              "ToolTip": "C:\\Users\\Asus\\Desktop\\Big Project\\ProjectKZM\\ProjectKZM\\Views\\DonHangs\\ChiTiet.cshtml",
+              "RelativeToolTip": "ProjectKZM\\Views\\DonHangs\\ChiTiet.cshtml",
+              "ViewState": "AgIAACcDAAAAAAAAAAAowC8DAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-08-21T08:02:40.364Z"
+              "WhenOpened": "2026-08-23T19:03:03.193Z"
             }
           ]
         }
