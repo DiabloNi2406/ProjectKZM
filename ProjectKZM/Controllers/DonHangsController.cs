@@ -688,6 +688,88 @@ namespace ProjectKZM.Controllers
                 model);
         }
 
+        // =========================================================
+        // HÓA ĐƠN - XEM VÀ IN HÓA ĐƠN
+        // =========================================================
+
+        [Authorize]
+        [HttpGet]
+        public async Task<IActionResult> HoaDon(int id)
+        {
+            var user = await GetCurrentUser();
+
+            if (user == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            // Admin được xem mọi đơn.
+            // User chỉ được xem hóa đơn của đơn hàng thuộc tài khoản mình.
+            var query = _context.DonHangs
+                .AsNoTracking()
+                .Where(d => d.MaDonHang == id);
+
+            if (!User.IsInRole("Admin"))
+            {
+                query = query.Where(
+                    d => d.MaNguoiDung == user.MaNguoiDung);
+            }
+
+            var donHang = await query
+                .Include(d => d.NguoiDung)
+                .Include(d => d.ChiTietDonHangs)
+                    .ThenInclude(ct => ct.Sach)
+                .FirstOrDefaultAsync();
+
+            if (donHang == null)
+            {
+                return NotFound();
+            }
+
+            var model = new DonHangChiTietViewModel
+            {
+                MaDonHang = donHang.MaDonHang,
+                NgayDat = donHang.NgayDat,
+                TongTien = donHang.TongTien,
+                TrangThai = donHang.TrangThai,
+                PhuongThucThanhToan =
+                    donHang.PhuongThucThanhToan,
+                DiaChiGiaoHang = donHang.DiaChiGiaoHang,
+                GhiChu = donHang.GhiChu,
+                LyDoHuy = donHang.LyDoHuy,
+
+                TenKhachHang =
+                    donHang.NguoiDung?.HoTen
+                    ?? "Không xác định",
+
+                EmailKhachHang =
+                    donHang.NguoiDung?.Email
+                    ?? string.Empty
+            };
+
+            foreach (var ct in donHang.ChiTietDonHangs)
+            {
+                model.SanPhams.Add(
+                    new DonHangSanPhamViewModel
+                    {
+                        MaSach = ct.MaSach,
+
+                        TenSach =
+                            ct.Sach?.TenSach
+                            ?? "Không xác định",
+
+                        Hinh = ct.Sach?.Hinh,
+
+                        SoLuong = ct.SoLuong,
+
+                        DonGia = ct.DonGia,
+
+                        ThanhTien = ct.ThanhTien
+                    });
+            }
+
+            return View(model);
+        }
 
         // =========================================================
         // ADMIN - THỐNG KÊ

@@ -1,217 +1,389 @@
-﻿@model ProjectKZM.ViewModels.ThanhToanViewModel
+﻿
+@model ProjectKZM.ViewModels.ThanhToanViewModel
 
 @{
     ViewData["Title"] = "Xác nhận đơn hàng COD";
 }
 
 <style>
-    .page {
+    .cod-page {
         max-width: 1000px;
         margin: 0 auto;
-        padding: 55px 20px 80px;
+        padding: 50px 20px 80px;
+        color: #222;
     }
 
-    .box {
+    /* HEADER */
+
+    .cod-title {
+        margin: 0 0 12px;
+        font-size: 35px;
+        font-weight: 600;
+        letter-spacing: -.6px;
+        color: #222;
+    }
+
+    .cod-subtitle {
+        margin-bottom: 28px;
+        color: #777;
+        font-size: 14px;
+        line-height: 1.8;
+    }
+
+    /* MAIN BOX */
+
+    .cod-box {
+        padding: 32px;
         background: #fff;
         border: 1px solid #e5e5e5;
-        padding: 35px;
+        border-radius: 12px;
+        box-shadow: 0 5px 18px rgba(0, 0, 0, .035);
     }
 
-    .title {
-        font-size: 35px;
-        margin-bottom: 15px;
-        font-weight: 400;
+    .cod-section-title {
+        margin: 0 0 20px;
+        color: #222;
+        font-size: 19px;
+        font-weight: 600;
     }
 
-    .message {
-        color: #666;
-        line-height: 1.7;
-        margin-bottom: 30px;
+    /* NOTICE */
+
+    .cod-notice {
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+        padding: 15px 17px;
+        margin-bottom: 27px;
+        border: 1px solid #dcebdF;
+        border-radius: 9px;
+        background: #f3f8f4;
+        color: #526b59;
+        font-size: 13px;
+        line-height: 1.8;
+    }
+
+    .notice-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 25px;
+        height: 25px;
+        flex-shrink: 0;
+        border-radius: 50%;
+        background: #dcefe1;
+        color: #23864b;
+        font-weight: 700;
+    }
+
+    .cod-notice strong {
+        color: #23864b;
+    }
+
+    /* PRODUCTS */
+
+    .product-list {
+        border-top: 1px solid #eee;
     }
 
     .product-item {
         display: flex;
-        gap: 15px;
+        align-items: center;
+        gap: 16px;
         padding: 18px 0;
         border-bottom: 1px solid #eee;
     }
 
     .product-image {
+        display: block;
         width: 75px;
         height: 100px;
+        flex-shrink: 0;
         object-fit: cover;
         background: #f2f2f2;
-        flex-shrink: 0;
+        border-radius: 7px;
     }
 
     .product-info {
         flex: 1;
+        min-width: 0;
     }
 
     .product-name {
-        font-size: 16px;
-        font-weight: 500;
         margin-bottom: 8px;
+        color: #222;
+        font-size: 15px;
+        font-weight: 600;
+        line-height: 1.5;
     }
 
-    .product-quantity,
-    .product-price {
-        font-size: 14px;
-        color: #777;
-        margin-bottom: 5px;
+    .product-meta {
+        color: #888;
+        font-size: 13px;
+        line-height: 1.8;
+    }
+
+    .product-meta strong {
+        color: #555;
+        font-weight: 600;
     }
 
     .product-total {
+        flex-shrink: 0;
+        color: #222;
+        font-size: 14px;
         font-weight: 600;
         white-space: nowrap;
     }
 
-    .summary {
-        border-top: 1px solid #ddd;
-        margin-top: 20px;
-        padding-top: 20px;
+    /* SUMMARY */
+
+    .cod-summary {
+        margin-top: 22px;
+        padding: 18px 20px;
+        border-radius: 9px;
+        background: #f8f9f8;
     }
 
     .summary-row {
         display: flex;
         justify-content: space-between;
-        padding: 9px 0;
+        align-items: center;
+        padding: 7px 0;
+        color: #666;
+        font-size: 14px;
+    }
+
+    .summary-row strong {
+        color: #333;
     }
 
     .summary-total {
         display: flex;
         justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+        margin-top: 12px;
+        padding-top: 17px;
         border-top: 1px solid #ddd;
-        margin-top: 10px;
-        padding-top: 20px;
-        font-size: 22px;
-        font-weight: 600;
+        color: #222;
+        font-size: 20px;
+        font-weight: 700;
     }
 
-    .submit {
+    .summary-total span:last-child {
+        color: #23864b;
+        text-align: right;
+    }
+
+    /* BUTTON */
+
+    .cod-submit {
         width: 100%;
-        border: none;
-        background: #111;
-        color: #fff;
         padding: 16px;
         margin-top: 25px;
+        border: none;
+        border-radius: 8px;
+        background: #23864b;
+        color: #fff;
+        font-size: 14px;
+        font-weight: 700;
         cursor: pointer;
-        font-size: 15px;
+        transition: background .2s ease, transform .2s ease;
     }
 
-        .submit:hover {
-            background: #333;
+    .cod-submit:hover {
+        background: #176b39;
+        transform: translateY(-1px);
+    }
+
+    .cod-submit:active {
+        transform: translateY(0);
+    }
+
+    .submit-caption {
+        margin-top: 10px;
+        color: #999;
+        font-size: 11px;
+        line-height: 1.6;
+        text-align: center;
+    }
+
+    /* BACK */
+
+    .cod-back {
+        display: inline-block;
+        margin-top: 20px;
+        color: #555;
+        font-size: 14px;
+        text-decoration: none;
+    }
+
+    .cod-back:hover {
+        color: #23864b;
+        text-decoration: underline;
+    }
+
+    /* MOBILE */
+
+    @@media (max-width: 600px) {
+        .cod-page {
+            padding: 35px 15px 60px;
         }
 
-    .back {
-        display: inline-block;
-        margin-top: 18px;
-        color: #111;
-        text-decoration: none;
+        .cod-box {
+            padding: 20px;
+        }
+
+        .cod-title {
+            font-size: 28px;
+        }
+
+        .product-item {
+            align-items: flex-start;
+            gap: 11px;
+        }
+
+        .product-image {
+            width: 60px;
+            height: 80px;
+        }
+
+        .product-name {
+            font-size: 13px;
+        }
+
+        .product-meta {
+            font-size: 11px;
+        }
+
+        .product-total {
+            font-size: 12px;
+        }
+
+        .summary-total {
+            font-size: 17px;
+        }
+
+        .summary-total span:last-child {
+            font-size: 18px;
+        }
     }
 </style>
 
 
-<div class="page">
+<div class="cod-page">
 
-    <div class="box">
+    <!-- HEADER -->
 
-        <h1 class="title">
-            Xác nhận đơn hàng COD
-        </h1>
+    <h1 class="cod-title">
+        Xác nhận đơn hàng COD
+    </h1>
 
-        <div class="message">
-            Đơn hàng của bạn sẽ được <strong>giữ hàng</strong>
-            và chuyển đến Admin để xác nhận.
-            Nếu Admin hủy, số lượng hàng đã giữ sẽ được
-            trả lại kho.
+    <p class="cod-subtitle">
+        Vui lòng kiểm tra lại thông tin sản phẩm và tổng tiền
+        trước khi xác nhận đặt hàng.
+    </p>
+
+
+    <div class="cod-box">
+
+        <!-- NOTICE -->
+
+        <div class="cod-notice">
+
+            <div class="notice-icon">!</div>
+
+            <div>
+                <strong>Lưu ý về đơn hàng:</strong>
+                Đơn hàng của bạn sẽ được giữ hàng và chuyển đến Admin
+                để xác nhận. Nếu Admin hủy đơn, số lượng hàng đã giữ
+                sẽ được trả lại kho.
+            </div>
+
         </div>
 
 
-        <h3>
+        <!-- PRODUCTS -->
+
+        <h2 class="cod-section-title">
             Sản phẩm trong đơn hàng
-        </h3>
+        </h2>
 
+        <div class="product-list">
 
-        @for (int i = 0; i < Model.SanPhams.Count; i++)
-        {
-            <div class="product-item">
+            @for (int i = 0; i < Model.SanPhams.Count; i++)
+            {
+                <div class="product-item">
 
-                @if (!string.IsNullOrWhiteSpace(
-                    Model.SanPhams[i].Hinh))
-                {
-                    <img src="@Model.SanPhams[i].Hinh"
-                         class="product-image"
-                         alt="@Model.SanPhams[i].TenSach" />
-                }
-                else
-                {
-                    <div class="product-image"></div>
-                }
+                    @if (!string.IsNullOrWhiteSpace(Model.SanPhams[i].Hinh))
+                    {
+                        <img src="@Model.SanPhams[i].Hinh"
+                             class="product-image"
+                             alt="@Model.SanPhams[i].TenSach" />
+                    }
+                    else
+                    {
+                        <div class="product-image"></div>
+                    }
 
+                    <div class="product-info">
 
-                <div class="product-info">
+                        <div class="product-name">
+                            @Model.SanPhams[i].TenSach
+                        </div>
 
-                    <div class="product-name">
-                        @Model.SanPhams[i].TenSach
+                        <div class="product-meta">
+                            Số lượng:
+                            <strong>@Model.SanPhams[i].SoLuong</strong>
+
+                            <br />
+
+                            Đơn giá:
+                            <strong>
+                                @Model.SanPhams[i].DonGia.ToString("N0") VNĐ
+                            </strong>
+                        </div>
+
                     </div>
 
-                    <div class="product-quantity">
-                        Số lượng:
-                        @Model.SanPhams[i].SoLuong
-                    </div>
-
-                    <div class="product-price">
-                        Đơn giá:
-                        @Model.SanPhams[i].DonGia.ToString("N0")
-                        VNĐ
+                    <div class="product-total">
+                        @Model.SanPhams[i].ThanhTien.ToString("N0") VNĐ
                     </div>
 
                 </div>
+            }
+
+        </div>
 
 
-                <div class="product-total">
-                    @Model.SanPhams[i].ThanhTien.ToString("N0")
-                    VNĐ
-                </div>
+        <!-- SUMMARY -->
 
-            </div>
-
-
-            <input type="hidden"
-                   asp-for="SanPhams[i].MaSach" />
-
-            <input type="hidden"
-                   asp-for="SanPhams[i].SoLuong" />
-        }
-
-
-        <div class="summary">
+        <div class="cod-summary">
 
             <div class="summary-row">
-                <span>Số lượng</span>
+                <span>Tổng số lượng</span>
                 <strong>@Model.TongSoLuong</strong>
             </div>
-
 
             <div class="summary-total">
                 <span>Tổng tiền</span>
 
                 <span>
-                    @Model.TongTien.ToString("N0")
-                    VNĐ
+                    @Model.TongTien.ToString("N0") VNĐ
                 </span>
             </div>
 
         </div>
 
 
+        <!-- CONFIRM FORM -->
+
         <form asp-controller="ThanhToan"
               asp-action="XacNhanCOD"
               method="post">
 
             @Html.AntiForgeryToken()
-
 
             @for (int i = 0; i < Model.SanPhams.Count; i++)
             {
@@ -222,40 +394,33 @@
                        asp-for="SanPhams[i].SoLuong" />
             }
 
+            <input type="hidden" asp-for="HoTen" />
 
-            <input type="hidden"
-                   asp-for="HoTen" />
+            <input type="hidden" asp-for="SoDienThoai" />
 
-            <input type="hidden"
-                   asp-for="SoDienThoai" />
+            <input type="hidden" asp-for="DiaChiGiaoHang" />
 
-            <input type="hidden"
-                   asp-for="DiaChiGiaoHang" />
-
-            <input type="hidden"
-                   asp-for="GhiChu" />
+            <input type="hidden" asp-for="GhiChu" />
 
             <input type="hidden"
                    name="PhuongThucThanhToan"
                    value="COD" />
 
-
-            <button type="submit"
-                    class="submit">
-
+            <button type="submit" class="cod-submit">
                 XÁC NHẬN ĐẶT HÀNG COD
-
             </button>
+
+            <div class="submit-caption">
+                Vui lòng kiểm tra kỹ đơn hàng trước khi xác nhận.
+            </div>
 
         </form>
 
 
         <a asp-controller="ThanhToan"
            asp-action="Index"
-           class="back">
-
+           class="cod-back">
             ← Quay lại phương thức thanh toán
-
         </a>
 
     </div>

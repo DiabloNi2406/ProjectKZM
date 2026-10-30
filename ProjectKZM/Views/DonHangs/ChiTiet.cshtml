@@ -249,19 +249,52 @@
             box-shadow: 0 5px 13px rgba(220,53,69,.16);
         }
 
-    .back-button {
-        background: #fff;
-        border-color: #d7d7d7;
-        color: #555;
+
+    .bottom-actions {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        margin-top: 25px;
     }
 
-        .back-button:hover {
-            background: #212529;
-            border-color: #212529;
-            color: #fff;
-            transform: translateY(-1px);
-            box-shadow: 0 5px 13px rgba(0,0,0,.12);
+        .back-button {
+            background: #fff;
+            border-color: #d7d7d7;
+            color: #555;
         }
+
+            .back-button:hover {
+                background: #212529;
+                border-color: #212529;
+                color: #fff;
+                transform: translateY(-1px);
+                box-shadow: 0 5px 13px rgba(0,0,0,.12);
+            }
+
+        .invoice-button.invoice-back {
+            height: 42px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 18px;
+            border: 1px solid #198754;
+            border-radius: 8px;
+            background: #198754;
+            color: #fff;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+            transition: background-color .2s ease, border-color .2s ease, color .2s ease, transform .15s ease, box-shadow .2s ease;
+        }
+
+            .invoice-button.invoice-back:hover {
+                background: #157347;
+                border-color: #157347;
+                color: #fff;
+                transform: translateY(-1px);
+                box-shadow: 0 5px 13px rgba(21, 115, 71, .2);
+            }
 
 
     /* =========================================================
@@ -787,6 +820,15 @@
            class="action-button back-button">
 
             ← Quay lại đơn chờ xác nhận
+
+        </a>
+
+        <a asp-controller="DonHangs"
+           asp-action="HoaDon"
+           asp-route-id="@Model.MaDonHang"
+           class="invoice-button invoice-back">
+
+            🧾 Xem hóa đơn
 
         </a>
 

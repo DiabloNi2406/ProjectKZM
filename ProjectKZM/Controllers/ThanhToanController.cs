@@ -514,7 +514,7 @@ namespace ProjectKZM.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DatHangChuyenKhoan(
-    ThanhToanViewModel model)
+        ThanhToanViewModel model)
         {
             var user = await GetCurrentUser();
 
@@ -615,16 +615,7 @@ namespace ProjectKZM.Controllers
 
                 await _context.SaveChangesAsync();
 
-                // =====================================================
-                // TẠO THÔNG BÁO
-                // =====================================================
 
-                await _thongBaoService.CreateForAdminsAsync(
-                    "Đơn chuyển khoản mới",
-                    $"Đơn hàng #{donHang.MaDonHang} đang chờ Admin kiểm tra chuyển khoản.",
-                    $"/DonHangs/ChiTiet/{donHang.MaDonHang}",
-                    "BANK",
-                    donHang.MaDonHang);
 
                 await transaction.CommitAsync();
 
@@ -673,7 +664,7 @@ namespace ProjectKZM.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> XacNhanChuyenKhoan(
-    ThanhToanViewModel model)
+            ThanhToanViewModel model)
         {
             var user = await GetCurrentUser();
 
@@ -682,157 +673,56 @@ namespace ProjectKZM.Controllers
                 return RedirectToAction("Login", "Account");
             }
 
-            if (model.SanPhams == null ||
-                model.SanPhams.Count == 0)
+            if (model.MaDonHang <= 0)
+            {
+                ViewData["Success"] = false;
+                ViewData["Message"] = "Mã đơn hàng không hợp lệ.";
+
+                return View("~/Views/ChuyenKhoan/KetQua.cshtml");
+            }
+
+            // Lấy đơn đã được tạo trong DatHangChuyenKhoan.
+            // Không tạo đơn mới, không trừ tồn kho lần nữa.
+            var donHang = await _context.DonHangs
+                .AsNoTracking()
+                .FirstOrDefaultAsync(d =>
+                    d.MaDonHang == model.MaDonHang &&
+                    d.MaNguoiDung == user.MaNguoiDung &&
+                    d.PhuongThucThanhToan == "BANK");
+
+            if (donHang == null)
             {
                 ViewData["Success"] = false;
                 ViewData["Message"] =
-                    "Không có sản phẩm nào để đặt hàng.";
+                    "Không tìm thấy đơn chuyển khoản hợp lệ.";
 
-                return View(
-                    "~/Views/ChuyenKhoan/KetQua.cshtml");
+                return View("~/Views/ChuyenKhoan/KetQua.cshtml");
             }
 
-            using var transaction =
-                await _context.Database.BeginTransactionAsync();
+            var daThongBao = await _context.ThongBaos.AnyAsync(t =>
+                t.MaDonHang == donHang.MaDonHang &&
+                t.Loai == "BANK" &&
+                t.TieuDe == "Đơn chuyển khoản mới");
 
-            try
+            if (!daThongBao)
             {
-                var gioHang = await _context.GioHangs
-                    .Include(g => g.ChiTietGioHangs)
-                        .ThenInclude(ct => ct.Sach)
-                    .FirstOrDefaultAsync(
-                        g => g.MaNguoiDung == user.MaNguoiDung);
-
-                if (gioHang == null)
-                {
-                    throw new Exception(
-                        "Không tìm thấy giỏ hàng.");
-                }
-
-                decimal tongTien = 0;
-
-                var chiTietDonHangMoi =
-                    new List<ChiTietDonHang>();
-
-
-                foreach (var item in model.SanPhams)
-                {
-                    var chiTietGio =
-                        gioHang.ChiTietGioHangs
-                            .FirstOrDefault(
-                                ct => ct.MaSach == item.MaSach);
-
-                    if (chiTietGio == null ||
-                        chiTietGio.Sach == null)
-                    {
-                        throw new Exception(
-                            "Có sản phẩm không còn trong giỏ hàng.");
-                    }
-
-                    if (item.SoLuong <= 0 ||
-                        item.SoLuong > chiTietGio.SoLuong)
-                    {
-                        throw new Exception(
-                            $"Số lượng của \"{chiTietGio.Sach.TenSach}\" không hợp lệ.");
-                    }
-
-                    if (chiTietGio.Sach.SoLuong < item.SoLuong)
-                    {
-                        throw new Exception(
-                            $"Sách \"{chiTietGio.Sach.TenSach}\" không đủ tồn kho.");
-                    }
-
-
-                    decimal donGia =
-                        chiTietGio.Sach.Gia;
-
-                    decimal thanhTien =
-                        donGia * item.SoLuong;
-
-                    tongTien += thanhTien;
-
-
-                    chiTietDonHangMoi.Add(
-                        new ChiTietDonHang
-                        {
-                            MaSach = item.MaSach,
-                            SoLuong = item.SoLuong,
-                            DonGia = donGia,
-                            ThanhTien = thanhTien
-                        });
-
-
-                    // =====================================================
-                    // GIỮ HÀNG
-                    // =====================================================
-
-                    chiTietGio.Sach.SoLuong -=
-                        item.SoLuong;
-                }
-
-
-                var donHang = new DonHang
-                {
-                    NgayDat = DateTime.Now,
-
-                    TongTien = tongTien,
-
-                    TrangThai =
-                        "Chờ Admin xác nhận",
-
-                    PhuongThucThanhToan =
-                        "BANK",
-
-                    DiaChiGiaoHang =
-                        model.DiaChiGiaoHang.Trim(),
-
-                    MaNguoiDung =
-                        user.MaNguoiDung,
-
-                    GhiChu =
-                        string.IsNullOrWhiteSpace(model.GhiChu)
-                            ? null
-                            : model.GhiChu.Trim(),
-
-                    ChiTietDonHangs =
-                        chiTietDonHangMoi
-                };
-
-
-                _context.DonHangs.Add(donHang);
-
-                await _context.SaveChangesAsync();
-
-                await transaction.CommitAsync();
-
-
-                ViewData["Success"] = true;
-
-                ViewData["Message"] =
-                    $"Đã ghi nhận yêu cầu chuyển khoản cho đơn #{donHang.MaDonHang}. " +
-                    "Sản phẩm đã được giữ và đang chờ Admin kiểm tra giao dịch.";
-
-                ViewData["MaDonHang"] =
-                    donHang.MaDonHang;
-
-                return View(
-                    "~/Views/ChuyenKhoan/KetQua.cshtml");
+                await _thongBaoService.CreateForAdminsAsync(
+                    "Đơn chuyển khoản mới",
+                    $"Đơn hàng #{donHang.MaDonHang} đang chờ Admin kiểm tra chuyển khoản.",
+                    $"/DonHangs/ChiTiet/{donHang.MaDonHang}",
+                    "BANK",
+                    donHang.MaDonHang);
             }
-            catch (Exception ex)
-            {
-                await transaction.RollbackAsync();
 
-                ViewData["Success"] = false;
+            ViewData["Success"] = true;
+            ViewData["Message"] =
+                $"Đã ghi nhận đơn chuyển khoản #{donHang.MaDonHang}. " +
+                "Admin sẽ kiểm tra giao dịch ngân hàng và xác nhận đơn hàng.";
 
-                ViewData["Message"] =
-                    ex.Message;
+            ViewData["MaDonHang"] = donHang.MaDonHang;
 
-                return View(
-                    "~/Views/ChuyenKhoan/KetQua.cshtml");
-            }
+            return View("~/Views/ChuyenKhoan/KetQua.cshtml");
         }
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DatHangVNPAY(

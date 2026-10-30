@@ -5,15 +5,18 @@
 }
 
 <style>
+    /* =========================================================
+           BANK PAGE
+           ========================================================= */
+
     .bank-page {
         max-width: 1150px;
         margin: 0 auto;
         padding: 50px 20px 80px;
+        color: #222;
     }
 
-    /* =========================================================
-           HEADER
-           ========================================================= */
+    /* HEADER */
 
     .bank-header {
         margin-bottom: 32px;
@@ -21,9 +24,9 @@
 
     .bank-title {
         margin: 0;
-        font-size: 40px;
-        font-weight: 500;
-        letter-spacing: -0.8px;
+        font-size: 38px;
+        font-weight: 600;
+        letter-spacing: -.7px;
         color: #222;
     }
 
@@ -31,41 +34,36 @@
         margin-top: 10px;
         max-width: 760px;
         color: #777;
-        font-size: 15px;
-        line-height: 1.7;
+        font-size: 14px;
+        line-height: 1.8;
     }
 
-
-    /* =========================================================
-           MAIN GRID
-           ========================================================= */
+    /* MAIN GRID */
 
     .bank-grid {
         display: grid;
-        grid-template-columns: 1.35fr 0.9fr;
+        grid-template-columns: 1.35fr .9fr;
         gap: 25px;
         align-items: start;
     }
 
     .bank-box {
+        min-width: 0;
+        padding: 28px;
         background: #fff;
         border: 1px solid #e6e6e6;
         border-radius: 14px;
-        padding: 28px;
-        box-shadow: 0 5px 18px rgba(0, 0, 0, 0.04);
+        box-shadow: 0 5px 18px rgba(0, 0, 0, .04);
     }
 
     .box-title {
         margin: 0 0 20px;
-        font-size: 21px;
+        font-size: 20px;
         font-weight: 600;
         color: #222;
     }
 
-
-    /* =========================================================
-           PRODUCTS
-           ========================================================= */
+    /* PRODUCTS */
 
     .product-list {
         border-top: 1px solid #eee;
@@ -80,10 +78,11 @@
     }
 
     .product-image {
+        display: block;
         width: 72px;
         height: 96px;
-        object-fit: cover;
         flex-shrink: 0;
+        object-fit: cover;
         background: #f3f3f3;
         border-radius: 8px;
     }
@@ -94,30 +93,32 @@
     }
 
     .product-name {
-        font-size: 15px;
-        font-weight: 600;
-        color: #222;
         margin-bottom: 8px;
-        line-height: 1.45;
+        color: #222;
+        font-size: 14px;
+        font-weight: 600;
+        line-height: 1.5;
     }
 
     .product-meta {
         color: #888;
-        font-size: 13px;
-        line-height: 1.7;
+        font-size: 12px;
+        line-height: 1.8;
     }
+
+        .product-meta strong {
+            color: #555;
+        }
 
     .product-total {
-        white-space: nowrap;
-        font-size: 15px;
-        font-weight: 600;
+        flex-shrink: 0;
         color: #222;
+        font-size: 14px;
+        font-weight: 600;
+        white-space: nowrap;
     }
 
-
-    /* =========================================================
-           SUMMARY
-           ========================================================= */
+    /* SUMMARY */
 
     .summary {
         margin-top: 22px;
@@ -138,38 +139,115 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
+        gap: 12px;
         margin-top: 10px;
         padding-top: 18px;
         border-top: 1px solid #ddd;
-        font-size: 21px;
-        font-weight: 700;
         color: #111;
+        font-size: 20px;
+        font-weight: 700;
     }
 
+        .summary-total span:last-child {
+            color: #23864b;
+            text-align: right;
+        }
 
     /* =========================================================
-           BANK INFORMATION
+           ACB BANK CARD - GIỮ NGUYÊN MÀU XANH ACB
            ========================================================= */
 
+    .bank-brand {
+        position: relative;
+        overflow: hidden;
+        padding: 29px;
+        margin-bottom: 23px;
+        border-radius: 19px;
+        background: linear-gradient(120deg, #123b81, #1765d7);
+        color: #fff;
+    }
+
+        .bank-brand::after {
+            content: "";
+            position: absolute;
+            top: -60px;
+            right: -35px;
+            width: 190px;
+            height: 190px;
+            border: 1px solid rgba(255,255,255,.13);
+            border-radius: 50%;
+            box-shadow: 0 0 0 22px rgba(255,255,255,.035), 0 0 0 45px rgba(255,255,255,.025);
+            pointer-events: none;
+        }
+
+    .bank-brand-top {
+        position: relative;
+        z-index: 1;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+    }
+
+    .bank-brand-logo {
+        display: grid;
+        place-items: center;
+        width: 64px;
+        height: 54px;
+        border-radius: 11px;
+        background: #fff;
+        color: #1252b7;
+        font-size: 24px;
+        font-weight: 900;
+        letter-spacing: -1px;
+    }
+
+    .bank-brand-tag {
+        padding: 9px 13px;
+        border: 1px solid rgba(255,255,255,.25);
+        border-radius: 22px;
+        color: #fff;
+        font-size: 12px;
+        font-weight: 700;
+    }
+
+    .bank-brand-name {
+        position: relative;
+        z-index: 1;
+        margin-top: 28px;
+        font-size: 23px;
+        font-weight: 800;
+    }
+
+    .bank-brand-description {
+        position: relative;
+        z-index: 1;
+        margin-top: 8px;
+        color: rgba(255,255,255,.8);
+        font-size: 14px;
+    }
+
+    /* BANK INFORMATION */
+
     .bank-info {
-        background: #f8f8f8;
+        padding: 18px;
         border: 1px solid #e5e5e5;
         border-radius: 12px;
-        padding: 20px;
+        background: #fafafa;
     }
 
     .bank-info-title {
         margin-bottom: 15px;
+        color: #222;
         font-size: 15px;
         font-weight: 600;
-        color: #222;
     }
 
     .bank-row {
         display: flex;
         justify-content: space-between;
         align-items: flex-start;
-        gap: 20px;
+        gap: 15px;
         padding: 12px 0;
         border-bottom: 1px solid #e6e6e6;
     }
@@ -184,103 +262,104 @@
     }
 
     .bank-value {
-        text-align: right;
+        color: #222;
         font-size: 14px;
         font-weight: 600;
-        color: #222;
-        word-break: break-word;
+        text-align: right;
+        overflow-wrap: anywhere;
     }
 
     .money-value {
+        color: #23864b;
         font-size: 19px;
         font-weight: 700;
     }
 
     .transfer-content {
         display: inline-block;
-        background: #fff;
-        border: 1px dashed #bbb;
+        padding: 8px 11px;
+        border: 1px dashed #b9d9c2;
         border-radius: 7px;
-        padding: 7px 10px;
+        background: #f1f8f3;
+        color: #176b39;
         font-weight: 700;
-        letter-spacing: 0.3px;
+        letter-spacing: .3px;
     }
 
-
-    /* =========================================================
-           NOTICE
-           ========================================================= */
+    /* NOTICE */
 
     .notice {
         margin-top: 18px;
         padding: 14px 16px;
+        border: 1px solid #dcebdF;
         border-radius: 9px;
-        background: #f5f5f5;
-        color: #666;
+        background: #f3f8f4;
+        color: #526b59;
         font-size: 13px;
-        line-height: 1.7;
+        line-height: 1.8;
     }
 
+        .notice strong {
+            color: #23864b;
+        }
 
-    /* =========================================================
-           BUTTON
-           ========================================================= */
+    /* BUTTON */
 
     .submit-button {
         width: 100%;
-        border: none;
-        border-radius: 10px;
-        background: #111;
-        color: #fff;
         padding: 16px;
-        margin-top: 24px;
-        font-size: 15px;
-        font-weight: 600;
+        margin-top: 23px;
+        border: none;
+        border-radius: 9px;
+        background: #23864b;
+        color: #fff;
+        font-size: 14px;
+        font-weight: 700;
         cursor: pointer;
         transition: background .2s ease, transform .2s ease;
     }
 
         .submit-button:hover {
-            background: #2d2d2d;
+            background: #176b39;
             transform: translateY(-1px);
         }
 
+    .submit-caption {
+        margin-top: 10px;
+        color: #999;
+        font-size: 11px;
+        line-height: 1.6;
+        text-align: center;
+    }
 
-    /* =========================================================
-           BACK
-           ========================================================= */
+    /* BACK */
 
     .back-link {
         display: inline-block;
         margin-top: 18px;
         color: #555;
-        text-decoration: none;
         font-size: 14px;
+        text-decoration: none;
     }
 
         .back-link:hover {
-            color: #111;
+            color: #23864b;
             text-decoration: underline;
         }
 
-
-    /* =========================================================
-           MOBILE
-           ========================================================= */
+    /* MOBILE */
 
     @@media (max-width: 850px) {
-
         .bank-grid {
             grid-template-columns: 1fr;
         }
 
         .bank-title {
-            font-size: 33px;
+            font-size: 32px;
         }
     }
 
     @@media (max-width: 550px) {
-
         .bank-page {
             padding: 35px 15px 60px;
         }
@@ -291,6 +370,7 @@
 
         .product-item {
             align-items: flex-start;
+            gap: 11px;
         }
 
         .product-image {
@@ -298,8 +378,16 @@
             height: 80px;
         }
 
-        .product-total {
+        .product-name {
             font-size: 13px;
+        }
+
+        .product-meta {
+            font-size: 11px;
+        }
+
+        .product-total {
+            font-size: 12px;
         }
 
         .bank-row {
@@ -310,15 +398,29 @@
         .bank-value {
             text-align: left;
         }
+
+        .bank-brand {
+            padding: 23px;
+        }
+
+        .bank-brand-name {
+            font-size: 20px;
+        }
+
+        .summary-total {
+            font-size: 17px;
+        }
+
+            .summary-total span:last-child {
+                font-size: 18px;
+            }
     }
 </style>
 
 
 <div class="bank-page">
 
-    <!-- =====================================================
-         HEADER
-         ===================================================== -->
+    <!-- HEADER -->
 
     <div class="bank-header">
 
@@ -329,22 +431,17 @@
         <p class="bank-subtitle">
             Vui lòng kiểm tra lại sản phẩm và thực hiện chuyển khoản
             đúng số tiền. Sau khi bạn xác nhận đã chuyển khoản,
-            đơn hàng sẽ được giữ hàng và chờ Admin kiểm tra giao dịch.
+            đơn hàng sẽ được giữ và chờ Admin kiểm tra giao dịch.
         </p>
 
     </div>
 
 
-    <!-- =====================================================
-         MAIN
-         ===================================================== -->
+    <!-- MAIN -->
 
     <div class="bank-grid">
 
-
-        <!-- =================================================
-             LEFT - PRODUCTS
-             ================================================= -->
+        <!-- LEFT - PRODUCTS -->
 
         <div class="bank-box">
 
@@ -352,15 +449,13 @@
                 Sản phẩm trong đơn hàng
             </h2>
 
-
             <div class="product-list">
 
                 @for (int i = 0; i < Model.SanPhams.Count; i++)
                 {
                     <div class="product-item">
 
-                        @if (!string.IsNullOrWhiteSpace(
-                            Model.SanPhams[i].Hinh))
+                        @if (!string.IsNullOrWhiteSpace(Model.SanPhams[i].Hinh))
                         {
                             <img src="@Model.SanPhams[i].Hinh"
                                  class="product-image"
@@ -371,7 +466,6 @@
                             <div class="product-image"></div>
                         }
 
-
                         <div class="product-info">
 
                             <div class="product-name">
@@ -379,30 +473,21 @@
                             </div>
 
                             <div class="product-meta">
-
                                 Số lượng:
-                                <strong>
-                                    @Model.SanPhams[i].SoLuong
-                                </strong>
+                                <strong>@Model.SanPhams[i].SoLuong</strong>
 
                                 <br />
 
                                 Đơn giá:
                                 <strong>
-                                    @Model.SanPhams[i].DonGia.ToString("N0")
-                                    VNĐ
+                                    @Model.SanPhams[i].DonGia.ToString("N0") VNĐ
                                 </strong>
-
                             </div>
 
                         </div>
 
-
                         <div class="product-total">
-
-                            @Model.SanPhams[i].ThanhTien.ToString("N0")
-                            VNĐ
-
+                            @Model.SanPhams[i].ThanhTien.ToString("N0") VNĐ
                         </div>
 
                     </div>
@@ -410,35 +495,18 @@
 
             </div>
 
-
             <!-- SUMMARY -->
 
             <div class="summary">
 
                 <div class="summary-row">
-
-                    <span>
-                        Tổng số lượng
-                    </span>
-
-                    <strong>
-                        @Model.TongSoLuong
-                    </strong>
-
+                    <span>Tổng số lượng</span>
+                    <strong>@Model.TongSoLuong</strong>
                 </div>
 
-
                 <div class="summary-total">
-
-                    <span>
-                        Tổng tiền
-                    </span>
-
-                    <span>
-                        @Model.TongTien.ToString("N0")
-                        VNĐ
-                    </span>
-
+                    <span>Tổng tiền</span>
+                    <span>@Model.TongTien.ToString("N0") VNĐ</span>
                 </div>
 
             </div>
@@ -446,9 +514,7 @@
         </div>
 
 
-        <!-- =================================================
-             RIGHT - BANK INFORMATION
-             ================================================= -->
+        <!-- RIGHT - BANK INFORMATION -->
 
         <div class="bank-box">
 
@@ -456,15 +522,40 @@
                 Thông tin chuyển khoản
             </h2>
 
+            <!-- ACB BRAND CARD -->
+
+            <div class="bank-brand">
+
+                <div class="bank-brand-top">
+
+                    <div class="bank-brand-logo">
+                        ACB
+                    </div>
+
+                    <div class="bank-brand-tag">
+                        BANK TRANSFER
+                    </div>
+
+                </div>
+
+                <div class="bank-brand-name">
+                    Ngân hàng ACB
+                </div>
+
+                <div class="bank-brand-description">
+                    Ngân hàng Thương mại Cổ phần Á Châu
+                </div>
+
+            </div>
+
+
+            <!-- ACCOUNT INFORMATION -->
 
             <div class="bank-info">
 
                 <div class="bank-info-title">
                     Vui lòng chuyển khoản chính xác
                 </div>
-
-
-                <!-- NGÂN HÀNG -->
 
                 <div class="bank-row">
 
@@ -478,9 +569,6 @@
 
                 </div>
 
-
-                <!-- SỐ TÀI KHOẢN -->
-
                 <div class="bank-row">
 
                     <span class="bank-label">
@@ -492,9 +580,6 @@
                     </span>
 
                 </div>
-
-
-                <!-- CHỦ TÀI KHOẢN -->
 
                 <div class="bank-row">
 
@@ -508,9 +593,6 @@
 
                 </div>
 
-
-                <!-- SỐ TIỀN -->
-
                 <div class="bank-row">
 
                     <span class="bank-label">
@@ -518,16 +600,11 @@
                     </span>
 
                     <span class="bank-value money-value">
-
-                        @Model.TongTien.ToString("N0")
-                        VNĐ
-
+                        @Model.TongTien.ToString("N0") VNĐ
                     </span>
 
                 </div>
 
-
-                <!-- MÃ ĐƠN -->
                 @if (Model.MaDonHang.HasValue)
                 {
                     <div class="bank-row">
@@ -543,9 +620,6 @@
                     </div>
                 }
 
-
-                <!-- NỘI DUNG -->
-
                 <div class="bank-row">
 
                     <span class="bank-label">
@@ -553,11 +627,9 @@
                     </span>
 
                     <span class="bank-value">
-
                         <span class="transfer-content">
                             THANHTOAN-@(Model.MaDonHang?.ToString() ?? "DONHANG")
                         </span>
-
                     </span>
 
                 </div>
@@ -565,20 +637,21 @@
             </div>
 
 
+            <!-- NOTICE -->
+
             <div class="notice">
 
                 <strong>Lưu ý:</strong>
+
                 Nội dung chuyển khoản cần ghi đúng để Admin
                 dễ dàng kiểm tra giao dịch. Sau khi bạn bấm
-                “Tôi đã chuyển khoản”, hàng sẽ được giữ cho đơn
-                và chờ Admin xác nhận.
+                “Xác nhận chuyển khoản”, hệ thống sẽ thông báo cho Admin
+                kiểm tra giao dịch trước khi xác nhận đơn hàng.
 
             </div>
 
 
-            <!-- =================================================
-                 CONFIRM
-                 ================================================= -->
+            <!-- CONFIRM FORM -->
 
             <form asp-controller="ThanhToan"
                   asp-action="XacNhanChuyenKhoan"
@@ -586,6 +659,7 @@
 
                 @Html.AntiForgeryToken()
 
+                <input type="hidden" asp-for="MaDonHang" />
 
                 @for (int i = 0; i < Model.SanPhams.Count; i++)
                 {
@@ -596,30 +670,26 @@
                            asp-for="SanPhams[i].SoLuong" />
                 }
 
+                <input type="hidden" asp-for="HoTen" />
 
-                <input type="hidden"
-                       asp-for="HoTen" />
+                <input type="hidden" asp-for="SoDienThoai" />
 
-                <input type="hidden"
-                       asp-for="SoDienThoai" />
+                <input type="hidden" asp-for="DiaChiGiaoHang" />
 
-                <input type="hidden"
-                       asp-for="DiaChiGiaoHang" />
-
-                <input type="hidden"
-                       asp-for="GhiChu" />
+                <input type="hidden" asp-for="GhiChu" />
 
                 <input type="hidden"
                        name="PhuongThucThanhToan"
                        value="BANK" />
 
-
-                <button type="submit"
-                        class="submit-button">
-
-                    TÔI ĐÃ CHUYỂN KHOẢN
-
+                <button type="submit" class="submit-button">
+                    XÁC NHẬN CHUYỂN KHOẢN
                 </button>
+
+                <div class="submit-caption">
+                    Admin sẽ kiểm tra giao dịch thực tế trước khi
+                    xác nhận đơn hàng của bạn.
+                </div>
 
             </form>
 

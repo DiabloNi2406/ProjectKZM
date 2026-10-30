@@ -1,4 +1,5 @@
-﻿@{
+﻿
+@{
     ViewData["Title"] = "Kết quả chuyển khoản";
 
     bool success =
@@ -7,88 +8,391 @@
     string message =
         ViewData["Message"]?.ToString()
         ?? "Không có thông tin.";
+
+    int? maDonHang =
+        ViewData["MaDonHang"] as int?;
 }
 
 <style>
-    .page {
-        max-width: 800px;
+
+    /* =========================================================
+       PAGE
+       ========================================================= */
+
+    .result-page {
+        max-width: 900px;
         margin: 0 auto;
-        padding: 80px 20px;
+        padding: 70px 20px 90px;
     }
 
-    .box {
+
+    /* =========================================================
+       CARD
+       ========================================================= */
+
+    .result-card {
+        position: relative;
+        background: #fff;
         border: 1px solid #e5e5e5;
-        padding: 45px;
+        border-radius: 18px;
+        padding: 50px 45px;
         text-align: center;
+        box-shadow: 0 10px 35px rgba(0, 0, 0, .06);
+        overflow: hidden;
     }
 
-    .icon {
-        font-size: 50px;
-        margin-bottom: 20px;
+    .result-card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 5px;
+        background: #198754;
     }
 
-    .title {
-        font-size: 32px;
-        margin-bottom: 15px;
+    .result-card.failed::before {
+        background: #dc3545;
     }
 
-    .message {
-        color: #666;
+
+    /* =========================================================
+       ICON
+       ========================================================= */
+
+    .result-icon {
+        width: 78px;
+        height: 78px;
+        margin: 0 auto 22px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        font-size: 38px;
+        font-weight: 700;
+    }
+
+    .result-icon.success {
+        background: #edf8f0;
+        border: 1px solid #cfe8d5;
+        color: #198754;
+    }
+
+    .result-icon.failed {
+        background: #fff0f1;
+        border: 1px solid #f3c4c8;
+        color: #dc3545;
+    }
+
+
+    /* =========================================================
+       TITLE
+       ========================================================= */
+
+    .result-title {
+        margin: 0 0 12px;
+        color: #222;
+        font-size: 34px;
+        font-weight: 700;
+        letter-spacing: -0.5px;
+    }
+
+
+    /* =========================================================
+       MESSAGE
+       ========================================================= */
+
+    .result-message {
+        max-width: 650px;
+        margin: 0 auto 28px;
+        color: #777;
+        font-size: 15px;
         line-height: 1.7;
-        margin-bottom: 30px;
     }
 
-    .button {
-        display: inline-block;
-        background: #111;
-        color: #fff;
-        text-decoration: none;
-        padding: 14px 25px;
+
+    /* =========================================================
+       ORDER INFO
+       ========================================================= */
+
+    .order-number {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        margin-bottom: 30px;
+        padding: 8px 13px;
+        border-radius: 8px;
+        background: #f6f6f6;
+        border: 1px solid #e5e5e5;
+        color: #444;
+        font-size: 13px;
+        font-weight: 600;
     }
+
+
+    /* =========================================================
+       BUTTON GROUP
+       ========================================================= */
+
+    .result-actions {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+        flex-wrap: wrap;
+    }
+
+
+    /* =========================================================
+       BUTTON
+       ========================================================= */
+
+    .result-button {
+        min-width: 170px;
+        height: 44px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 7px;
+        padding: 0 18px;
+        border-radius: 9px;
+        text-decoration: none;
+        font-size: 14px;
+        font-weight: 600;
+        transition: background-color .2s ease, border-color .2s ease, color .2s ease, transform .15s ease, box-shadow .2s ease;
+    }
+
+
+    /* CONTINUE SHOPPING */
+
+    .continue-button {
+        background: #fff;
+        border: 1px solid #d7d7d7;
+        color: #444;
+    }
+
+    .continue-button:hover {
+        background: #212529;
+        border-color: #212529;
+        color: #fff;
+        transform: translateY(-1px);
+        box-shadow: 0 5px 13px rgba(0,0,0,.12);
+    }
+
+
+    /* ORDER BUTTON */
+
+    .order-button {
+        background: #198754;
+        border: 1px solid #198754;
+        color: #fff;
+    }
+
+    .order-button:hover {
+        background: #157347;
+        border-color: #157347;
+        color: #fff;
+        transform: translateY(-1px);
+        box-shadow: 0 5px 13px rgba(25,135,84,.18);
+    }
+
+
+    /* HOME BUTTON */
+
+    .home-button {
+        background: #f3f3f3;
+        border: 1px solid #e0e0e0;
+        color: #555;
+    }
+
+    .home-button:hover {
+        background: #e5e5e5;
+        border-color: #d5d5d5;
+        color: #222;
+        transform: translateY(-1px);
+    }
+
+
+    /* FAILED STATE */
+
+    .failed-message {
+        background: #fff8f8;
+        border: 1px solid #f3c4c8;
+        border-radius: 10px;
+        padding: 13px 16px;
+        margin-bottom: 28px;
+        color: #b02a37;
+        font-size: 14px;
+    }
+
+
+    /* FOOTER NOTE */
+
+    .result-note {
+        margin-top: 22px;
+        color: #aaa;
+        font-size: 12px;
+    }
+
+
+    /* RESPONSIVE */
+
+    @@media (max-width: 600px) {
+
+        .result-page {
+            padding: 40px 15px 60px;
+        }
+
+        .result-card {
+            padding: 40px 22px;
+        }
+
+        .result-title {
+            font-size: 28px;
+        }
+
+        .result-icon {
+            width: 68px;
+            height: 68px;
+            font-size: 32px;
+        }
+
+        .result-actions {
+            flex-direction: column;
+        }
+
+        .result-button {
+            width: 100%;
+        }
+    }
+
 </style>
 
 
-<div class="page">
+<div class="result-page">
 
-    <div class="box">
+    <div class="result-card @(success ? "" : "failed")">
 
         @if (success)
         {
-            <div class="icon">
+            <!-- =====================================================
+                 SUCCESS
+                 ===================================================== -->
+
+            <div class="result-icon success">
                 ✓
             </div>
 
-            <div class="title">
-                Đã ghi nhận yêu cầu
+            <h1 class="result-title">
+                Đã ghi nhận chuyển khoản
+            </h1>
+
+            <div class="result-message">
+                @message
             </div>
 
-            <div class="message">
-                @message
+            @if (maDonHang.HasValue)
+            {
+                <div class="order-number">
+
+                    Mã đơn hàng:
+
+                    <strong>
+                        #@maDonHang.Value
+                    </strong>
+
+                </div>
+            }
+
+            <div class="result-actions">
+
+                <!-- TIẾP TỤC MUA HÀNG -->
+
+                <a asp-controller="GioHangs"
+                   asp-action="Index"
+                   class="result-button continue-button">
+
+                    🛒 Tiếp tục mua hàng
+
+                </a>
+
+
+                <!-- XEM ĐƠN HÀNG -->
+
+                @if (maDonHang.HasValue)
+                {
+                    <a asp-controller="DonHangs"
+                       asp-action="ChiTietCuaToi"
+                       asp-route-id="@maDonHang.Value"
+                       class="result-button order-button">
+
+                        📦 Xem đơn hàng
+
+                    </a>
+                }
+
+
+                <!-- TRANG CHỦ -->
+
+                <a asp-controller="Home"
+                   asp-action="Index"
+                   class="result-button home-button">
+
+                    🏠 Trang chủ
+
+                </a>
+
+            </div>
+
+            <div class="result-note">
+                Yêu cầu chuyển khoản đã được ghi nhận.
+                Admin sẽ kiểm tra giao dịch trước khi xác nhận đơn hàng.
             </div>
         }
         else
         {
-            <div class="icon">
+            <!-- =====================================================
+                 FAILED
+                 ===================================================== -->
+
+            <div class="result-icon failed">
                 ✕
             </div>
 
-            <div class="title">
-                Có lỗi xảy ra
-            </div>
+            <h1 class="result-title">
+                Không thể ghi nhận yêu cầu
+            </h1>
 
-            <div class="message">
+            <div class="failed-message">
                 @message
             </div>
+
+            <div class="result-actions">
+
+                <!-- QUAY LẠI GIỎ HÀNG -->
+
+                <a asp-controller="GioHangs"
+                   asp-action="Index"
+                   class="result-button continue-button">
+
+                    ← Quay lại giỏ hàng
+
+                </a>
+
+
+                <!-- TRANG CHỦ -->
+
+                <a asp-controller="Home"
+                   asp-action="Index"
+                   class="result-button home-button">
+
+                    🏠 Trang chủ
+
+                </a>
+
+            </div>
         }
-
-
-        <a asp-controller="Home"
-           asp-action="Index"
-           class="button">
-
-            Về trang chủ
-
-        </a>
 
     </div>
 
